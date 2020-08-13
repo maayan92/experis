@@ -3,7 +3,7 @@
 
 namespace kokfikoCDR {
 
-IParser::RecordInfo PipeParser::Parsering(String a_buffer) {
+CdrRecord PipeParser::Parsering(String a_buffer) {
     size_t fromPos = 0, toPos = a_buffer.find(delimiter);
     RecordInfo info;
 
@@ -21,7 +21,7 @@ IParser::RecordInfo PipeParser::Parsering(String a_buffer) {
         info.push_back(token);
     }
 
-    return info;
+    return CdrRecord(info);
 }
 
 } // kokfikoCDR

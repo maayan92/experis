@@ -1,7 +1,7 @@
 TARGET= pipeParserTest.out 
 CC= g++ 
 CFLAGS= -ansi -pedantic -g -I../../inc/
-INC= ../../inc/pipeParser.hpp ../../inc/iParser.hpp
+INC= ../../inc/pipeParser.hpp ../../inc/iParser.hpp ../../inc/cdrRecord.hpp
 OBJS= pipeParser.o pipeParserTest.o
 
 $(TARGET): $(OBJS)

@@ -1,5 +1,5 @@
-#ifndef __PIPE_PARSER_H__
-#define __PIPE_PARSER_H__
+#ifndef PIPE_PARSER_H
+#define PIPE_PARSER_H
 
 #include "iParser.hpp"
 
@@ -12,7 +12,7 @@ public:
     //~PipeParser() = default;
     //PipeParser& operator(const PipeParser& a_pipeParser) = default;
 
-    virtual RecordInfo Parsering(String a_buffer);
+    virtual CdrRecord Parsering(String a_buffer);
 
 private:
     static const char delimiter = '|';

@@ -36,13 +36,13 @@ struct CdrRecord {
     size_t m_imsi;
     std::string m_imei;
     std::string m_usageType;
-    size_t m_msisn;
+    size_t m_msisdn;
     std::string m_callDate;
     std::string m_callTime;
     size_t m_duration;
     size_t m_byteRecieved;
     size_t m_byteTransmitted;
-    size_t m_secondPartyMsisn;
+    size_t m_secondPartyMsisdn;
 };
 
 inline CdrRecord::CdrRecord(RecordInfo a_info)
@@ -50,13 +50,13 @@ inline CdrRecord::CdrRecord(RecordInfo a_info)
 , m_imsi()
 , m_imei(a_info[IMEI])
 , m_usageType(a_info[USAGE_TYPE])
-, m_msisn()
+, m_msisdn()
 , m_callDate(a_info[CALL_DATE])
 , m_callTime(a_info[CALL_TIME])
 , m_duration()
 , m_byteRecieved()
 , m_byteTransmitted()
-, m_secondPartyMsisn() {
+, m_secondPartyMsisdn() {
 
     setValues(a_info);
 }
@@ -68,7 +68,7 @@ inline void CdrRecord::setValues(RecordInfo a_info) {
     setStrToNum >> m_imsi;
     
     setStrToNum.str(a_info[MSISN]);
-    setStrToNum >> m_msisn;
+    setStrToNum >> m_msisdn;
 
     setStrToNum.str(a_info[DURATION]);
     setStrToNum >> m_duration;
@@ -80,7 +80,7 @@ inline void CdrRecord::setValues(RecordInfo a_info) {
     setStrToNum >> m_byteTransmitted;
     
     setStrToNum.str(a_info[SECOND_PARTY_MSISN]);
-    setStrToNum >> m_secondPartyMsisn;
+    setStrToNum >> m_secondPartyMsisdn;
 }
 
 } // kokfikoCDR

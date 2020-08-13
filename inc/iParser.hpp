@@ -1,8 +1,9 @@
-#ifndef __IPARSER_H__
-#define __IPARSER_H__
+#ifndef IPARSER_H
+#define IPARSER_H
 
 #include <string>
 #include <vector>
+#include "cdrRecord.hpp"
 
 namespace kokfikoCDR {
 
@@ -13,9 +14,9 @@ public:
 
     //IParser() = default;
     //IParser(const IParser& a_iparser) = default;
-    virtual ~IParser();
+    virtual ~IParser() {}
 
-    virtual RecordInfo Parsering(String a_buffer) = 0;
+    virtual CdrRecord Parsering(String a_buffer) = 0;
 };
 
 } // kokfikoCDR
