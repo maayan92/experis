@@ -30,8 +30,6 @@ struct CdrRecord {
         SECOND_PARTY_MSISN
     };
 
-    void setValues(RecordInfo a_info);
-
     size_t m_sequenceNum;
     size_t m_imsi;
     std::string m_imei;
@@ -43,6 +41,9 @@ struct CdrRecord {
     size_t m_byteRecieved;
     size_t m_byteTransmitted;
     size_t m_secondPartyMsisdn;
+
+private:    
+    void setValues(RecordInfo a_info);
 };
 
 inline CdrRecord::CdrRecord(RecordInfo a_info)
@@ -63,7 +64,8 @@ inline CdrRecord::CdrRecord(RecordInfo a_info)
 
 inline void CdrRecord::setValues(RecordInfo a_info) {
     std::istringstream setStrToNum(a_info[SEQUENCE_NUM]);
-    std::istringstream(a_info[SEQUENCE_NUM]) >> m_sequenceNum;
+    setStrToNum >> m_sequenceNum;
+    
     setStrToNum.str(a_info[IMSI]);
     setStrToNum >> m_imsi;
     
