@@ -8,7 +8,7 @@ using namespace exceptions;
 
 namespace tcp {
 
-Socket::Socket(unsigned int a_port) {
+Socket::Socket() {
     m_socketNum = socket(AF_INET, SOCK_STREAM, 0);
     if(m_socketNum < 0) {
         assert(EINVAL != errno);

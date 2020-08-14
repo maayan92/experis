@@ -5,7 +5,7 @@ namespace tcp {
 
 class Socket {
 public:
-    Socket(unsigned int a_port);
+    Socket();
     //Socket(const Socket& a_socket) = default;
     ~Socket();
     //Socket& operator=(const Socket& a_socket) = default;
