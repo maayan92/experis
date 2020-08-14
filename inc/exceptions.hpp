@@ -26,6 +26,34 @@ public:
     }
 };
 
+class ExcConnectionReset : std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "Connection reset!";
+    }
+};
+
+class ExcSignalOccurred : std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "A signal occurred before any data was transmitted!";
+    }
+};
+
+class ExcNoMemory : std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "No memory available!";
+    }
+};
+
+class ExcLocalHasBeenShutDown : std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "The local end has been shut down on a connection oriented socket!";
+    }
+};
+
 } // exceptions
 
 #endif
