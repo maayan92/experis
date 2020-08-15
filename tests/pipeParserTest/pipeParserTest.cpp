@@ -13,7 +13,8 @@ static bool CompareRecord(CdrRecord a_left, CdrRecord a_right) {
             (a_left.m_duration == a_right.m_duration) &&
             (a_left.m_byteRecieved == a_right.m_byteRecieved) &&
             (a_left.m_byteTransmitted == a_right.m_byteTransmitted) &&
-            (a_left.m_secondPartyMsisdn == a_right.m_secondPartyMsisdn);
+            (a_left.m_secondPartyMsisdn == a_right.m_secondPartyMsisdn) &&
+            (a_left.m_recordSize == a_right.m_recordSize);
 }
 
 static void TestParsing(std::string a_info, CdrRecord a_wantedResult) {

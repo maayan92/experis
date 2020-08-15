@@ -2,6 +2,7 @@
 #define CDR_RECORD_H
 
 #include <string>
+#include <cstring>
 #include <vector>
 #include <sstream>
 
@@ -21,13 +22,13 @@ struct CdrRecord {
         IMSI,
         IMEI,
         USAGE_TYPE,
-        MSISN,
+        MSISDN,
         CALL_DATE,
         CALL_TIME,
         DURATION,
         BYTE_RECEIVED,
         BYTE_TRANSMITTED,
-        SECOND_PARTY_MSISN
+        SECOND_PARTY_MSISDN
     };
 
     size_t m_sequenceNum;
@@ -42,8 +43,11 @@ struct CdrRecord {
     size_t m_byteTransmitted;
     size_t m_secondPartyMsisdn;
 
+    size_t m_recordSize;
+
 private:    
-    void setValues(RecordInfo a_info);
+    inline void setValues(RecordInfo a_info);
+    inline void calculateRecordSize(RecordInfo a_info);
 };
 
 inline CdrRecord::CdrRecord(RecordInfo a_info)
@@ -57,32 +61,26 @@ inline CdrRecord::CdrRecord(RecordInfo a_info)
 , m_duration()
 , m_byteRecieved()
 , m_byteTransmitted()
-, m_secondPartyMsisdn() {
-
+, m_secondPartyMsisdn()
+, m_recordSize() {
     setValues(a_info);
+    calculateRecordSize(a_info);
 }
 
 inline void CdrRecord::setValues(RecordInfo a_info) {
-    std::istringstream setStrToNum(a_info[SEQUENCE_NUM]);
-    setStrToNum >> m_sequenceNum;
-    
-    setStrToNum.str(a_info[IMSI]);
-    setStrToNum >> m_imsi;
-    
-    setStrToNum.str(a_info[MSISN]);
-    setStrToNum >> m_msisdn;
+    std::istringstream(a_info[SEQUENCE_NUM]) >> m_sequenceNum;
+    std::istringstream(a_info[IMSI]) >> m_imsi;
+    std::istringstream(a_info[MSISDN]) >> m_msisdn;
+    std::istringstream(a_info[DURATION]) >> m_duration;
+    std::istringstream(a_info[BYTE_RECEIVED]) >> m_byteRecieved;
+    std::istringstream(a_info[BYTE_TRANSMITTED]) >> m_byteTransmitted;
+    std::istringstream(a_info[SECOND_PARTY_MSISDN]) >> m_secondPartyMsisdn;
+}
 
-    setStrToNum.str(a_info[DURATION]);
-    setStrToNum >> m_duration;
-    
-    setStrToNum.str(a_info[BYTE_RECEIVED]);
-    setStrToNum >> m_byteRecieved;
-    
-    setStrToNum.str(a_info[BYTE_TRANSMITTED]);
-    setStrToNum >> m_byteTransmitted;
-    
-    setStrToNum.str(a_info[SECOND_PARTY_MSISN]);
-    setStrToNum >> m_secondPartyMsisdn;
+inline void CdrRecord::calculateRecordSize(RecordInfo a_info) {
+    for(size_t position = 0 ; position < a_info.size() ; ++position) {
+        m_recordSize += strlen(a_info[position].c_str());
+    }
 }
 
 } // kokfikoCDR
