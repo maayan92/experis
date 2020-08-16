@@ -10,7 +10,7 @@ namespace kokfikoCDR {
 
 static const size_t BUFFER_SIZE = 200;
 
-void CdrFileReader::ReadFile(string& a_filename) {
+void CdrFileReader::ReadFile(const string& a_filename) {
     ifstream file(a_filename);
     if(file.fail()) {
         throw ExcFileFailedToOpen();
@@ -21,7 +21,7 @@ void CdrFileReader::ReadFile(string& a_filename) {
 
     file.getline(buffer, BUFFER_SIZE); // temporary
     while(file.getline(buffer, BUFFER_SIZE)) {
-        
+
     }
 }
 

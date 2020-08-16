@@ -9,10 +9,10 @@ class PipeParser : public IParser {
 public:
     //PipeParser() = default;
     //PipeParser(const PipeParser& a_pipeParser) = default;
-    //~PipeParser() = default;
+    virtual ~PipeParser() {}
     //PipeParser& operator(const PipeParser& a_pipeParser) = default;
 
-    virtual CdrRecord Parsering(String a_buffer);
+    virtual CdrRecord Parsering(const String& a_buffer);
 
 private:
     static const char delimiter = '|';

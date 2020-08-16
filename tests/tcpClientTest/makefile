@@ -1,16 +1,16 @@
 TARGET= tcpClientTest.out 
 CC= g++ 
-CFLAGS= -ansi -pedantic -g -I../../inc/
-INC= ../../inc/tcpClient.hpp ../../inc/socket.hpp
+CFLAGS= -ansi -pedantic -g -I../../inc/ -I../
+INC= ../../inc/tcpClient.hpp ../../inc/socket.hpp ../testFunc.hpp
 OBJS= socket.o tcpClient.o tcpClientTest.o
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(INC)
 	$(CC) -o $(TARGET) $(OBJS)
 
-socket.o: ../../src/socket.cpp $(INC)
+socket.o: ../../src/socket.cpp
 	$(CC) $(CFLAGS) -c ../../src/socket.cpp
 
-tcpClient.o: ../../src/tcpClient.cpp $(INC)
+tcpClient.o: ../../src/tcpClient.cpp
 	$(CC) $(CFLAGS) -c ../../src/tcpClient.cpp
 	
 tcpClientTest.o: tcpClientTest.cpp 

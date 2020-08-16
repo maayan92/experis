@@ -12,7 +12,7 @@ struct CdrRecord {
     typedef std::string String;
     typedef std::vector<String> RecordInfo;
 
-    CdrRecord(RecordInfo a_info);
+    CdrRecord(const RecordInfo& a_info);
     //CdrRecord(const CdrRecord& a_cdrRecord) = default;
     //~CdrRecord() = default;
     //CdrRecord& operator=(const CdrRecord& a_cdrRecord) = default;
@@ -46,11 +46,11 @@ struct CdrRecord {
     size_t m_recordSize;
 
 private:    
-    inline void setValues(RecordInfo a_info);
-    inline void calculateRecordSize(RecordInfo a_info);
+    inline void setValues(const RecordInfo& a_info);
+    inline void calculateRecordSize(const RecordInfo& a_info);
 };
 
-inline CdrRecord::CdrRecord(RecordInfo a_info)
+inline CdrRecord::CdrRecord(const RecordInfo& a_info)
 : m_sequenceNum()
 , m_imsi()
 , m_imei(a_info[IMEI])
@@ -67,7 +67,7 @@ inline CdrRecord::CdrRecord(RecordInfo a_info)
     calculateRecordSize(a_info);
 }
 
-inline void CdrRecord::setValues(RecordInfo a_info) {
+inline void CdrRecord::setValues(const RecordInfo& a_info) {
     std::istringstream(a_info[SEQUENCE_NUM]) >> m_sequenceNum;
     std::istringstream(a_info[IMSI]) >> m_imsi;
     std::istringstream(a_info[MSISDN]) >> m_msisdn;
@@ -77,7 +77,7 @@ inline void CdrRecord::setValues(RecordInfo a_info) {
     std::istringstream(a_info[SECOND_PARTY_MSISDN]) >> m_secondPartyMsisdn;
 }
 
-inline void CdrRecord::calculateRecordSize(RecordInfo a_info) {
+inline void CdrRecord::calculateRecordSize(const RecordInfo& a_info) {
     for(size_t position = 0 ; position < a_info.size() ; ++position) {
         m_recordSize += strlen(a_info[position].c_str());
     }

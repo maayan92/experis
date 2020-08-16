@@ -12,7 +12,7 @@ public:
     //~CdrFileReader() = default;
     //CdrFileReader& operator=(const CdrFileReader& a_cdrFileReader) = default;
 
-    void ReadFile(std::string& a_filename);
+    void ReadFile(const std::string& a_filename);
 };
 
 } // kokfikoCDR

@@ -1,13 +1,13 @@
 TARGET= cdrRecordTest.out 
 CC= g++
-CFLAGS= -ansi -pedantic -g -I../../inc/
-INC= ../../inc/cdrRecord.hpp
+CFLAGS= -ansi -pedantic -g -I../../inc/ -I../
+INC= ../../inc/cdrRecord.hpp ../testFunc.hpp
 OBJS= cdrRecordTest.o
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(INC)
 	$(CC) -o $(TARGET) $(OBJS)
 
-cdrRecordTest.o: cdrRecordTest.cpp $(INC)
+cdrRecordTest.o: cdrRecordTest.cpp
 	$(CC) $(CFLAGS) -c cdrRecordTest.cpp
 
 clean:

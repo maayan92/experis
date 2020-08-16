@@ -8,7 +8,7 @@ CdrSender::CdrSender()
 : m_client() {
 }
 
-void CdrSender::SendMessage(CdrRecord a_record) const {
+void CdrSender::SendMessage(const CdrRecord& a_record) const {
     size_t bufferSize = a_record.m_recordSize + Protocol::NUM_OF_RECORDS;
     char* packedMsg = new char[bufferSize + 1];
     Protocol::PackMessage(a_record, packedMsg, bufferSize + 1);

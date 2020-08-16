@@ -10,20 +10,6 @@ typedef kokfikoCDR::CdrRecord::RecordInfo Record;
 
 namespace tcp {
 
-static void FillVector(Record& a_values) {
-    a_values.push_back("123");
-    a_values.push_back("425020528409010"); // 15
-    a_values.push_back("35-209900-176148-1"); // 18
-    a_values.push_back("MOC");
-    a_values.push_back("9720528409042"); // 13
-    a_values.push_back("DD/MM/YYYY"); // 10
-    a_values.push_back("HH:MM:SS"); // 8
-    a_values.push_back("2152");
-    a_values.push_back("64");
-    a_values.push_back("32");
-    a_values.push_back("61523827346"); // 11
-}
-
 static bool CheckNext(char* a_buffer, Record& a_values, size_t& a_bufPos, size_t& a_valuesPos) {
     size_t valSize = a_values[a_valuesPos].size();
     bool result = (valSize == a_buffer[a_bufPos++]) && (0 == strncmp(a_buffer + a_bufPos, a_values[a_valuesPos].c_str(), valSize));
@@ -45,8 +31,8 @@ static bool CheckResult(char* a_buffer, Record& a_values) {
 
 static void TestProtocolPackMsg() {
     Record values;
-    FillVector(values);
-    kokfikoCDR::CdrRecord record(values);
+    FillValues(values);
+    CdrRecord record(values);
     char buffer[BUFFER_SIZE];
     static int testNum = 0;
 

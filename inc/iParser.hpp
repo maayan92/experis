@@ -16,7 +16,7 @@ public:
     //IParser(const IParser& a_iparser) = default;
     virtual ~IParser() {}
 
-    virtual CdrRecord Parsering(String a_buffer) = 0;
+    virtual CdrRecord Parsering(const String& a_buffer) = 0;
 };
 
 } // kokfikoCDR

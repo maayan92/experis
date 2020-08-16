@@ -20,7 +20,7 @@ static void setNumberAsStrToBuffer(size_t a_value, char* a_buffer, size_t& a_pos
     a_position += valSize;
 }
 
-static void setStrToBuffer(std::string a_value, char* a_buffer, size_t& a_position) {
+static void setStrToBuffer(const std::string& a_value, char* a_buffer, size_t& a_position) {
     size_t valSize = strlen(a_value.c_str());
     a_buffer[++a_position] = valSize;
     a_buffer[a_position + 1] = '\0';

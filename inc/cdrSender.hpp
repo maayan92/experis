@@ -13,7 +13,7 @@ public:
     //~CdrSender() = default;
     //CdrSender& operator=(const CdrSender& a_cdrSender) = default;
 
-    void SendMessage(CdrRecord a_record) const;
+    void SendMessage(const CdrRecord& a_record) const;
 
 private:
     TcpClient m_client;
