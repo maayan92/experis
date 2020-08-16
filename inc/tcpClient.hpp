@@ -2,7 +2,6 @@
 #define TCP_CLIENT_H
 
 #include "socket.hpp"
-#include <string>
 #include <arpa/inet.h> 
 
 namespace kokfikoCDR {

@@ -6,27 +6,12 @@ typedef kokfikoCDR::CdrRecord::RecordInfo RecordInfo;
 
 namespace kokfikoCDR {
 
-static bool CompareRecords(const CdrRecord& a_left, const CdrRecord& a_right) {
-    return (a_left.m_sequenceNum == a_right.m_sequenceNum) &&
-            (a_left.m_imsi == a_right.m_imsi) &&
-            (a_left.m_imei == a_right.m_imei) &&
-            (a_left.m_usageType == a_right.m_usageType) &&
-            (a_left.m_msisdn == a_right.m_msisdn) &&
-            (a_left.m_callDate == a_right.m_callDate) &&
-            (a_left.m_callTime == a_right.m_callTime) &&
-            (a_left.m_duration == a_right.m_duration) &&
-            (a_left.m_byteRecieved == a_right.m_byteRecieved) &&
-            (a_left.m_byteTransmitted == a_right.m_byteTransmitted) &&
-            (a_left.m_secondPartyMsisdn == a_right.m_secondPartyMsisdn) &&
-            (a_left.m_recordSize == a_right.m_recordSize);
-}
-
 static void TestParsing(const std::string& a_info, const CdrRecord& a_values) {
     static int testNum = 0;
     PipeParser pipeParser;
     CdrRecord result = pipeParser.Parsering(a_info);
     
-    PrintResult("parsing", CompareRecords(result, a_values), testNum);
+    PrintResult("parsing", CompareRecords(result, a_values), testNum, ": \t");
 }
 
 } // kokfikoCDR

@@ -14,11 +14,11 @@ static void TestSender() {
     try {
         CdrSender sender;
         sender.SendMessage(record);
-        PrintResult("sender", true, testNum);
+        PrintResult("sender", true, testNum, ": \t");
 
     }catch(const exception& exc) {
         cout << exc.what() << endl;
-        PrintResult("sender", false, testNum);
+        PrintResult("sender", false, testNum, ": \t");
     }
 }
 

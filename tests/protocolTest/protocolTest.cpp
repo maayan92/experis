@@ -6,11 +6,11 @@ using namespace kokfikoCDR;
 
 #define BUFFER_SIZE 200
 
-typedef kokfikoCDR::CdrRecord::RecordInfo Record;
+typedef kokfikoCDR::CdrRecord::RecordInfo RecordInfo;
 
 namespace tcp {
 
-static bool CheckNext(char* a_buffer, Record& a_values, size_t& a_bufPos, size_t& a_valuesPos) {
+static bool CheckNext(char* a_buffer, const RecordInfo& a_values, size_t& a_bufPos, size_t& a_valuesPos) {
     size_t valSize = a_values[a_valuesPos].size();
     bool result = (valSize == a_buffer[a_bufPos++]) && (0 == strncmp(a_buffer + a_bufPos, a_values[a_valuesPos].c_str(), valSize));
     a_bufPos += valSize;
@@ -18,7 +18,7 @@ static bool CheckNext(char* a_buffer, Record& a_values, size_t& a_bufPos, size_t
     return result;
 }
 
-static bool CheckResult(char* a_buffer, Record& a_values) {
+static bool CheckResult(char* a_buffer, const RecordInfo& a_values) {
     size_t bufPos = 0, valuesPos = 0, valSize = a_values[valuesPos].size();
     bool result = (100 == a_buffer[bufPos++]);
 
@@ -29,28 +29,45 @@ static bool CheckResult(char* a_buffer, Record& a_values) {
     return result;
 }
 
-static void TestProtocolPackMsg() {
-    Record values;
-    FillValues(values);
-    CdrRecord record(values);
+static void TestProtocolPackMsg(const CdrRecord& a_record, const RecordInfo& a_values) {
     char buffer[BUFFER_SIZE];
     static int testNum = 0;
 
     try {
-        Protocol::PackMessage(record, buffer, BUFFER_SIZE);
-        bool result = CheckResult(buffer, values);
+        Protocol::PackMessage(a_record, buffer, BUFFER_SIZE);
+        bool result = CheckResult(buffer, a_values);
 
-        PrintResult("protocol pack message", result, testNum);
+        PrintResult("protocol pack message", result, testNum, ": \t\t");
     }catch(const exception& exc) {
         cout << exc.what() << endl;
-        PrintResult("protocol pack message", false, testNum);
+        PrintResult("protocol pack message", false, testNum, ": \t\t");
+    }
+}
+
+static void TestProtocolUnPackMsg(const CdrRecord& a_record) {
+    char buffer[BUFFER_SIZE];
+    static int testNum = 0;
+
+    try {
+        Protocol::PackMessage(a_record, buffer, BUFFER_SIZE);
+        Protocol::Record recordResult = Protocol::UnPackMessage(buffer);
+        bool result = CompareRecords(a_record, recordResult);
+
+        PrintResult("protocol unpack message", result, testNum, ": \t");
+    }catch(const exception& exc) {
+        cout << exc.what() << endl;
+        PrintResult("protocol unpack message", false, testNum, ": \t");
     }
 }
 
 } // tcp
 
 int main() {
-    tcp::TestProtocolPackMsg();
+    RecordInfo values;
+    FillValues(values);
+    CdrRecord record(values);
+    tcp::TestProtocolPackMsg(record, values);
+    tcp::TestProtocolUnPackMsg(record);
 
     return 0;
 }

@@ -3,6 +3,8 @@
 using namespace std;
 using namespace exceptions;
 
+#include <iostream>
+
 namespace tcp {
 
 static string fromNumToStr(size_t a_value) {
@@ -46,6 +48,49 @@ void Protocol::PackMessage(const Protocol::Record& a_record, char* a_buffer, siz
     setNumberAsStrToBuffer(a_record.m_byteRecieved, a_buffer, position);
     setNumberAsStrToBuffer(a_record.m_byteTransmitted, a_buffer, position);
     setNumberAsStrToBuffer(a_record.m_secondPartyMsisdn, a_buffer, position);
+}
+
+static size_t setStrToNumberFromBuffer(const char* a_msg, size_t& a_position, size_t a_size) {
+    size_t result;
+    istringstream(string(a_msg, ++a_position, a_size)) >> result;
+    a_position += a_size;
+    return result;
+}
+
+static string setStrFromBuffer(const char* a_msg, size_t& a_position, size_t a_size) {
+    string result(a_msg, ++a_position, a_size);
+    a_position += a_size;
+    return result;
+}
+
+Protocol::Record Protocol::UnPackMessage(const char* a_msg) {
+    Record record;
+    size_t position = 1;
+
+    record.m_recordSize += a_msg[position];
+    record.m_sequenceNum = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
+    record.m_recordSize += a_msg[position];
+    record.m_imsi = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
+    record.m_recordSize += a_msg[position];
+    record.m_imei = setStrFromBuffer(a_msg, position, a_msg[position]);
+    record.m_recordSize += a_msg[position];
+    record.m_usageType = setStrFromBuffer(a_msg, position, a_msg[position]);
+    record.m_recordSize += a_msg[position];
+    record.m_msisdn = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
+    record.m_recordSize += a_msg[position];
+    record.m_callDate = setStrFromBuffer(a_msg, position, a_msg[position]);
+    record.m_recordSize += a_msg[position];
+    record.m_callTime = setStrFromBuffer(a_msg, position, a_msg[position]);
+    record.m_recordSize += a_msg[position];
+    record.m_duration = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
+    record.m_recordSize += a_msg[position];
+    record.m_byteRecieved = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
+    record.m_recordSize += a_msg[position];
+    record.m_byteTransmitted = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
+    record.m_recordSize += a_msg[position];
+    record.m_secondPartyMsisdn = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
+
+    return record;
 }
 
 } // tcp

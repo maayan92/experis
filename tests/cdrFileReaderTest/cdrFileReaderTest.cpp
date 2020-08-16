@@ -8,11 +8,11 @@ static void TestReadFile() {
     static int testNum = 0;
     try {
         readFile.ReadFile("testFile.txt");
-        PrintResult("read file", true, testNum);
+        PrintResult("read file", true, testNum, ": \t");
 
     }catch(const exception& exc) {
         cout << exc.what() << endl;
-        PrintResult("read file", false, testNum);
+        PrintResult("read file", false, testNum, ": \t");
     }
 }
 
