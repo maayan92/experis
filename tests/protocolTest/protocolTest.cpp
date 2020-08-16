@@ -1,5 +1,8 @@
 #include "protocol.hpp"
+#include "testFunc.hpp"
 #include <iostream>
+using namespace std;
+using namespace kokfikoCDR;
 
 #define BUFFER_SIZE 200
 
@@ -45,14 +48,17 @@ static void TestProtocolPackMsg() {
     FillVector(values);
     kokfikoCDR::CdrRecord record(values);
     char buffer[BUFFER_SIZE];
-    Protocol::PackMessage(record, buffer, BUFFER_SIZE);
-
-    bool result = CheckResult(buffer, values);
-
     static int testNum = 0;
-    std::cout << "protocol pack message, test number " <<  ++testNum << ": \t"
-            << (result ? "\033[1;31mSUCCESS" : "\033[1;32mFAILED")
-                << "\033[0m" << std::endl;
+
+    try {
+        Protocol::PackMessage(record, buffer, BUFFER_SIZE);
+        bool result = CheckResult(buffer, values);
+
+        PrintResult("protocol pack message", result, testNum);
+    }catch(const exception& exc) {
+        cout << exc.what() << endl;
+        PrintResult("protocol pack message", false, testNum);
+    }
 }
 
 } // tcp

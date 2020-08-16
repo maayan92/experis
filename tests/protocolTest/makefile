@@ -1,7 +1,7 @@
 TARGET= protocolTest.out 
 CC= g++ 
-CFLAGS= -ansi -pedantic -g -I../../inc/
-INC= ../../inc/protocol.hpp ../../inc/cdrRecord.hpp
+CFLAGS= -ansi -pedantic -g -I../../inc/ -I../
+INC= ../../inc/protocol.hpp ../../inc/exceptions.hpp ../testFunc.hpp ../../inc/cdrRecord.hpp
 OBJS= protocol.o protocolTest.o
 
 $(TARGET): $(OBJS)

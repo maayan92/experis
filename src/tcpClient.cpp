@@ -68,7 +68,7 @@ void TcpClient::createSockerAddr() {
 }
 
 void TcpClient::connectToServer() {
-    int status = connect(m_socket.GetSocketNumber(), (struct sockaddr *)&m_servAddr, sizeof(m_servAddr));
+    int status = connect(m_socket.GetSocketNumber(), reinterpret_cast<struct sockaddr*>(&m_servAddr), sizeof(m_servAddr));
     if(0 > status) {
         CheckErrno();
         // no:

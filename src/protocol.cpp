@@ -1,5 +1,7 @@
 #include "protocol.hpp"
+#include "exceptions.hpp"
 using namespace std;
+using namespace exceptions;
 
 namespace tcp {
 
@@ -28,9 +30,8 @@ static void setStrToBuffer(std::string a_value, char* a_buffer, size_t& a_positi
 
 void Protocol::PackMessage(const Protocol::Record& a_record, char* a_buffer, size_t a_bufferSize) {
     if(a_bufferSize < (a_record.m_recordSize + Protocol::NUM_OF_RECORDS)) {
-        return; // throw 
+        throw ExcBufferSizeTooSmall();
     }
-    
     size_t position = 0;
     a_buffer[position] = a_record.m_recordSize + Protocol::NUM_OF_RECORDS;
 
