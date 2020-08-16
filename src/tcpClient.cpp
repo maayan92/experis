@@ -77,8 +77,8 @@ void TcpClient::ConnectToServer() {
 }
 
 void TcpClient::SendMessage(const char* a_msg) const {
-    ssize_t status = send(m_socketNum, a_msg, strlen(a_msg), 0);
-    if(0 > status) {
+    ssize_t sentBytes = send(m_socketNum, a_msg, strlen(a_msg), 0);
+    if(0 > sentBytes) {
         CheckErrno();
         assert(EWOULDBLOCK != errno);
         assert(EDESTADDRREQ != errno);
@@ -99,6 +99,18 @@ void TcpClient::SendMessage(const char* a_msg) const {
         }
         assert(!"undocumented error for send!");
     }
+}
+
+void TcpClient::RecvMessage(int m_clientSocket, char* a_msg, size_t a_msgSize) {
+    ssize_t readBytes = recv(m_clientSocket, a_msg, a_msgSize, 0);
+    if(0 == readBytes) {
+        throw ExcSocketIsClosed();
+    }
+    if(0 > readBytes) {
+        throw ExcRecieveFailed();
+    }
+
+    a_msg[readBytes] = '\0';
 }
 
 // private functions:

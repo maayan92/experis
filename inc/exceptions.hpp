@@ -61,10 +61,45 @@ public:
     }
 };
 
+class ExcSocketIsClosed : public std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "client socket is closed!";
+    }
+};
+
+class ExcRecieveFailed : public std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "recieve data failed!";
+    }
+};
+
 class ExcFileFailedToOpen : public std::exception {
 public:
     virtual const char* what() const throw() {
         return "The file failed to open!";
+    }
+};
+
+class ExcSetSocketFailed : public std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "Set server socket failed!";
+    }
+};
+
+class ExcServerBindFailed : public std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "Server bind failed!";
+    }
+};
+
+class ExcServerListenFailed : public std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "Server listen failed!";
     }
 };
 
