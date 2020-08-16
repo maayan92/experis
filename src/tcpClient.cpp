@@ -25,15 +25,59 @@ static void CheckErrno() {
     }
 }
 
+static int OpenSocket() {
+    int socketNum = socket(AF_INET, SOCK_STREAM, 0);
+    if(socketNum < 0) {
+        assert(EINVAL != errno);
+        assert(EAFNOSUPPORT != errno);
+        assert(EPROTONOSUPPORT != errno);
+
+        if(EACCES == errno) {
+            throw ExcPermissionDenied();
+        }
+        if(EMFILE == errno) {
+            throw ExcDescriptorTableFull();
+        }
+        if(ENOBUFS == errno || ENOMEM == errno) {
+            throw ExcNotEnoughSpace();
+        }
+        assert(!"undocumented error for socket!");
+    }
+    return socketNum;
+}
+
 TcpClient::TcpClient()
-: m_socket()
-, m_servAddr() {
+: m_socketNum(OpenSocket())
+, m_servAddr()
+{
     createSockerAddr();
-    connectToServer();
+}
+
+TcpClient::~TcpClient() {
+    int status = close(m_socketNum);
+    assert(0 == status);
+}
+
+void TcpClient::ConnectToServer() {
+    int status = connect(m_socketNum, reinterpret_cast<struct sockaddr*>(&m_servAddr), sizeof(m_servAddr));
+    if(0 > status) {
+        CheckErrno();
+        // no:
+        // EPERM
+        // EADDRINUSE
+        // EADDRNOTAVAIL
+        // EAFNOSUPPORT
+        // ECONNREFUSED
+        // EINPROGRESS
+        // ENETUNREACH
+        // EPROTOTYPE
+        // ETIMEDOUT
+        assert(!"undocumented error for connect!");
+    }
 }
 
 void TcpClient::SendMessage(const char* a_msg) const {
-    ssize_t status = send(m_socket.GetSocketNumber() , a_msg, strlen(a_msg), 0);
+    ssize_t status = send(m_socketNum, a_msg, strlen(a_msg), 0);
     if(0 > status) {
         CheckErrno();
         assert(EWOULDBLOCK != errno);
@@ -65,24 +109,6 @@ void TcpClient::createSockerAddr() {
     m_servAddr.sin_family = AF_INET;
     m_servAddr.sin_addr.s_addr = inet_addr(IP_ADDR);
     m_servAddr.sin_port = htons(PORT);
-}
-
-void TcpClient::connectToServer() {
-    int status = connect(m_socket.GetSocketNumber(), reinterpret_cast<struct sockaddr*>(&m_servAddr), sizeof(m_servAddr));
-    if(0 > status) {
-        CheckErrno();
-        // no:
-        // EPERM
-        // EADDRINUSE
-        // EADDRNOTAVAIL
-        // EAFNOSUPPORT
-        // ECONNREFUSED
-        // EINPROGRESS
-        // ENETUNREACH
-        // EPROTOTYPE
-        // ETIMEDOUT
-        assert(!"undocumented error for connect!");
-    }
 }
 
 } // kokfikoCDR

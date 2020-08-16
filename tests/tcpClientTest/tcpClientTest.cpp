@@ -16,6 +16,7 @@ int main() {
     static int testNum = 0;
     try {
         TcpClient client;
+        client.ConnectToServer();
         PrintResult("create client", true, testNum);
       
         TestCreateClient(client);

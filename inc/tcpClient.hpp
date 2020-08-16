@@ -11,17 +11,17 @@ class TcpClient {
 public:
     TcpClient();
     //TcpClient(const TcpClient& a_tcpClient) = default;
-    //~TcpClient() = default;
+    ~TcpClient();
     //TcpClient& operator=(cons t TcpClient& a_tcpClient) = default;
 
+    void ConnectToServer();
     void SendMessage(const char* a_msg) const;
 
 private:  
     void createSockerAddr();
-    void connectToServer();
 
 private:
-    tcp::Socket m_socket;
+    int m_socketNum;
     struct sockaddr_in m_servAddr;
 };
 

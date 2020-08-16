@@ -6,6 +6,7 @@ namespace kokfikoCDR {
 
 CdrSender::CdrSender()
 : m_client() {
+    m_client.ConnectToServer();
 }
 
 void CdrSender::SendMessage(const CdrRecord& a_record) const {
