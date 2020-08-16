@@ -13,6 +13,7 @@ struct CdrRecord {
     typedef std::vector<String> RecordInfo;
 
     CdrRecord(const RecordInfo& a_info);
+    CdrRecord();
     //CdrRecord(const CdrRecord& a_cdrRecord) = default;
     //~CdrRecord() = default;
     //CdrRecord& operator=(const CdrRecord& a_cdrRecord) = default;
@@ -65,6 +66,21 @@ inline CdrRecord::CdrRecord(const RecordInfo& a_info)
 , m_recordSize() {
     setValues(a_info);
     calculateRecordSize(a_info);
+}
+
+inline CdrRecord::CdrRecord()
+: m_sequenceNum()
+, m_imsi()
+, m_imei()
+, m_usageType()
+, m_msisdn()
+, m_callDate()
+, m_callTime()
+, m_duration()
+, m_byteRecieved()
+, m_byteTransmitted()
+, m_secondPartyMsisdn()
+, m_recordSize() {
 }
 
 inline void CdrRecord::setValues(const RecordInfo& a_info) {
