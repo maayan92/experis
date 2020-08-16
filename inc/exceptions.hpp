@@ -61,6 +61,13 @@ public:
     }
 };
 
+class ExcFileFailedToOpen : public std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "The file failed to open!";
+    }
+};
+
 } // exceptions
 
 #endif
