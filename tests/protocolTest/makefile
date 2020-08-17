@@ -1,6 +1,6 @@
 TARGET= protocolTest.out 
 CC= g++ 
-CFLAGS= -ansi -pedantic -g -I../../inc/ -I../
+CFLAGS= -ansi -pedantic -Wall -Werror -g -I../../inc/ -I../
 INC= ../../inc/protocol.hpp ../../inc/exceptions.hpp ../testFunc.hpp ../../inc/cdrRecord.hpp
 OBJS= protocol.o protocolTest.o
 

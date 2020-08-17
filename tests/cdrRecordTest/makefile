@@ -1,6 +1,6 @@
 TARGET= cdrRecordTest.out 
 CC= g++
-CFLAGS= -ansi -pedantic -g -I../../inc/ -I../
+CFLAGS= -ansi -pedantic -Wall -Werror -g -I../../inc/ -I../
 INC= ../../inc/cdrRecord.hpp ../testFunc.hpp
 OBJS= cdrRecordTest.o
 

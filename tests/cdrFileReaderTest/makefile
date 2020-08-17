@@ -1,6 +1,6 @@
 TARGET= cdrFileReaderTest.out 
 CC= g++
-CFLAGS= -ansi -pedantic -g -I../../inc/ -I../
+CFLAGS= -ansi -pedantic -Wall -Werror -g -I../../inc/ -I../
 INC= ../../inc/cdrFileReader.hpp ../../inc/exceptions.hpp ../../inc/iParser.hpp ../../inc/pipeParser.hpp \
 	../../inc/cdrSender.hpp ../../inc/socket.hpp ../../inc/tcpClient.hpp ../../inc/protocol.hpp ../testFunc.hpp
 OBJS= pipeParser.o socket.o tcpClient.o cdrSender.o protocol.o cdrFileReader.o cdrFileReaderTest.o

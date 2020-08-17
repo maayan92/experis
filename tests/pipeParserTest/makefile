@@ -1,6 +1,6 @@
 TARGET= pipeParserTest.out 
 CC= g++ 
-CFLAGS= -ansi -pedantic -g -I../../inc/ -I../
+CFLAGS= -ansi -pedantic -Wall -Werror -g -I../../inc/ -I../
 INC= ../../inc/pipeParser.hpp ../../inc/iParser.hpp ../../inc/cdrRecord.hpp ../testFunc.hpp
 OBJS= pipeParser.o pipeParserTest.o
 
