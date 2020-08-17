@@ -8,11 +8,19 @@
 
 namespace kokfikoCDR {
 
-struct CdrRecord {
-    typedef std::string String;
-    typedef std::vector<String> RecordInfo;
+struct Imsi {
+    size_t m_mcc;
+    size_t m_mnc;
+    size_t m_msin;
+    bool operator==(const Imsi& a_imsi) const;
+};
 
-    CdrRecord(const RecordInfo& a_info);
+inline bool Imsi::operator==(const Imsi& a_imsi) const {
+    return (m_mcc == a_imsi.m_mcc) && (m_mnc == a_imsi.m_mnc) && (m_msin == a_imsi.m_msin);
+}
+
+struct CdrRecord {
+    CdrRecord(const std::vector<std::string>& a_info);
     CdrRecord();
     //CdrRecord(const CdrRecord& a_cdrRecord) = default;
     //~CdrRecord() = default;
@@ -33,7 +41,7 @@ struct CdrRecord {
     };
 
     size_t m_sequenceNum;
-    size_t m_imsi;
+    Imsi m_imsi;
     std::string m_imei;
     std::string m_usageType;
     size_t m_msisdn;
@@ -47,11 +55,12 @@ struct CdrRecord {
     size_t m_recordSize;
 
 private:    
-    inline void setValues(const RecordInfo& a_info);
-    inline void calculateRecordSize(const RecordInfo& a_info);
+    void setValues(const std::vector<std::string>& a_info);
+    void calculateRecordSize(const std::vector<std::string>& a_info);
+    void setImsi(const std::string& a_strImsi);
 };
 
-inline CdrRecord::CdrRecord(const RecordInfo& a_info)
+inline CdrRecord::CdrRecord(const std::vector<std::string>& a_info)
 : m_sequenceNum()
 , m_imsi()
 , m_imei(a_info[IMEI])
@@ -83,9 +92,9 @@ inline CdrRecord::CdrRecord()
 , m_recordSize() {
 }
 
-inline void CdrRecord::setValues(const RecordInfo& a_info) {
+inline void CdrRecord::setValues(const std::vector<std::string>& a_info) {
+    setImsi(a_info[IMSI]);
     std::istringstream(a_info[SEQUENCE_NUM]) >> m_sequenceNum;
-    std::istringstream(a_info[IMSI]) >> m_imsi;
     std::istringstream(a_info[MSISDN]) >> m_msisdn;
     std::istringstream(a_info[DURATION]) >> m_duration;
     std::istringstream(a_info[BYTE_RECEIVED]) >> m_byteRecieved;
@@ -93,7 +102,13 @@ inline void CdrRecord::setValues(const RecordInfo& a_info) {
     std::istringstream(a_info[SECOND_PARTY_MSISDN]) >> m_secondPartyMsisdn;
 }
 
-inline void CdrRecord::calculateRecordSize(const RecordInfo& a_info) {
+inline void CdrRecord::setImsi(const std::string& a_strImsi) {
+    std::istringstream(a_strImsi.substr(0, 3)) >> m_imsi.m_mcc;
+    std::istringstream(a_strImsi.substr(3, 2)) >> m_imsi.m_mcc;
+    std::istringstream(a_strImsi.substr(5)) >> m_imsi.m_mcc;
+}
+
+inline void CdrRecord::calculateRecordSize(const std::vector<std::string>& a_info) {
     for(size_t position = 0 ; position < a_info.size() ; ++position) {
         m_recordSize += strlen(a_info[position].c_str());
     }

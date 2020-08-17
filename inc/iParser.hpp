@@ -9,11 +9,9 @@ namespace kokfikoCDR {
 
 class IParser {
 public:
-    typedef std::vector<std::string> RecordInfo;
-
     //IParser() = default;
     //IParser(const IParser& a_iparser) = default;
-    virtual ~IParser() {}
+    virtual ~IParser();
 
     virtual CdrRecord Parsering(const std::string& a_buffer) = 0;
 };

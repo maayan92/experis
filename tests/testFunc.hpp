@@ -2,11 +2,9 @@
 #include <iostream>
 using namespace std;
 
-typedef kokfikoCDR::CdrRecord::RecordInfo RecordInfo;
-
 namespace kokfikoCDR {
 
-static void FillValues(CdrRecord::RecordInfo& a_values) {
+static void FillValues(vector<string>& a_values) {
     a_values.push_back("123");
     a_values.push_back("425020528409010");
     a_values.push_back("35-209900-176148-1");
@@ -26,10 +24,16 @@ static string fromNumToStr(size_t a_value) {
     return numToStr.str();
 }
 
+static string getNumFromImsi(const Imsi& a_imsi) {
+    stringstream numToStr;
+    numToStr << a_imsi.m_mcc << a_imsi.m_mnc << a_imsi.m_msin;
+    return numToStr.str();
+}
+
 static bool CheckRecord(const CdrRecord& a_record, const RecordInfo& a_values) {
     int position = 0;
     return (fromNumToStr(a_record.m_sequenceNum) == a_values[position]) &&
-            (fromNumToStr(a_record.m_imsi) == a_values[++position].c_str()) &&
+            (getNumFromImsi(a_record.m_imsi) == a_values[++position].c_str()) &&
             (a_record.m_imei == a_values[++position].c_str()) &&
             (a_record.m_usageType == a_values[++position].c_str()) &&
             (fromNumToStr(a_record.m_msisdn) == a_values[++position].c_str()) &&
