@@ -54,7 +54,7 @@ static void TestRecieve(TcpClient& a_client) {
 int main() {
     static int testNum = 0;
     try {
-        TcpClient client;
+        TcpClient client("127.0.0.1", 1234);
         PrintResult("create client", true, testNum, ": \t");
       
         TestConnectToServer(client);

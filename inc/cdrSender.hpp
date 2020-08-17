@@ -8,7 +8,7 @@ namespace kokfikoCDR {
 
 class CdrSender {
 public:
-    CdrSender();
+    CdrSender(const char* a_ipAddress, size_t a_port);
     //CdrSender(const CdrSender& a_cdrSender) = default;
     //~CdrSender() = default;
     //CdrSender& operator=(const CdrSender& a_cdrSender) = default;

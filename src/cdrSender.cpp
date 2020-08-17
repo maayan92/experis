@@ -4,8 +4,8 @@ using namespace tcp;
 
 namespace kokfikoCDR {
 
-CdrSender::CdrSender()
-: m_client() {
+CdrSender::CdrSender(const char* a_ipAddress, size_t a_port)
+: m_client(a_ipAddress, a_port) {
     m_client.ConnectToServer();
 }
 

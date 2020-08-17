@@ -8,7 +8,7 @@ namespace kokfikoCDR {
 
 class TcpServer {
 public:
-    TcpServer();
+    TcpServer(const char* a_ipAddress, size_t a_port);
 
     int WaitForMessage();
     int GetSocketConnection(int& a_activity);

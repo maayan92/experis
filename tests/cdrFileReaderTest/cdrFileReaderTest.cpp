@@ -11,7 +11,7 @@ static void PrintResult(const char* a_test, bool a_result, int& a_testNum, const
 }
 
 static void TestReadFile() {
-    CdrFileReader readFile;
+    CdrFileReader readFile("127.0.0.1", 1234);
     static int testNum = 0;
     ifstream file("testFile.txt");
     try {

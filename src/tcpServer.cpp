@@ -6,8 +6,8 @@ using namespace exceptions;
 
 namespace kokfikoCDR {
 
-TcpServer::TcpServer()
-: m_socket()
+TcpServer::TcpServer(const char* a_ipAddress, size_t a_port)
+: m_socket(a_ipAddress, a_port)
 , m_masterfd()
 , m_watchingfd()
 {

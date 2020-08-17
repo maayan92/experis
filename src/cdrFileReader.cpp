@@ -7,8 +7,8 @@ using namespace exceptions;
 
 namespace kokfikoCDR {
 
-CdrFileReader::CdrFileReader() 
-: m_sender()
+CdrFileReader::CdrFileReader(const char* a_ipAddress, size_t a_port) 
+: m_sender(a_ipAddress, a_port)
 {
 }
 

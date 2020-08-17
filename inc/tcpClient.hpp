@@ -7,21 +7,21 @@ namespace kokfikoCDR {
 
 class TcpClient {
 public:
-    TcpClient();
+    TcpClient(const char* a_ipAddress, size_t a_port);
     ~TcpClient();
 
     void ConnectToServer();
     void SendMessage(const char* a_msg) const;
     void RecvMessage(int m_clientSocket, char* a_msg, size_t a_msgSize);
 
-    int GetSocketNumber() const { return m_socketNum; }
-    struct sockaddr_in& GetSocketAddr() { return m_servAddr; }
+    int GetSocketNumber() const;
+    struct sockaddr_in GetSocketAddr() const;
 
 private:  
     TcpClient(const TcpClient& a_tcpClient);
     TcpClient& operator=(const TcpClient& a_tcpClient);
     
-    void createSockerAddr();
+    void createSockerAddr(const char* a_ipAddress, size_t a_port);
 
 private:
     int m_socketNum;

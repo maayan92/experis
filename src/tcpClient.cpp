@@ -6,9 +6,6 @@
 #include <cassert>
 using namespace exceptions;
 
-static const int PORT = 1234;
-static const char* IP_ADDR = "127.0.0.1";
-
 namespace kokfikoCDR {
 
 static void CheckErrno() {
@@ -46,11 +43,11 @@ static int OpenSocket() {
     return socketNum;
 }
 
-TcpClient::TcpClient()
+TcpClient::TcpClient(const char* a_ipAddress, size_t a_port)
 : m_socketNum(OpenSocket())
 , m_servAddr()
 {
-    createSockerAddr();
+    createSockerAddr(a_ipAddress, a_port);
 }
 
 TcpClient::~TcpClient() {
@@ -113,14 +110,22 @@ void TcpClient::RecvMessage(int m_clientSocket, char* a_msg, size_t a_msgSize) {
     a_msg[readBytes] = '\0';
 }
 
+int TcpClient::GetSocketNumber() const {
+    return m_socketNum;
+}
+
+struct sockaddr_in TcpClient::GetSocketAddr() const {
+    return m_servAddr;
+}
+
 // private functions:
 
-void TcpClient::createSockerAddr() {
+void TcpClient::createSockerAddr(const char* a_ipAddress, size_t a_port) {
     memset(&m_servAddr,0,sizeof(m_servAddr));
     
     m_servAddr.sin_family = AF_INET;
-    m_servAddr.sin_addr.s_addr = inet_addr(IP_ADDR);
-    m_servAddr.sin_port = htons(PORT);
+    m_servAddr.sin_addr.s_addr = inet_addr(a_ipAddress);
+    m_servAddr.sin_port = htons(a_port);
 }
 
 } // kokfikoCDR

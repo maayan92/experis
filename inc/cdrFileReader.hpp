@@ -9,7 +9,7 @@ namespace kokfikoCDR {
 
 class CdrFileReader {
 public:
-    CdrFileReader();
+    CdrFileReader(const char* a_ipAddress, size_t a_port);
     //CdrFileReader(const CdrFileReader& a_cdrFileReader) = default;
     //~CdrFileReader() = default;
     //CdrFileReader& operator=(const CdrFileReader& a_cdrFileReader) = default;

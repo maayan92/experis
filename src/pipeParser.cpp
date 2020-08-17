@@ -1,14 +1,15 @@
 #include "pipeParser.hpp"
 #include <iostream>
+using namespace std;
 
 namespace kokfikoCDR {
 
-CdrRecord PipeParser::Parsering(const String& a_buffer) {
+CdrRecord PipeParser::Parsering(const string& a_buffer) {
     size_t fromPos = 0, toPos = a_buffer.find(delimiter);
     RecordInfo info;
 
-    while(toPos != String::npos) {
-        String token(a_buffer,fromPos , toPos - fromPos);
+    while(toPos != string::npos) {
+        string token(a_buffer,fromPos , toPos - fromPos);
         if(token.size() > 0) {
             info.push_back(token);
         }
@@ -17,7 +18,7 @@ CdrRecord PipeParser::Parsering(const String& a_buffer) {
         toPos = a_buffer.find(delimiter, fromPos);
     }
     if(fromPos < a_buffer.size()) {
-        String token(a_buffer,fromPos , a_buffer.size() - fromPos);
+        string token(a_buffer,fromPos , a_buffer.size() - fromPos);
         info.push_back(token);
     }
 

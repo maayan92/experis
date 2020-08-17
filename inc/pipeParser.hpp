@@ -12,7 +12,7 @@ public:
     virtual ~PipeParser() {}
     //PipeParser& operator(const PipeParser& a_pipeParser) = default;
 
-    virtual CdrRecord Parsering(const String& a_buffer);
+    virtual CdrRecord Parsering(const std::string& a_buffer);
 
 private:
     static const char delimiter = '|';
