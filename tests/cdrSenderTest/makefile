@@ -1,7 +1,7 @@
 TARGET= cdrSenderTest.out 
 CC= g++
 CFLAGS= -ansi -pedantic -Wall -Werror -g -I../../inc/ -I../
-INC= ../../inc/cdrSender.hpp ../../inc/cdrRecord.hpp ../../inc/protocol.hpp ../../inc/socket.hpp ../../inc/tcpClient.hpp ../testFunc.hpp
+INC= ../../inc/cdrSender.hpp ../../inc/cdrRecord.hpp ../../inc/protocol.hpp ../../inc/tcpClient.hpp ../testFunc.hpp
 OBJS= protocol.o socket.o tcpClient.o cdrSender.o cdrSenderTest.o
 
 $(TARGET): $(OBJS)

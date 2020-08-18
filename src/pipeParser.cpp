@@ -9,9 +9,12 @@ const int PipeParser::LUT[] = {CdrRecord::SEQUENCE_NUM, CdrRecord::IMSI, CdrReco
                      CdrRecord::BYTE_TRANSMITTED, CdrRecord::SECOND_PARTY_MSISDN };
 
 CdrRecord PipeParser::Parsering(const string& a_buffer) {
-    vector<string> info(NUM_OF_RECORD_FIELDS);
+    vector<string> info(CdrRecord::NUM_OF_RECORD_FIELDS);
     initializeInfo(info, a_buffer);
     return CdrRecord(info);
+}
+
+PipeParser::~PipeParser() {
 }
 
 void PipeParser::initializeInfo(vector<string>& a_info, const string& a_buffer) {

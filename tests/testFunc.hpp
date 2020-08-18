@@ -30,7 +30,7 @@ static string getNumFromImsi(const Imsi& a_imsi) {
     return numToStr.str();
 }
 
-static bool CheckRecord(const CdrRecord& a_record, const RecordInfo& a_values) {
+static bool CheckRecord(const CdrRecord& a_record, const vector<string>& a_values) {
     int position = 0;
     return (fromNumToStr(a_record.m_sequenceNum) == a_values[position]) &&
             (getNumFromImsi(a_record.m_imsi) == a_values[++position].c_str()) &&
