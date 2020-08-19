@@ -1,18 +1,24 @@
 #include "mutexBucket.hpp"
 #include <algorithm>
 
-#include <iostream>
 namespace experis {
 
+template<class T>
+struct DeleteElement {
+    void operator()(T* a_element){
+        delete a_element;
+    }
+};
+
 MutexBucket::MutexBucket(size_t a_numOfThreads)
-: m_bucket(calcCapacity(a_numOfThreads))
+: m_bucket()
 {
-    createMutexs();
+    createMutexs(calcCapacity(a_numOfThreads));
 }
 
 MutexBucket::~MutexBucket() 
 {
-    deleteMutexs();
+    std::for_each(m_bucket.begin(), m_bucket.end(), DeleteElement<Mutex>());
 }
 
 void MutexBucket::LockByPosition(size_t a_hashPosition) const
@@ -32,17 +38,11 @@ size_t MutexBucket::calcCapacity(size_t a_numOfThreads)
     return (a_numOfThreads*1.3);
 }
 
-void MutexBucket::createMutexs()
+void MutexBucket::createMutexs(size_t a_size)
 {
-    for (size_t i = 0 ; i < m_bucket.size() ; ++i) {
-        m_bucket[i] = new Mutex;
-    }
-}
-
-void MutexBucket::deleteMutexs()
-{
-    for (size_t i = 0 ; i < m_bucket.size() ; ++i) {
-        delete m_bucket[i];
+    m_bucket.reserve(a_size);
+    for (size_t i = 0 ; i < a_size ; ++i) {
+        m_bucket.push_back(new Mutex);
     }
 }
 

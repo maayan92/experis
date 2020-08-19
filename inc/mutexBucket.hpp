@@ -9,7 +9,7 @@ namespace experis {
 
 class MutexBucket : private Uncopyable{
 public:
-    MutexBucket(size_t a_numOfThreads);
+    explicit MutexBucket(size_t a_numOfThreads);
     ~MutexBucket();
 
     void LockByPosition(size_t a_hashPosition) const;
@@ -17,8 +17,7 @@ public:
 
 private:
     size_t calcCapacity(size_t a_numOfThreads);
-    void createMutexs();
-    void deleteMutexs();
+    void createMutexs(size_t a_size);
 
 private:
     std::vector<Mutex*> m_bucket;

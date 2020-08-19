@@ -3,12 +3,13 @@
 
 #include "mutexBucket.hpp"
 #include <tr1/unordered_map>
+#include "atomic.hpp"
 #include <assert.h>
 
 namespace experis {
 
 template<class Key, class T, class HashFunc, class Equal>
-class HashMapMT : Uncopyable{
+class HashMapMT : private Uncopyable{
     typedef std::tr1::unordered_map<Key, T, HashFunc, Equal> Map;
     typedef typename Map::iterator Iterator;
 public:
@@ -24,7 +25,7 @@ public:
 private:
     Map m_hash;
     MutexBucket m_mutexBucket;
-    size_t m_size;
+    Atomic<size_t> m_size;
 };
 
 } // experis
@@ -35,7 +36,7 @@ template<class Key, class T, class HashFunc, class Equal>
 HashMapMT<Key, T, HashFunc, Equal>::HashMapMT(size_t a_conccurency)
 : m_hash()
 , m_mutexBucket(a_conccurency)
-, m_size(0)
+, m_size()
 {
     assert(a_conccurency > 1);
 }
@@ -44,29 +45,31 @@ template<class Key, class T, class HashFunc, class Equal>
 template<class Combine>
 void HashMapMT<Key, T, HashFunc, Equal>::Upsert(const Key& a_key, const T& a_value)
 {
-    m_mutexBucket.LockByPosition(HashFunc()(a_key));
+    size_t hashVal = HashFunc()(a_key);
+    m_mutexBucket.LockByPosition(hashVal);
     Iterator itr = m_hash.find(a_key);
     if(itr != m_hash.end()) {
         itr->second = Combine()(itr->second, a_value);
     }
     else {
         m_hash.insert(std::make_pair(a_key, a_value));
-        __sync_add_and_fetch(&m_size, 1);
+        ++m_size;
     }
-    m_mutexBucket.UnLockByPosition(HashFunc()(a_key));
+    m_mutexBucket.UnLockByPosition(hashVal);
 }
 
 template<class Key, class T, class HashFunc, class Equal>
 bool HashMapMT<Key, T, HashFunc, Equal>::Find(const Key& a_key, T& a_foundValue) const
 {
-    m_mutexBucket.LockByPosition(HashFunc()(a_key));
+    size_t hashVal = HashFunc()(a_key);
+    m_mutexBucket.LockByPosition(hashVal);
     typename Map::const_iterator itr = m_hash.find(a_key);
     if(itr != m_hash.end()) {
         a_foundValue = itr->second;
-        m_mutexBucket.UnLockByPosition(HashFunc()(a_key));
+        m_mutexBucket.UnLockByPosition(hashVal);
         return true;
     }
-    m_mutexBucket.UnLockByPosition(HashFunc()(a_key));
+    m_mutexBucket.UnLockByPosition(hashVal);
 
     return false;
 }
@@ -74,23 +77,24 @@ bool HashMapMT<Key, T, HashFunc, Equal>::Find(const Key& a_key, T& a_foundValue)
 template<class Key, class T, class HashFunc, class Equal>
 bool HashMapMT<Key, T, HashFunc, Equal>::Remove(const Key& a_key, T& a_foundValue)
 {
-    m_mutexBucket.LockByPosition(HashFunc()(a_key));
+    size_t hashVal = HashFunc()(a_key);
+    m_mutexBucket.LockByPosition(hashVal);
     Iterator itr = m_hash.find(a_key);
     bool result = false;
     if(itr != m_hash.end()) {
         a_foundValue = itr->second;
         m_hash.erase(itr);
         result = true;
-        __sync_sub_and_fetch(&m_size, 1);
+        --m_size;
     }
-    m_mutexBucket.UnLockByPosition(HashFunc()(a_key));
+    m_mutexBucket.UnLockByPosition(hashVal);
 
     return result;
 }
 
 template<class Key, class T, class HashFunc, class Equal>
 size_t HashMapMT<Key, T, HashFunc, Equal>::Size() const {
-    return m_size;
+    return (size_t)m_size;
 }
 
 } // experis

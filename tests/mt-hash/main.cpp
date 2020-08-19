@@ -21,8 +21,8 @@ static void PrintResult(const char* a_test, bool a_result, int& a_testNum, const
 }
 
 struct Combine {
-    int operator()(const int a_left, const int& a_right) const {
-        return (a_left + a_right);
+    int operator()(int& a_left, const int& a_right) const {
+        return (a_left += a_right);
     }
 };
 
