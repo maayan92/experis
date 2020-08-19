@@ -3,6 +3,7 @@
 
 #include "mutexBucket.hpp"
 #include <tr1/unordered_map>
+#include <assert.h>
 
 namespace experis {
 
@@ -36,7 +37,7 @@ HashMapMT<Key, T, HashFunc, Equal>::HashMapMT(size_t a_conccurency)
 , m_mutexBucket(a_conccurency)
 , m_size(0)
 {
-    //assert(a_conccurency > 1);
+    assert(a_conccurency > 1);
 }
 
 template<class Key, class T, class HashFunc, class Equal>
