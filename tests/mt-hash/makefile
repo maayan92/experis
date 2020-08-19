@@ -4,7 +4,7 @@ CFLAGS= -ansi -pedantic -Wall -Werror -g -I../../inc/
 OBJS= mutex.o mutexBucket.o main.o
 
 $(TARGET): $(OBJS)
-	$(CC) -o $(TARGET) $(OBJS)
+	$(CC) -o $(TARGET) $(OBJS) -pthread
 
 mutex.o: ../../src/mutex.cpp ../../inc/mutex.hpp
 	$(CC) $(CFLAGS) -c ../../src/mutex.cpp
