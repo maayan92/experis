@@ -21,14 +21,19 @@ MutexBucket::~MutexBucket()
     std::for_each(m_bucket.begin(), m_bucket.end(), DeleteElement<Mutex>());
 }
 
-void MutexBucket::LockByPosition(size_t a_hashPosition) const
+void MutexBucket::LockByHashPosition(size_t a_hashPosition) const
 {
     m_bucket[a_hashPosition % m_bucket.size()]->Lock();
 }
 
-void MutexBucket::UnLockByPosition(size_t a_hashPosition) const 
+void MutexBucket::UnLockByHashPosition(size_t a_hashPosition) const 
 {
     m_bucket[a_hashPosition % m_bucket.size()]->Unlock();
+}
+
+Mutex* MutexBucket::GetMutexByHashPosition(size_t a_hashPosition) const
+{
+    return m_bucket[a_hashPosition % m_bucket.size()];
 }
 
 // private functions:

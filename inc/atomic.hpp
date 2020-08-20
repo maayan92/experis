@@ -1,18 +1,20 @@
 #ifndef ATOMIC_H
 #define ATOMIC_H
 
+#include <cassert>
+
 namespace experis {
 
 template<typename T>
 class Atomic {
 public:
-    Atomic();
-    //Atomic(const Atomic& a_atomic) = default;
+    explicit Atomic(T a_value = T());
+    Atomic(const Atomic& a_atomic);
     //~Atomic() = default;
     Atomic& operator=(const Atomic& a_atomic);
 
-    void operator++();
-    void operator--();
+    T operator++();
+    T operator--();
     operator T() const;
 
 private:
@@ -20,24 +22,32 @@ private:
 };
 
 template<typename T>
-Atomic<T>::Atomic()
-: m_element()
+Atomic<T>::Atomic(T a_value)
+: m_element(a_value)
 {
+        assert((sizeof(T) == 1 || sizeof(T) == 2 || sizeof(T) == 4 || sizeof(T) == 8) && \
+                "T must be char, int, short, long");
+}
+
+template<typename T>
+Atomic<T>::Atomic(const Atomic& a_atomic)
+{
+    m_element = (T)a_atomic;
 }
 
 template<typename T>
 Atomic<T>& Atomic<T>::operator=(const Atomic& a_atomic) {
-    __sync_val_compare_and_swap(&m_element, m_element, a_atomic.m_element); /// ???
+    __sync_val_compare_and_swap(&m_element, m_element, a_atomic.m_element); // TODO, check with __sync_add/sub
 }
 
 template<typename T>
-void Atomic<T>::operator++() {
-    __sync_add_and_fetch(&m_element, 1);
+T Atomic<T>::operator++() {
+    return __sync_add_and_fetch(&m_element, 1);
 }
 
 template<typename T>
-void Atomic<T>::operator--() {
-    __sync_sub_and_fetch(&m_element, 1);
+T Atomic<T>::operator--() {
+    return __sync_sub_and_fetch(&m_element, 1);
 }
 
 template<typename T>

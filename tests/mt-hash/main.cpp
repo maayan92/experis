@@ -40,7 +40,7 @@ static void TestUpsert(HashMapMT& a_hash, int a_key, int a_value, int a_valueAft
 {
     static int testNum = 0;
     try {
-        a_hash.Upsert<Combine>(a_key, a_value);
+        a_hash.Upsert(a_key, a_value, Combine());
         int result = 0;
         PrintResult("upsert", ((a_hash.Find(a_key, result) && (a_valueAfter == result))), testNum, ": \t\t");
 
@@ -107,8 +107,9 @@ static void* TestThreadsRemove(void* a_hash)
 
 static void* TestThreadsUpsert(void* a_hash)
 {
+    Combine combine;
     for (size_t i = 0 ; i < 10 ; ++i) {
-        static_cast<HashMapMT*>(a_hash)->Upsert<Combine>(i, i);
+        static_cast<HashMapMT*>(a_hash)->Upsert(i, i, combine);
         int result = 0;
         static_cast<HashMapMT*>(a_hash)->Find(i, result);
         cout << "value upserted: " << result << '\n';

@@ -6,13 +6,13 @@ OBJS= mutex.o mutexBucket.o main.o
 $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(OBJS) -pthread
 
-mutex.o: ../../src/mutex.cpp ../../inc/mutex.hpp ../../inc/atomic.hpp
+mutex.o: ../../src/mutex.cpp ../../inc/mutex.hpp
 	$(CC) $(CFLAGS) -c ../../src/mutex.cpp
 
 mutexBucket.o: ../../src/mutexBucket.cpp ../../inc/mutexBucket.hpp
 	$(CC) $(CFLAGS) -c ../../src/mutexBucket.cpp
 
-main.o: main.cpp ../../inc/uncopyable.hpp ../../inc/hashMap.hpp
+main.o: main.cpp ../../inc/uncopyable.hpp ../../inc/hashMap.hpp ../../inc/atomic.hpp ../../inc/locker.hpp
 	$(CC) $(CFLAGS) -c main.cpp
 
 clean:

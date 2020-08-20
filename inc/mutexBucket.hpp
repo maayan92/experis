@@ -12,8 +12,9 @@ public:
     explicit MutexBucket(size_t a_numOfThreads);
     ~MutexBucket();
 
-    void LockByPosition(size_t a_hashPosition) const;
-    void UnLockByPosition(size_t a_hashPosition) const;
+    void LockByHashPosition(size_t a_hashPosition) const;
+    void UnLockByHashPosition(size_t a_hashPosition) const;
+    Mutex* GetMutexByHashPosition(size_t a_hashPosition) const;
 
 private:
     size_t calcCapacity(size_t a_numOfThreads);
