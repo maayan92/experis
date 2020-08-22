@@ -63,26 +63,26 @@ Customer& Customer::operator+=(const Customer& a_customer) {
 void Customer::initialization(const kokfikoCDR::CdrRecord& a_record) {
     if("MOC" == a_record.m_usageType) {
         m_outgoingVC = a_record.m_duration;
-        setSecondParty(a_record.m_msisdn, m_outgoingVC, 0);
+        setSecondParty(a_record.m_secondPartyMsisdn, m_outgoingVC, 0);
     }
     else if("MTC" == a_record.m_usageType) {
         m_incomingVC = a_record.m_duration;
-        setSecondParty(a_record.m_msisdn, m_incomingVC, 0);
+        setSecondParty(a_record.m_secondPartyMsisdn, m_incomingVC, 0);
     }
     else if("SMS-MO" == a_record.m_usageType) {
         m_totalSmsSent = 1;
-        setSecondParty(a_record.m_msisdn, 0, m_totalSmsSent);
+        setSecondParty(a_record.m_secondPartyMsisdn, 0, m_totalSmsSent);
     }
     else if("SMS-MT" == a_record.m_usageType) {
         m_totalSmsReceive = 1;
-        setSecondParty(a_record.m_msisdn, 0, m_totalSmsReceive);
+        setSecondParty(a_record.m_secondPartyMsisdn, 0, m_totalSmsReceive);
     }
     else if("D" == a_record.m_usageType) {
         m_totalDataTransf = a_record.m_byteTransmitted;
         m_totalDataReceive = a_record.m_byteRecieved;
     }
     else {
-        setSecondParty(a_record.m_msisdn, 0, 0);
+        setSecondParty(a_record.m_secondPartyMsisdn, 0, 0);
     }
 }
 

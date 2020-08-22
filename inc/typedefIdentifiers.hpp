@@ -6,7 +6,7 @@
 namespace experis {
 
 typedef size_t IMSI; ////// should be std::string
-typedef size_t MNC; ////// should be std::string
+typedef std::string MNC;
 
 typedef size_t MSISDN; ////// should be std::string
 

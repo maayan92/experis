@@ -37,7 +37,7 @@ static void TestOperatorBillingCreate() {
     OperatorBilling operatorBilling(5);
     static int testNum = 0;
     Operator mobileOp;
-    PrintResult("mobileOp billing create", (!operatorBilling.Find(425020528409010, mobileOp)), testNum, ": \t");
+    PrintResult("mobileOp billing create", (!operatorBilling.Find("02", mobileOp)), testNum, ": \t");
 }
 
 static void TestOperatorBillingUpdate(OperatorBilling& a_oBilling, const string& a_usage, const string&a_sParty, Operator& a_oResult) {
@@ -48,7 +48,7 @@ static void TestOperatorBillingUpdate(OperatorBilling& a_oBilling, const string&
 
     static int testNum = 0;
     Operator mobileOp;
-    bool result = a_oBilling.Find(425020528409010, mobileOp);
+    bool result = a_oBilling.Find("02", mobileOp);
     PrintResult("operator billing update", (result && CheckResult(a_oResult, mobileOp)), testNum, ": \t");
 }
 

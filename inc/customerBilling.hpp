@@ -14,7 +14,7 @@ struct HashFuncCustomer {
     }
 };
 
-class CustomerBilling : public IDataAggregator<Customer> { // uncopyable
+class CustomerBilling : public IDataAggregator<Customer, experis::IMSI> { // uncopyable
 public:
     CustomerBilling(size_t a_numOfThreads = 2);
     //virtual ~CustomerBilling() = default;

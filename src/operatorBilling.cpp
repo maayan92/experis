@@ -7,15 +7,18 @@ OperatorBilling::OperatorBilling(size_t a_numOfThreads)
 {
 }
 
-void OperatorBilling::Update(const kokfikoCDR::CdrRecord& a_record)
+void OperatorBilling::Update(const kokfikoCDR::CdrRecord& a_record) /// change imsi to mnc
 {
     Operator mobileOp(a_record);
-    m_operatorData.Upsert(a_record.m_imsi, mobileOp, experis::Combine<Operator>()); /// change imsi to mcn
+    std::stringstream imsi;
+    imsi << a_record.m_imsi;
+    std::string mnc(imsi.str(), 3, 2);
+    m_operatorData.Upsert(mnc, mobileOp, experis::Combine<Operator>());
 }
 
-bool OperatorBilling::Find(const experis::IMSI& a_imsi, Operator& a_operator) const /// change imsi to mcn
+bool OperatorBilling::Find(const experis::MNC& a_mnc, Operator& a_operator) const
 {
-    return m_operatorData.Find(a_imsi, a_operator);
+    return m_operatorData.Find(a_mnc, a_operator);
 }
 
 } // data
