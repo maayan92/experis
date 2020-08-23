@@ -5,11 +5,20 @@
 
 namespace experis {
 
-typedef size_t IMSI; ////// should be std::string
+typedef std::string MCC;
 typedef std::string MNC;
+typedef std::string MSIN;
 
-typedef size_t MSISDN; ////// should be std::string
-
+typedef std::string MSISDN;
+typedef std::string SEQUENCE_NUM;
+typedef std::string IMEI;
+typedef std::string USAGE_TYPE;
+typedef std::string CALL_DATE;
+typedef std::string CALL_TIME;
+typedef size_t DURATION;
+typedef size_t BYTE_RECEIVED;
+typedef size_t BYTE_TRANSMITTED;
+typedef std::string SECOND_PARTY_MSISDN;
 
 typedef size_t OUT_GOING_VC;
 typedef size_t INCOMING_VC;

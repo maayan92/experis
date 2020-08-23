@@ -1,6 +1,7 @@
 #ifndef CDR_RECORD_H
 #define CDR_RECORD_H
 
+#include "typedefIdentifiers.hpp"
 #include <string>
 #include <cstring>
 #include <vector>
@@ -9,9 +10,9 @@
 namespace kokfikoCDR {
 
 struct Imsi {
-    std::string m_mcc;
-    std::string m_mnc;
-    std::string m_msin;
+    experis::MCC m_mcc;
+    experis::MNC m_mnc;
+    experis::MSIN m_msin;
     bool operator==(const Imsi& a_imsi) const;
 };
 
@@ -42,17 +43,17 @@ struct CdrRecord {
         SECOND_PARTY_MSISDN
     };
 
-    size_t m_sequenceNum;
+    experis::SEQUENCE_NUM m_sequenceNum;
     Imsi m_imsi;
-    std::string m_imei;
-    std::string m_usageType;
-    size_t m_msisdn;
-    std::string m_callDate;
-    std::string m_callTime;
-    size_t m_duration;
-    size_t m_byteRecieved;
-    size_t m_byteTransmitted;
-    size_t m_secondPartyMsisdn;
+    experis::IMEI m_imei;
+    experis::USAGE_TYPE m_usageType;
+    experis::MSISDN m_msisdn;
+    experis::CALL_DATE m_callDate;
+    experis::CALL_TIME m_callTime;
+    experis::DURATION m_duration;
+    experis::BYTE_RECEIVED m_byteRecieved;
+    experis::BYTE_TRANSMITTED m_byteTransmitted;
+    experis::SECOND_PARTY_MSISDN m_secondPartyMsisdn;
 
     size_t m_recordSize;
 

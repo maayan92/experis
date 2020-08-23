@@ -48,17 +48,17 @@ void Protocol::PackMessage(const Protocol::Record& a_record, char* a_buffer, siz
     size_t position = 0;
     a_buffer[position] = a_record.m_recordSize + Protocol::NUM_OF_RECORDS;
 
-    setNumberAsStrToBuffer(a_record.m_sequenceNum, a_buffer, position);
+    setStrToBuffer(a_record.m_sequenceNum, a_buffer, position);
     setImsiToBuffer(a_record.m_imsi, a_buffer, position);
     setStrToBuffer(a_record.m_imei, a_buffer, position);
     setStrToBuffer(a_record.m_usageType, a_buffer, position);
-    setNumberAsStrToBuffer(a_record.m_msisdn, a_buffer, position);
+    setStrToBuffer(a_record.m_msisdn, a_buffer, position);
     setStrToBuffer(a_record.m_callDate, a_buffer, position);
     setStrToBuffer(a_record.m_callTime, a_buffer, position);
     setNumberAsStrToBuffer(a_record.m_duration, a_buffer, position);
     setNumberAsStrToBuffer(a_record.m_byteRecieved, a_buffer, position);
     setNumberAsStrToBuffer(a_record.m_byteTransmitted, a_buffer, position);
-    setNumberAsStrToBuffer(a_record.m_secondPartyMsisdn, a_buffer, position);
+    setStrToBuffer(a_record.m_secondPartyMsisdn, a_buffer, position);
 }
 
 static size_t setStrToNumberFromBuffer(const char* a_msg, size_t& a_position, size_t a_size) {
@@ -88,7 +88,7 @@ Protocol::Record Protocol::UnPackMessage(const char* a_msg) {
     size_t position = 1;
 
     record.m_recordSize += a_msg[position];
-    record.m_sequenceNum = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
+    record.m_sequenceNum = setStrFromBuffer(a_msg, position, a_msg[position]);
     record.m_recordSize += a_msg[position];
     record.m_imsi = setStrToImsiFromBuffer(a_msg, position, a_msg[position]);
     record.m_recordSize += a_msg[position];
@@ -96,7 +96,7 @@ Protocol::Record Protocol::UnPackMessage(const char* a_msg) {
     record.m_recordSize += a_msg[position];
     record.m_usageType = setStrFromBuffer(a_msg, position, a_msg[position]);
     record.m_recordSize += a_msg[position];
-    record.m_msisdn = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
+    record.m_msisdn = setStrFromBuffer(a_msg, position, a_msg[position]);
     record.m_recordSize += a_msg[position];
     record.m_callDate = setStrFromBuffer(a_msg, position, a_msg[position]);
     record.m_recordSize += a_msg[position];
@@ -108,7 +108,7 @@ Protocol::Record Protocol::UnPackMessage(const char* a_msg) {
     record.m_recordSize += a_msg[position];
     record.m_byteTransmitted = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
     record.m_recordSize += a_msg[position];
-    record.m_secondPartyMsisdn = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
+    record.m_secondPartyMsisdn = setStrFromBuffer(a_msg, position, a_msg[position]);
 
     return record;
 }

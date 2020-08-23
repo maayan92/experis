@@ -32,17 +32,17 @@ static string getNumFromImsi(const Imsi& a_imsi) {
 
 bool CheckRecord(const CdrRecord& a_record, const vector<string>& a_values) {
     int position = 0;
-    return (fromNumToStr(a_record.m_sequenceNum) == a_values[position]) &&
+    return (a_record.m_sequenceNum == a_values[position]) &&
             (getNumFromImsi(a_record.m_imsi) == a_values[++position].c_str()) &&
             (a_record.m_imei == a_values[++position].c_str()) &&
             (a_record.m_usageType == a_values[++position].c_str()) &&
-            (fromNumToStr(a_record.m_msisdn) == a_values[++position].c_str()) &&
+            (a_record.m_msisdn == a_values[++position].c_str()) &&
             (a_record.m_callDate == a_values[++position].c_str()) &&
             (a_record.m_callTime == a_values[++position].c_str()) &&
             (fromNumToStr(a_record.m_duration) == a_values[++position].c_str()) &&
             (fromNumToStr(a_record.m_byteRecieved) == a_values[++position].c_str()) &&
             (fromNumToStr(a_record.m_byteTransmitted) == a_values[++position].c_str()) &&
-            (fromNumToStr(a_record.m_secondPartyMsisdn) == a_values[++position].c_str());
+            (a_record.m_secondPartyMsisdn == a_values[++position].c_str());
 }
 
 bool CompareRecords(const CdrRecord& a_left, const CdrRecord& a_right) {

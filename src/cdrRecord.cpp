@@ -3,17 +3,17 @@
 namespace kokfikoCDR {
 
 CdrRecord::CdrRecord(const std::vector<std::string>& a_info)
-: m_sequenceNum()
+: m_sequenceNum(a_info[SEQUENCE_NUM])
 , m_imsi()
 , m_imei(a_info[IMEI])
 , m_usageType(a_info[USAGE_TYPE])
-, m_msisdn()
+, m_msisdn(a_info[MSISDN])
 , m_callDate(a_info[CALL_DATE])
 , m_callTime(a_info[CALL_TIME])
 , m_duration()
 , m_byteRecieved()
 , m_byteTransmitted()
-, m_secondPartyMsisdn()
+, m_secondPartyMsisdn(a_info[SECOND_PARTY_MSISDN])
 , m_recordSize() {
     setValues(a_info);
     calculateRecordSize(a_info);
@@ -36,12 +36,9 @@ CdrRecord::CdrRecord()
 
 void CdrRecord::setValues(const std::vector<std::string>& a_info) {
     setImsi(a_info[IMSI]);
-    std::istringstream(a_info[SEQUENCE_NUM]) >> m_sequenceNum;
-    std::istringstream(a_info[MSISDN]) >> m_msisdn;
     std::istringstream(a_info[DURATION]) >> m_duration;
     std::istringstream(a_info[BYTE_RECEIVED]) >> m_byteRecieved;
     std::istringstream(a_info[BYTE_TRANSMITTED]) >> m_byteTransmitted;
-    std::istringstream(a_info[SECOND_PARTY_MSISDN]) >> m_secondPartyMsisdn;
 }
 
 void CdrRecord::setImsi(const std::string& a_strImsi) {
