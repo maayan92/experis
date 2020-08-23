@@ -13,7 +13,7 @@ class IDataQuery : private experis::Uncopyable {
 public:
     virtual ~IDataQuery();
 
-    virtual bool Find(const Key& a_key, Data& a_data) const = 0; /// change name to query
+    virtual bool Query(const Key& a_key, Data& a_data) const = 0; /// change name to query
 
 protected:
     IDataQuery();

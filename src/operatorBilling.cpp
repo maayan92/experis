@@ -15,7 +15,7 @@ void OperatorBilling::Update(const kokfikoCDR::CdrRecord& a_record)
     m_operatorData.Upsert(mccmnc, mobileOp, experis::Combine<Operator>());
 }
 
-bool OperatorBilling::Find(const experis::MCC_MNC& a_mccmnc, Operator& a_operator) const
+bool OperatorBilling::Query(const experis::MCC_MNC& a_mccmnc, Operator& a_operator) const
 {
     return m_operatorData.Find(a_mccmnc, a_operator);
 }

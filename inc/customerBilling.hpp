@@ -24,7 +24,7 @@ public:
     //virtual ~CustomerBilling() = default;
 
     virtual void Update(const kokfikoCDR::CdrRecord& a_record);
-    virtual bool Find(const experis::MSISDN& a_msisdn, Customer& a_customer) const;
+    virtual bool Query(const experis::MSISDN& a_msisdn, Customer& a_customer) const;
 
 private:
     experis::HashMapMT<experis::MSISDN, Customer, HashFuncCustomer, experis::Equal<experis::MSISDN> > m_customersData;

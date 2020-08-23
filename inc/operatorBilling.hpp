@@ -24,7 +24,7 @@ public:
     //virtual ~OperatorBilling() = default;
 
     virtual void Update(const kokfikoCDR::CdrRecord& a_record);
-    virtual bool Find(const experis::MCC_MNC& a_mccmnc, Operator& a_operator) const;
+    virtual bool Query(const experis::MCC_MNC& a_mccmnc, Operator& a_operator) const;
 
 private:
     experis::HashMapMT<experis::MCC_MNC, Operator, HashFuncOperator, experis::Equal<experis::MCC_MNC> > m_operatorData;

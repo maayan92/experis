@@ -44,7 +44,7 @@ static void TestCustomerBillingCreate() {
     CustomerBilling customerBilling(5);
     static int testNum = 0;
     Customer customer;
-    PrintResult("customer billing create", (!customerBilling.Find("9720528409042", customer)), testNum, ": \t");
+    PrintResult("customer billing create", (!customerBilling.Query("9720528409042", customer)), testNum, ": \t");
 }
 
 static void TestCustomerBillingUpdate(CustomerBilling& a_cBilling, const string& a_usage, const string&a_sParty, Customer& a_cResult) {
@@ -55,7 +55,7 @@ static void TestCustomerBillingUpdate(CustomerBilling& a_cBilling, const string&
 
     static int testNum = 0;
     Customer customer;
-    bool result = a_cBilling.Find("9720528409042", customer);
+    bool result = a_cBilling.Query("9720528409042", customer);
     PrintResult("customer billing update", (result && CheckResult(a_cResult, customer)), testNum, ": \t");
 }
 
