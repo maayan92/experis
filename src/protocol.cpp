@@ -76,9 +76,10 @@ static string setStrFromBuffer(const char* a_msg, size_t& a_position, size_t a_s
 
 static kokfikoCDR::Imsi setStrToImsiFromBuffer(const char* a_msg, size_t& a_position, size_t a_size) {
     kokfikoCDR::Imsi imsi;
-    imsi.m_mcc = std::string(a_msg[0], 3);
-    imsi.m_mnc = string(a_msg[3], 2);
-    imsi.m_msin = string(a_msg[5], 10);
+    imsi.m_mcc = string(a_msg + (++a_position), 3);
+    imsi.m_mnc = string(a_msg + (a_position + 3), 2);
+    imsi.m_msin = string(a_msg + (a_position + 5), 10);
+    a_position += a_size;
     return imsi;
 }
 

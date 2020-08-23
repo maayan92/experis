@@ -1,5 +1,6 @@
 #include "tcpClient.hpp"
 #include "exceptions.hpp"
+#include "testFunc.hpp"
 #include <string.h>
 #include <iostream>
 using namespace std;
@@ -7,12 +8,6 @@ using namespace kokfikoCDR;
 using namespace exceptions;
 
 static const size_t BUFFER_SIZE = 200;
-
-static void PrintResult(const char* a_test, bool a_result, int& a_testNum, const char* a_tabs) {
-    cout << a_test << ", test number " <<  ++a_testNum << a_tabs
-            << (a_result ? "\033[1;31mSUCCESS" : "\033[1;32mFAILED")
-                << "\033[0m" << endl;
-}
 
 static void TestConnectToServer(TcpClient& a_client) {
     static int testNum = 0;

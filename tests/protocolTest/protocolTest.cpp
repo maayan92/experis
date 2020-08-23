@@ -1,14 +1,10 @@
 #include "protocol.hpp"
+#include "testFunc.hpp"
 #include <iostream>
 using namespace std;
 using namespace kokfikoCDR;
 
 #define BUFFER_SIZE 200
-
-static void FillValues(vector<string>& a_values);
-static bool CheckRecord(const CdrRecord& a_record, const vector<string>& a_values);
-static bool CompareRecords(const CdrRecord& a_left, const CdrRecord& a_right);
-static void PrintResult(const char* a_test, bool a_result, int& a_testNum, const char* a_tabs);
 
 namespace tcp {
 

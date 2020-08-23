@@ -4,7 +4,7 @@ using namespace std;
 
 namespace kokfikoCDR {
 
-static void FillValues(vector<string>& a_values) {
+void FillValues(vector<string>& a_values) {
     a_values.push_back("123");
     a_values.push_back("425020528409010");
     a_values.push_back("35-209900-176148-1");
@@ -30,7 +30,7 @@ static string getNumFromImsi(const Imsi& a_imsi) {
     return numToStr.str();
 }
 
-static bool CheckRecord(const CdrRecord& a_record, const vector<string>& a_values) {
+bool CheckRecord(const CdrRecord& a_record, const vector<string>& a_values) {
     int position = 0;
     return (fromNumToStr(a_record.m_sequenceNum) == a_values[position]) &&
             (getNumFromImsi(a_record.m_imsi) == a_values[++position].c_str()) &&
@@ -45,7 +45,7 @@ static bool CheckRecord(const CdrRecord& a_record, const vector<string>& a_value
             (fromNumToStr(a_record.m_secondPartyMsisdn) == a_values[++position].c_str());
 }
 
-static bool CompareRecords(const CdrRecord& a_left, const CdrRecord& a_right) {
+bool CompareRecords(const CdrRecord& a_left, const CdrRecord& a_right) {
     return (a_left.m_sequenceNum == a_right.m_sequenceNum) &&
             (a_left.m_imsi == a_right.m_imsi) &&
             (a_left.m_imei == a_right.m_imei) &&
@@ -60,7 +60,7 @@ static bool CompareRecords(const CdrRecord& a_left, const CdrRecord& a_right) {
             (a_left.m_recordSize == a_right.m_recordSize);
 }
 
-static void PrintResult(const char* a_test, bool a_result, int& a_testNum, const char* a_tabs) {
+void PrintResult(const char* a_test, bool a_result, int& a_testNum, const char* a_tabs) {
     cout << a_test << ", test number " <<  ++a_testNum << a_tabs
             << (a_result ? "\033[1;31mSUCCESS" : "\033[1;32mFAILED")
                 << "\033[0m" << endl;

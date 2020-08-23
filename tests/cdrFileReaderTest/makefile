@@ -2,7 +2,7 @@ TARGET= cdrFileReaderTest.out
 CC= g++
 CFLAGS= -ansi -pedantic -Wall -Werror -g -I../../inc/ -I../
 INC= ../../inc/cdrFileReader.hpp ../../inc/exceptions.hpp ../../inc/iParser.hpp ../../inc/pipeParser.hpp \
-	../../inc/cdrRecord.hpp ../../inc/cdrSender.hpp ../../inc/tcpClient.hpp ../../inc/protocol.hpp
+	../../inc/cdrRecord.hpp ../../inc/cdrSender.hpp ../../inc/tcpClient.hpp ../../inc/protocol.hpp ../testFunc.hpp
 OBJS= iParser.o pipeParser.o cdrRecord.o tcpClient.o cdrSender.o protocol.o cdrFileReader.o cdrFileReaderTest.o
 
 $(TARGET): $(OBJS) $(INC)

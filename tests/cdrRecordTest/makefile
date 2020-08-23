@@ -9,7 +9,7 @@ $(TARGET): $(OBJS) $(INC)
 cdrRecord.o: ../../src/cdrRecord.cpp ../../inc/cdrRecord.hpp
 	$(CC) $(CFLAGS) -c ../../src/cdrRecord.cpp
 
-cdrRecordTest.o: cdrRecordTest.cpp
+cdrRecordTest.o: cdrRecordTest.cpp ../testFunc.hpp
 	$(CC) $(CFLAGS) -c cdrRecordTest.cpp
 
 clean:

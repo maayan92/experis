@@ -1,14 +1,9 @@
 #include "cdrFileReader.hpp"
+#include "testFunc.hpp"
 #include <iostream>
 using namespace std;
 
 namespace kokfikoCDR {
-
-static void PrintResult(const char* a_test, bool a_result, int& a_testNum, const char* a_tabs) {
-    cout << a_test << ", test number " <<  ++a_testNum << a_tabs
-            << (a_result ? "\033[1;31mSUCCESS" : "\033[1;32mFAILED")
-                << "\033[0m" << endl;
-}
 
 static void TestReadFile() {
     CdrFileReader readFile("127.0.0.1", 1234);
