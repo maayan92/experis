@@ -1,25 +1,29 @@
 #include "protocol.hpp"
-#include "testFunc.hpp"
 #include <iostream>
 using namespace std;
 using namespace kokfikoCDR;
 
 #define BUFFER_SIZE 200
 
-typedef kokfikoCDR::CdrRecord::RecordInfo RecordInfo;
+static void FillValues(vector<string>& a_values);
+static bool CheckRecord(const CdrRecord& a_record, const vector<string>& a_values);
+static bool CompareRecords(const CdrRecord& a_left, const CdrRecord& a_right);
+static void PrintResult(const char* a_test, bool a_result, int& a_testNum, const char* a_tabs);
 
 namespace tcp {
 
-static bool CheckNext(char* a_buffer, const RecordInfo& a_values, size_t& a_bufPos, size_t& a_valuesPos) {
+static bool CheckNext(char* a_buffer, const vector<string>& a_values, size_t& a_bufPos, size_t& a_valuesPos) {
     size_t valSize = a_values[a_valuesPos].size();
-    bool result = (valSize == a_buffer[a_bufPos++]) && (0 == strncmp(a_buffer + a_bufPos, a_values[a_valuesPos].c_str(), valSize));
+    size_t size = a_buffer[a_bufPos++];
+    bool result = (valSize == size) && (0 == strncmp(a_buffer + a_bufPos, a_values[a_valuesPos].c_str(), valSize));
     a_bufPos += valSize;
     ++a_valuesPos;
     return result;
 }
 
-static bool CheckResult(char* a_buffer, const RecordInfo& a_values) {
-    size_t bufPos = 0, valuesPos = 0, valSize = a_values[valuesPos].size();
+static bool CheckResult(char* a_buffer, const vector<string>& a_values) {
+    size_t bufPos = 0;
+    size_t valuesPos = 0;
     bool result = (100 == a_buffer[bufPos++]);
 
     while(valuesPos < a_values.size()) {
@@ -29,7 +33,7 @@ static bool CheckResult(char* a_buffer, const RecordInfo& a_values) {
     return result;
 }
 
-static void TestProtocolPackMsg(const CdrRecord& a_record, const RecordInfo& a_values) {
+static void TestProtocolPackMsg(const CdrRecord& a_record, const vector<string>& a_values) {
     char buffer[BUFFER_SIZE];
     static int testNum = 0;
 
@@ -63,7 +67,7 @@ static void TestProtocolUnPackMsg(const CdrRecord& a_record) {
 } // tcp
 
 int main() {
-    RecordInfo values;
+    vector<string> values;
     FillValues(values);
     CdrRecord record(values);
     tcp::TestProtocolPackMsg(record, values);

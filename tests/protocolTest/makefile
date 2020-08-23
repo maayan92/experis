@@ -1,11 +1,14 @@
 TARGET= protocolTest.out 
 CC= g++ 
 CFLAGS= -ansi -pedantic -Wall -Werror -g -I../../inc/ -I../
-INC= ../../inc/protocol.hpp ../../inc/exceptions.hpp ../testFunc.hpp ../../inc/cdrRecord.hpp
-OBJS= protocol.o protocolTest.o
+INC= ../../inc/protocol.hpp ../../inc/exceptions.hpp ../../inc/cdrRecord.hpp
+OBJS= testFunc.o protocol.o protocolTest.o
 
 $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(OBJS)
+
+testFunc.o: ../testFunc.cpp $(INC)
+	$(CC) $(CFLAGS) -c ../testFunc.cpp
 
 protocol.o: ../../src/protocol.cpp $(INC)
 	$(CC) $(CFLAGS) -c ../../src/protocol.cpp

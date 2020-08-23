@@ -37,7 +37,7 @@ static void TestSendData(TcpClient& a_client) {
         PrintResult("send data", false, testNum, ": \t");
     }
 }
-
+/*
 static void TestRecieve(TcpClient& a_client) {
     static int testNum = 0;
     try {
@@ -50,7 +50,7 @@ static void TestRecieve(TcpClient& a_client) {
         PrintResult("send data", false, testNum, ": \t");
     }
 }
-
+*/
 int main() {
     static int testNum = 0;
     try {

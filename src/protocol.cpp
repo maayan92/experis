@@ -30,6 +30,17 @@ static void setStrToBuffer(const std::string& a_value, char* a_buffer, size_t& a
     a_position += valSize;
 }
 
+static void setImsiToBuffer(const kokfikoCDR::Imsi& a_imsi, char* a_buffer, size_t& a_position) {
+    string imsi(a_imsi.m_mcc);
+    imsi += a_imsi.m_mnc;
+    imsi += a_imsi.m_msin;
+    size_t valSize = strlen(imsi.c_str());
+    a_buffer[++a_position] = valSize;
+    a_buffer[a_position + 1] = '\0';
+    strncat(a_buffer, imsi.c_str(), valSize);
+    a_position += valSize;
+}
+
 void Protocol::PackMessage(const Protocol::Record& a_record, char* a_buffer, size_t a_bufferSize) {
     if(a_bufferSize < (a_record.m_recordSize + Protocol::NUM_OF_RECORDS)) {
         throw ExcBufferSizeTooSmall();
@@ -38,7 +49,7 @@ void Protocol::PackMessage(const Protocol::Record& a_record, char* a_buffer, siz
     a_buffer[position] = a_record.m_recordSize + Protocol::NUM_OF_RECORDS;
 
     setNumberAsStrToBuffer(a_record.m_sequenceNum, a_buffer, position);
-    setNumberAsStrToBuffer(a_record.m_imsi, a_buffer, position);
+    setImsiToBuffer(a_record.m_imsi, a_buffer, position);
     setStrToBuffer(a_record.m_imei, a_buffer, position);
     setStrToBuffer(a_record.m_usageType, a_buffer, position);
     setNumberAsStrToBuffer(a_record.m_msisdn, a_buffer, position);
@@ -63,6 +74,14 @@ static string setStrFromBuffer(const char* a_msg, size_t& a_position, size_t a_s
     return result;
 }
 
+static kokfikoCDR::Imsi setStrToImsiFromBuffer(const char* a_msg, size_t& a_position, size_t a_size) {
+    kokfikoCDR::Imsi imsi;
+    imsi.m_mcc = std::string(a_msg[0], 3);
+    imsi.m_mnc = string(a_msg[3], 2);
+    imsi.m_msin = string(a_msg[5], 10);
+    return imsi;
+}
+
 Protocol::Record Protocol::UnPackMessage(const char* a_msg) {
     Record record;
     size_t position = 1;
@@ -70,7 +89,7 @@ Protocol::Record Protocol::UnPackMessage(const char* a_msg) {
     record.m_recordSize += a_msg[position];
     record.m_sequenceNum = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
     record.m_recordSize += a_msg[position];
-    record.m_imsi = setStrToNumberFromBuffer(a_msg, position, a_msg[position]);
+    record.m_imsi = setStrToImsiFromBuffer(a_msg, position, a_msg[position]);
     record.m_recordSize += a_msg[position];
     record.m_imei = setStrFromBuffer(a_msg, position, a_msg[position]);
     record.m_recordSize += a_msg[position];
