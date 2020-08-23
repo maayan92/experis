@@ -109,7 +109,7 @@ static bool CheckResultCustomer(const Billing& a_billing) {
     customerResult.m_secondParties["496221540"] += sParty;
 
     Customer customer;
-    a_billing.m_customerBilling.Find("4250162782277", customer);
+    a_billing.m_customerBilling.Query("4250162782277", customer);
     return CheckResultCustomer(customerResult, customer);
 }
 
@@ -126,7 +126,7 @@ static bool CheckResultOperator(const Billing& a_billing) {
     operatorResult.m_incomingSms = 20; operatorResult.m_outgoingSms = 10;
 
     Operator mobileOp;
-    a_billing.m_operatorBilling.Find("42502", mobileOp);
+    a_billing.m_operatorBilling.Query("42502", mobileOp);
     return CheckResultOperator(operatorResult, mobileOp);
 }
 
