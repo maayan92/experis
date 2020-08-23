@@ -8,6 +8,7 @@ namespace experis {
 typedef std::string MCC;
 typedef std::string MNC;
 typedef std::string MSIN;
+typedef std::string MCC_MNC;
 
 typedef std::string MSISDN;
 typedef std::string SEQUENCE_NUM;

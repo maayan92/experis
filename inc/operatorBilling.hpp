@@ -5,6 +5,7 @@
 #include "hashMap.hpp"
 #include "operator.hpp"
 #include "additionalStructures.hpp"
+#include "iDataQuery.hpp"
 
 namespace data {
 
@@ -17,16 +18,16 @@ struct HashFuncOperator {
     }
 };
 
-class OperatorBilling : public IDataAggregator<Operator, experis::MNC>{ // uncopyable
+class OperatorBilling : public IDataAggregator, public IDataQuery<Operator, experis::MCC_MNC>{ // uncopyable
 public:
     OperatorBilling(size_t a_numOfThreads = 2);
     //virtual ~OperatorBilling() = default;
 
     virtual void Update(const kokfikoCDR::CdrRecord& a_record);
-    virtual bool Find(const experis::MNC& a_mnc, Operator& a_operator) const;
+    virtual bool Find(const experis::MCC_MNC& a_mccmnc, Operator& a_operator) const;
 
 private:
-    experis::HashMapMT<experis::MNC, Operator, HashFuncOperator, experis::Equal<experis::MNC> > m_operatorData;
+    experis::HashMapMT<experis::MCC_MNC, Operator, HashFuncOperator, experis::Equal<experis::MCC_MNC> > m_operatorData;
 };
 
 } // data
