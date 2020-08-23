@@ -1,8 +1,7 @@
 #include "pipeParser.hpp"
 #include "testFunc.hpp"
 #include <iostream>
-
-typedef kokfikoCDR::CdrRecord::RecordInfo RecordInfo;
+using namespace std;
 
 namespace kokfikoCDR {
 
@@ -18,7 +17,7 @@ static void TestParsing(const std::string& a_info, const CdrRecord& a_values) {
 
 int main() {
     std::string buffer("123|425020528409010|35-209900-176148-1|MOC|9720528409042|DD/MM/YYYY|HH:MM:SS|2152|64|32|61523827346");
-    RecordInfo a_values;
+    vector<string> a_values;
     kokfikoCDR::FillValues(a_values);
     
     kokfikoCDR::CdrRecord result(a_values);

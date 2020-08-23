@@ -3,24 +3,19 @@
 #include <sstream>
 #include <string>
 #include <iostream>
+using namespace kokfikoCDR;
 using namespace std;
 
-typedef kokfikoCDR::CdrRecord::RecordInfo RecordInfo;
-
-namespace kokfikoCDR {
-
-static void TestRecord(RecordInfo& a_values) {
+static void TestRecord(vector<string>& a_values) {
     kokfikoCDR::CdrRecord record(a_values);
     static int testNum = 0;
     PrintResult("record create", CheckRecord(record, a_values), testNum, ": \t");
 }
 
-} // kokfikoCDR
-
 int main() {
-    kokfikoCDR::CdrRecord::RecordInfo values;
-    kokfikoCDR::FillValues(values);
-    kokfikoCDR::TestRecord(values);
+    vector<string> values;
+    FillValues(values);
+    TestRecord(values);
 
     return 0;
 }
