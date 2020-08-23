@@ -14,12 +14,12 @@ struct Billing {
     OperatorBilling m_operatorBilling;
 };
 
-static void FillValues(CdrRecord::RecordInfo& a_values, const string& a_customer, const string& a_usage, const string&a_secondParty) {
+static void FillValues(vector<string>& a_values, const string& a_msisdn, const string& a_usage, const string&a_secondParty) {
     a_values.push_back("123");
-    a_values.push_back(a_customer);
+    a_values.push_back("425020162782277");
     a_values.push_back("35-209900-176148-1");
     a_values.push_back(a_usage);
-    a_values.push_back("9720528409042");
+    a_values.push_back(a_msisdn);
     a_values.push_back("DD/MM/YYYY");
     a_values.push_back("HH:MM:SS");
     a_values.push_back("2152");
@@ -48,10 +48,10 @@ static void UpdateWithNewRecord(void* a_billing, const string& a_customer, const
 static void* TestThreadsUpsertFirst(void* a_billing)
 {
     for (size_t i = 0 ; i < 10 ; ++i) {
-        UpdateWithNewRecord(a_billing, "425020162782277", "MOC", "615238273");
-        UpdateWithNewRecord(a_billing, "425020162782277", "X", "496221540");
-        UpdateWithNewRecord(a_billing, "425020528409010", "MTC", "615238273");
-        UpdateWithNewRecord(a_billing, "425020528409010", "SMS-MO", "615238273");
+        UpdateWithNewRecord(a_billing, "4250162782277", "MOC", "615238273");
+        UpdateWithNewRecord(a_billing, "4250162782277", "X", "496221540");
+        UpdateWithNewRecord(a_billing, "9720528409042", "MTC", "615238273");
+        UpdateWithNewRecord(a_billing, "9720528409042", "SMS-MO", "615238273");
     }
     
     pthread_exit(NULL);
@@ -61,9 +61,9 @@ static void* TestThreadsUpsertFirst(void* a_billing)
 static void* TestThreadsUpsertSecond(void* a_billing)
 {
     for (size_t i = 0 ; i < 10 ; ++i) {
-        UpdateWithNewRecord(a_billing, "425020162782277", "MTC", "615238273");
-        UpdateWithNewRecord(a_billing, "425020528409010", "MOC", "496221540");
-        UpdateWithNewRecord(a_billing, "425020528409010", "U", "496221540");
+        UpdateWithNewRecord(a_billing, "4250162782277", "MTC", "615238273");
+        UpdateWithNewRecord(a_billing, "9720528409042", "MOC", "496221540");
+        UpdateWithNewRecord(a_billing, "9720528409042", "U", "496221540");
     }
     
     pthread_exit(NULL);
@@ -73,9 +73,9 @@ static void* TestThreadsUpsertSecond(void* a_billing)
 static void* TestThreadsUpsertTheard(void* a_billing)
 {
     for (size_t i = 0 ; i < 10 ; ++i) {
-        UpdateWithNewRecord(a_billing, "425020162782277", "SMS-MT", "615238273");
-        UpdateWithNewRecord(a_billing, "425020162782277", "D", "496221540");
-        UpdateWithNewRecord(a_billing, "425020528409010", "SMS-MT", "615238273");
+        UpdateWithNewRecord(a_billing, "4250162782277", "SMS-MT", "615238273");
+        UpdateWithNewRecord(a_billing, "4250162782277", "D", "496221540");
+        UpdateWithNewRecord(a_billing, "9720528409042", "SMS-MT", "615238273");
     }
     
     pthread_exit(NULL);
@@ -104,12 +104,12 @@ static bool CheckResultCustomer(const Billing& a_billing) {
     customerResult.m_totalDataTransf = 320; customerResult.m_totalDataReceive = 640;
     customerResult.m_totalSmsReceive = 10; customerResult.m_totalSmsSent = 0;
     SecondParty sParty; sParty.m_totalVC = 43040; sParty.m_totalSms = 10;
-    customerResult.m_secondParties[615238273] += sParty;
+    customerResult.m_secondParties["615238273"] += sParty;
     sParty.m_totalVC = 0; sParty.m_totalSms = 0;
-    customerResult.m_secondParties[496221540] += sParty;
+    customerResult.m_secondParties["496221540"] += sParty;
 
     Customer customer;
-    a_billing.m_customerBilling.Find(425020162782277, customer);
+    a_billing.m_customerBilling.Find("4250162782277", customer);
     return CheckResultCustomer(customerResult, customer);
 }
 
@@ -126,7 +126,7 @@ static bool CheckResultOperator(const Billing& a_billing) {
     operatorResult.m_incomingSms = 20; operatorResult.m_outgoingSms = 10;
 
     Operator mobileOp;
-    a_billing.m_operatorBilling.Find("02", mobileOp);
+    a_billing.m_operatorBilling.Find("42502", mobileOp);
     return CheckResultOperator(operatorResult, mobileOp);
 }
 
