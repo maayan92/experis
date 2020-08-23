@@ -2,6 +2,9 @@
 
 namespace kokfikoCDR {
 
+IParser::IParser() {
+}
+
 IParser::~IParser() {
 }
 
