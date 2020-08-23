@@ -4,7 +4,7 @@ using namespace kokfikoCDR;
 using namespace std;
 using namespace data;
 
-static void FillValues(CdrRecord::RecordInfo& a_values, const string& a_usage, const string&a_secondParty) {
+static void FillValues(vector<string>& a_values, const string& a_usage, const string&a_secondParty) {
     a_values.push_back("123");
     a_values.push_back("425020528409010");
     a_values.push_back("35-209900-176148-1");
@@ -44,18 +44,18 @@ static void TestCustomerBillingCreate() {
     CustomerBilling customerBilling(5);
     static int testNum = 0;
     Customer customer;
-    PrintResult("customer billing create", (!customerBilling.Find(425020528409010, customer)), testNum, ": \t");
+    PrintResult("customer billing create", (!customerBilling.Find("9720528409042", customer)), testNum, ": \t");
 }
 
 static void TestCustomerBillingUpdate(CustomerBilling& a_cBilling, const string& a_usage, const string&a_sParty, Customer& a_cResult) {
-    CdrRecord::RecordInfo values;
+    vector<string> values;
     FillValues(values, a_usage, a_sParty);
     CdrRecord record(values);
     a_cBilling.Update(record);
 
     static int testNum = 0;
     Customer customer;
-    bool result = a_cBilling.Find(425020528409010, customer);
+    bool result = a_cBilling.Find("9720528409042", customer);
     PrintResult("customer billing update", (result && CheckResult(a_cResult, customer)), testNum, ": \t");
 }
 
@@ -68,18 +68,18 @@ int main() {
     customerResult.m_totalDataTransf = 0; customerResult.m_totalDataReceive = 0;
     customerResult.m_totalSmsReceive = 0; customerResult.m_totalSmsSent = 0;
     SecondParty sParty; sParty.m_totalVC = 2152; sParty.m_totalSms = 0;
-    customerResult.m_secondParties[61523827346] += sParty;
+    customerResult.m_secondParties["615238273"] += sParty;
 
     TestCustomerBillingUpdate(customerBilling, "MOC", "61523827346", customerResult);
 
     customerResult.m_incomingVC += 2152;
     sParty.m_totalVC = 2152; sParty.m_totalSms = 0;
-    customerResult.m_secondParties[61523827346] += sParty;
+    customerResult.m_secondParties["615238273"] += sParty;
     TestCustomerBillingUpdate(customerBilling, "MTC", "61523827346", customerResult);
 
     customerResult.m_totalSmsSent += 1;
     sParty.m_totalVC = 0; sParty.m_totalSms = 1;
-    customerResult.m_secondParties[496221540] += sParty;
+    customerResult.m_secondParties["496221540"] += sParty;
     TestCustomerBillingUpdate(customerBilling, "SMS-MO", "496221540", customerResult);
 
     

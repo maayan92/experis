@@ -10,12 +10,12 @@ CustomerBilling::CustomerBilling(size_t a_numOfThreads)
 void CustomerBilling::Update(const kokfikoCDR::CdrRecord& a_record)
 {
     Customer customer(a_record);
-    m_customersData.Upsert(a_record.m_imsi, customer, experis::Combine<Customer>());
+    m_customersData.Upsert(a_record.m_msisdn, customer, experis::Combine<Customer>());
 }
 
-bool CustomerBilling::Find(const experis::IMSI& a_imsi, Customer& a_operator) const
+bool CustomerBilling::Find(const experis::MSISDN& a_msisdn, Customer& a_operator) const
 {
-    return m_customersData.Find(a_imsi, a_operator);
+    return m_customersData.Find(a_msisdn, a_operator);
 }
 
 } // data

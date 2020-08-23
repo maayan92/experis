@@ -10,24 +10,24 @@
 namespace data{
 
 struct HashFuncCustomer {
-    size_t operator()(const kokfikoCDR::Imsi& a_imsi) const {
-        std::istringstream mnc(a_imsi.m_mnc);
-        size_t mncNum;
-        mnc >> mncNum;
-        return mncNum;
+    size_t operator()(const experis::MSISDN& a_msisdn) const {
+        std::istringstream msisdn(a_msisdn);
+        size_t msisdnNum;
+        msisdn >> msisdnNum;
+        return msisdnNum;
     }
 };
 
-class CustomerBilling : public IDataAggregator, public IDataQuery<Customer, kokfikoCDR::Imsi> { // uncopyable
+class CustomerBilling : public IDataAggregator, public IDataQuery<Customer, experis::MSISDN> { // uncopyable
 public:
     CustomerBilling(size_t a_numOfThreads = 2);
     //virtual ~CustomerBilling() = default;
 
     virtual void Update(const kokfikoCDR::CdrRecord& a_record);
-    virtual bool Find(const kokfikoCDR::Imsi& a_imsi, Customer& a_customer) const;
+    virtual bool Find(const experis::MSISDN& a_msisdn, Customer& a_customer) const;
 
 private:
-    experis::HashMapMT<kokfikoCDR::Imsi, Customer, HashFuncCustomer, experis::Equal<kokfikoCDR::Imsi> > m_customersData;
+    experis::HashMapMT<experis::MSISDN, Customer, HashFuncCustomer, experis::Equal<experis::MSISDN> > m_customersData;
 };
 
 } // data
