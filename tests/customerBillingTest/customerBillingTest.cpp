@@ -9,13 +9,13 @@ static void FillValues(CdrRecord::RecordInfo& a_values, const string& a_usage, c
     a_values.push_back("425020528409010");
     a_values.push_back("35-209900-176148-1");
     a_values.push_back(a_usage);
-    a_values.push_back(a_secondParty);
+    a_values.push_back("9720528409042");
     a_values.push_back("DD/MM/YYYY");
     a_values.push_back("HH:MM:SS");
     a_values.push_back("2152");
     a_values.push_back("64");
     a_values.push_back("32");
-    a_values.push_back("61523827346");
+    a_values.push_back(a_secondParty);
 }
 
 static void PrintResult(const char* a_test, bool a_result, int& a_testNum, const char* a_tabs) {
@@ -68,19 +68,19 @@ int main() {
     customerResult.m_totalDataTransf = 0; customerResult.m_totalDataReceive = 0;
     customerResult.m_totalSmsReceive = 0; customerResult.m_totalSmsSent = 0;
     SecondParty sParty; sParty.m_totalVC = 2152; sParty.m_totalSms = 0;
-    customerResult.m_secondParties[9720528409042] += sParty;
+    customerResult.m_secondParties[61523827346] += sParty;
 
-    TestCustomerBillingUpdate(customerBilling, "MOC", "9720528409042", customerResult);
+    TestCustomerBillingUpdate(customerBilling, "MOC", "61523827346", customerResult);
 
     customerResult.m_incomingVC += 2152;
     sParty.m_totalVC = 2152; sParty.m_totalSms = 0;
-    customerResult.m_secondParties[9720528409042] += sParty;
-    TestCustomerBillingUpdate(customerBilling, "MTC", "9720528409042", customerResult);
+    customerResult.m_secondParties[61523827346] += sParty;
+    TestCustomerBillingUpdate(customerBilling, "MTC", "61523827346", customerResult);
 
     customerResult.m_totalSmsSent += 1;
     sParty.m_totalVC = 0; sParty.m_totalSms = 1;
-    customerResult.m_secondParties[4320528409088] += sParty;
-    TestCustomerBillingUpdate(customerBilling, "SMS-MO", "4320528409088", customerResult);
+    customerResult.m_secondParties[496221540] += sParty;
+    TestCustomerBillingUpdate(customerBilling, "SMS-MO", "496221540", customerResult);
 
     
 
