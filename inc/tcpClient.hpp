@@ -1,31 +1,32 @@
 #ifndef TCP_CLIENT_H
 #define TCP_CLIENT_H
 
-#include <arpa/inet.h> 
+#include "uncopyable.hpp"
+#include <arpa/inet.h>
 
 namespace kokfikoCDR {
 
-class TcpClient {
+class TcpClient : private experis::Uncopyable{
 public:
     TcpClient(const char* a_ipAddress, size_t a_port);
+    explicit TcpClient(int a_socketNum);
     ~TcpClient();
 
     void ConnectToServer();
     void SendMessage(const char* a_msg) const;
-    void RecvMessage(int m_clientSocket, char* a_msg, size_t a_msgSize);
+    void RecvMessage(char* a_msg, size_t a_msgSize);
 
     int GetSocketNumber() const;
     struct sockaddr_in GetSocketAddr() const;
 
 private:  
-    TcpClient(const TcpClient& a_tcpClient);
-    TcpClient& operator=(const TcpClient& a_tcpClient);
-    
-    void createSockerAddr(const char* a_ipAddress, size_t a_port);
+    void createSocketAddr(const char* a_ipAddress, size_t a_port);
+    static int openSocket();
 
 private:
     int m_socketNum;
     struct sockaddr_in m_servAddr;
+    bool m_isConnected;
 };
 
 } // kokfikoCDR

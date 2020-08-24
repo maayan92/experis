@@ -10,9 +10,8 @@ class TcpServer {
 public:
     TcpServer(const char* a_ipAddress, size_t a_port);
 
-    int WaitForMessage();
-    int GetSocketConnection(int& a_activity);
-    void GetData(char* a_buffer, size_t a_bufferSize, int a_clientSocket);
+    void GetSocketConnection(int& a_activity);
+    void GetData(char* a_buffer, size_t a_bufferSize);
 
 private:
     void setSocket();
@@ -20,14 +19,10 @@ private:
     void listenSocket();
 
 private:
-    static const size_t NUM_OF_CLIENTS = 50;
-    static const size_t NUM_OF_SOCKETS = 1024;
-    static const size_t MAX_CLIENTS = 1000;
+    static const size_t NUM_OF_CLIENTS = 1;
 
     TcpClient m_socket;
-    std::vector<int> m_clients;
-	fd_set m_masterfd;
-    fd_set m_watchingfd;
+    std::vector<TcpClient*> m_clients;
 };
 
 } // kokfikoCDR

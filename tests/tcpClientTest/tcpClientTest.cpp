@@ -3,16 +3,30 @@
 #include "testFunc.hpp"
 #include <string.h>
 #include <iostream>
+#include <unistd.h>
 using namespace std;
 using namespace kokfikoCDR;
 using namespace exceptions;
 
 static const size_t BUFFER_SIZE = 200;
 
-static void TestConnectToServer(TcpClient& a_client) {
+static void TestCreateClient() {
     static int testNum = 0;
-     try {
-        a_client.ConnectToServer();
+    try {
+        TcpClient client("127.0.0.1", 1234);
+        PrintResult("create client", true, testNum, ": \t");
+
+    }catch(const exception& exc) {
+        cout << exc.what() << endl;
+        PrintResult("create client", false, testNum, ": \t");
+    }
+}
+
+static void TestConnectToServer() {
+    static int testNum = 0;
+    try {
+        TcpClient client("127.0.0.1", 1234);
+        client.ConnectToServer();
         PrintResult("connection", true, testNum, ": \t");
 
     }catch(const exception& exc) {
@@ -21,10 +35,12 @@ static void TestConnectToServer(TcpClient& a_client) {
     }
 }
 
-static void TestSendData(TcpClient& a_client) {
+static void TestSendData() {
     static int testNum = 0;
     try {
-        a_client.SendMessage("message from client\n");
+        TcpClient client("127.0.0.1", 1234);
+        client.ConnectToServer();
+        client.SendMessage("message from client\n");
         PrintResult("send data", true, testNum, ": \t");
 
     }catch(const exception& exc) {
@@ -32,34 +48,13 @@ static void TestSendData(TcpClient& a_client) {
         PrintResult("send data", false, testNum, ": \t");
     }
 }
-/*
-static void TestRecieve(TcpClient& a_client) {
-    static int testNum = 0;
-    try {
-        char buffer[BUFFER_SIZE];
-        a_client.RecvMessage(a_client.GetSocketNumber(), buffer, BUFFER_SIZE);
-        PrintResult("send data", (0 == strcmp(buffer, "message from client\n")), testNum, ": \t");
 
-    }catch(const exception& exc) {
-        cout << exc.what() << endl;
-        PrintResult("send data", false, testNum, ": \t");
-    }
-}
-*/
 int main() {
-    static int testNum = 0;
-    try {
-        TcpClient client("127.0.0.1", 1234);
-        PrintResult("create client", true, testNum, ": \t");
-      
-        TestConnectToServer(client);
-        TestSendData(client);
-        //TestRecieve(client);
-
-    }catch(const exception& exc) {
-        cout << exc.what() << endl;
-        PrintResult("create client or send data", false, testNum, ": \t");
-    }
+    TestCreateClient();
+    sleep(1);
+    TestConnectToServer();
+    sleep(1);
+    TestSendData();
 
     return 0;
 }

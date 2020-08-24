@@ -61,6 +61,20 @@ public:
     }
 };
 
+class ExcCantSendNotConnected : public std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "send data failed! client is not connection to server!";
+    }
+};
+
+class ExcConnetionFailed : public std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "client connection request failed!";
+    }
+};
+
 class ExcSocketIsClosed : public std::exception {
 public:
     virtual const char* what() const throw() {
@@ -100,6 +114,13 @@ class ExcServerListenFailed : public std::exception {
 public:
     virtual const char* what() const throw() {
         return "Server listen failed!";
+    }
+};
+
+class ExcAcceptFailed : public std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "accept client connection failed!";
     }
 };
 

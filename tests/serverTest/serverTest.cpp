@@ -1,8 +1,11 @@
-#include "serverManager.hpp"
+#include "tcpServer.hpp"
+#include "cdrRecord.hpp"
 #include "testFunc.hpp"
 #include <iostream>
 using namespace kokfikoCDR;
 using namespace std;
+
+static const size_t BUFFER_SIZE = 200; 
 
 static void TestCreateServer() {
     static int testNum = 0;
@@ -16,13 +19,29 @@ static void TestCreateServer() {
      }
 }
 
-static void TestGetMessage() {
+static void TestGetConnection() {
     static int testNum = 0;
      try {
          TcpServer server("127.0.0.1", 1234);
          int activity = 1;
          server.GetSocketConnection(activity);
-         //server.WaitForMessage();
+         PrintResult("create sevrer", true, testNum, ": \t");
+
+     }catch(const exception& exc) {
+         cout << exc.what() << endl;
+         PrintResult("create sevrer", false, testNum, ": \t");
+     }
+}
+
+static void TestGetData() {
+    static int testNum = 0;
+     try {
+         TcpServer server("127.0.0.1", 1234);
+         int activity = 1;
+         server.GetSocketConnection(activity);
+         char buffer[BUFFER_SIZE];
+         server.GetData(buffer, BUFFER_SIZE);
+         cout << buffer;
          PrintResult("create sevrer", true, testNum, ": \t");
 
      }catch(const exception& exc) {
@@ -33,21 +52,9 @@ static void TestGetMessage() {
 
 int main() {
 
-    //TcpServer server;
-    //GetSocketConnection(0);
-
     TestCreateServer();
+    TestGetConnection();
+    TestGetData();
 
-
-/*
-    try {
-        ofstream outputFile("../cdrFileReaderTest/result.txt");
-        ServerManager serverMng(outputFile);
-
-        serverMng.RunServer();
-    }catch(const exception& exc) {
-        cout << exc.what() << endl;
-    }
-*/
     return 0;
 }

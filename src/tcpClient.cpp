@@ -22,32 +22,18 @@ static void CheckErrno() {
     }
 }
 
-static int OpenSocket() {
-    int socketNum = socket(AF_INET, SOCK_STREAM, 0);
-    if(socketNum < 0) {
-        assert(EINVAL != errno);
-        assert(EAFNOSUPPORT != errno);
-        assert(EPROTONOSUPPORT != errno);
-
-        if(EACCES == errno) {
-            throw ExcPermissionDenied();
-        }
-        if(EMFILE == errno) {
-            throw ExcDescriptorTableFull();
-        }
-        if(ENOBUFS == errno || ENOMEM == errno) {
-            throw ExcNotEnoughSpace();
-        }
-        assert(!"undocumented error for socket!");
-    }
-    return socketNum;
+TcpClient::TcpClient(const char* a_ipAddress, size_t a_port)
+: m_socketNum(openSocket())
+, m_servAddr()
+, m_isConnected(false)
+{
+    createSocketAddr(a_ipAddress, a_port);
 }
 
-TcpClient::TcpClient(const char* a_ipAddress, size_t a_port)
-: m_socketNum(OpenSocket())
-, m_servAddr()
+TcpClient::TcpClient(int a_socketNum)
+: m_socketNum(a_socketNum)
+, m_isConnected(true)
 {
-    createSockerAddr(a_ipAddress, a_port);
 }
 
 TcpClient::~TcpClient() {
@@ -58,22 +44,15 @@ TcpClient::~TcpClient() {
 void TcpClient::ConnectToServer() {
     int status = connect(m_socketNum, reinterpret_cast<struct sockaddr*>(&m_servAddr), sizeof(m_servAddr));
     if(0 > status) {
-        CheckErrno();
-        // no:
-        // EPERM
-        // EADDRINUSE
-        // EADDRNOTAVAIL
-        // EAFNOSUPPORT
-        // ECONNREFUSED
-        // EINPROGRESS
-        // ENETUNREACH
-        // EPROTOTYPE
-        // ETIMEDOUT
-        assert(!"undocumented error for connect!");
+       throw ExcConnetionFailed();
     }
+    m_isConnected = true;
 }
 
 void TcpClient::SendMessage(const char* a_msg) const {
+    if(!m_isConnected) {
+        throw ExcCantSendNotConnected();
+    }
     ssize_t sentBytes = send(m_socketNum, a_msg, strlen(a_msg), 0);
     if(0 > sentBytes) {
         CheckErrno();
@@ -98,8 +77,8 @@ void TcpClient::SendMessage(const char* a_msg) const {
     }
 }
 
-void TcpClient::RecvMessage(int m_clientSocket, char* a_msg, size_t a_msgSize) {
-    ssize_t readBytes = recv(m_clientSocket, a_msg, a_msgSize, 0);
+void TcpClient::RecvMessage(char* a_msg, size_t a_msgSize) {
+    ssize_t readBytes = recv(m_socketNum, a_msg, a_msgSize, 0);
     if(0 == readBytes) {
         throw ExcSocketIsClosed();
     }
@@ -120,7 +99,28 @@ struct sockaddr_in TcpClient::GetSocketAddr() const {
 
 // private functions:
 
-void TcpClient::createSockerAddr(const char* a_ipAddress, size_t a_port) {
+int TcpClient::openSocket() {
+    int socketNum = socket(AF_INET, SOCK_STREAM, 0);
+    if(socketNum < 0) {
+        assert(EINVAL != errno);
+        assert(EAFNOSUPPORT != errno);
+        assert(EPROTONOSUPPORT != errno);
+
+        if(EACCES == errno) {
+            throw ExcPermissionDenied();
+        }
+        if(EMFILE == errno) {
+            throw ExcDescriptorTableFull();
+        }
+        if(ENOBUFS == errno || ENOMEM == errno) {
+            throw ExcNotEnoughSpace();
+        }
+        assert(!"undocumented error for socket!");
+    }
+    return socketNum;
+}
+
+void TcpClient::createSocketAddr(const char* a_ipAddress, size_t a_port) {
     memset(&m_servAddr,0,sizeof(m_servAddr));
     
     m_servAddr.sin_family = AF_INET;
