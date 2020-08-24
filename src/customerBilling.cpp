@@ -13,9 +13,9 @@ void CustomerBilling::Update(const kokfikoCDR::CdrRecord& a_record)
     m_customersData.Upsert(a_record.m_msisdn, customer, experis::Combine<Customer>());
 }
 
-bool CustomerBilling::Query(const experis::MSISDN& a_msisdn, Customer& a_operator) const
+bool CustomerBilling::Query(const experis::MSISDN& a_msisdn, Customer& a_customer) const
 {
-    return m_customersData.Find(a_msisdn, a_operator);
+    return m_customersData.Find(a_msisdn, a_customer);
 }
 
 } // data
