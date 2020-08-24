@@ -1,8 +1,10 @@
 
-template<typename dataType, typename keyType>
-data::IDataQuery<dataType, keyType>::IDataQuery() 
-{}
+template<typename Data, typename Key>
+data::IDataQuery<Data, Key>::IDataQuery()
+{
+}
 
-template<typename dataType, typename keyType>
-data::IDataQuery<dataType, keyType>::~IDataQuery() 
-{}
+template<typename Data, typename Key>
+data::IDataQuery<Data, Key>::~IDataQuery()
+{
+}

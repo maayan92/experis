@@ -2,7 +2,7 @@
 
 namespace data {
 
-DataAggregatorHandler::DataAggregatorHandler(CustomerBilling& a_customerBilling, OperatorBilling& a_operatorBilling)
+DataAggregatorHandler::DataAggregatorHandler(IDataAggregator* a_customerBilling, IDataAggregator* a_operatorBilling)
 : m_customerBilling(a_customerBilling)
 , m_operatorBilling(a_operatorBilling)
 {
@@ -10,8 +10,8 @@ DataAggregatorHandler::DataAggregatorHandler(CustomerBilling& a_customerBilling,
 
 void DataAggregatorHandler::InsertNewRecord(const kokfikoCDR::CdrRecord& a_record)
 {
-    m_customerBilling.Update(a_record);
-    m_operatorBilling.Update(a_record);
+    m_customerBilling->Update(a_record);
+    m_operatorBilling->Update(a_record);
 }
 
 } // data

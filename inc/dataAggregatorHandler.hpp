@@ -9,14 +9,14 @@ namespace data {
 
 class DataAggregatorHandler : private experis::Uncopyable{
 public:
-    DataAggregatorHandler(CustomerBilling& a_customerBilling, OperatorBilling& a_operatorBilling);
+    DataAggregatorHandler(IDataAggregator* a_customerBilling, IDataAggregator* a_operatorBilling);
     //~DataAggregatorHandler() = default;
 
     void InsertNewRecord(const kokfikoCDR::CdrRecord& a_record);
 
 private:
-    CustomerBilling& m_customerBilling;
-    OperatorBilling& m_operatorBilling;
+    IDataAggregator* m_customerBilling;
+    IDataAggregator* m_operatorBilling;
 };
 
 } // data
