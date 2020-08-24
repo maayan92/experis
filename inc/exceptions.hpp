@@ -47,6 +47,13 @@ public:
     }
 };
 
+class ExcInvalidRecordValue : public std::exception {
+public:
+    virtual const char* what() const throw() {
+        return "invalid values in the current record!";
+    }
+};
+
 class ExcLocalHasBeenShutDown : public std::exception {
 public:
     virtual const char* what() const throw() {

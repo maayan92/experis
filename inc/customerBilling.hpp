@@ -7,7 +7,7 @@
 #include "additionalStructures.hpp"
 #include "iDataQuery.hpp"
 
-namespace data{
+namespace data {
 
 struct HashFuncCustomer {
     size_t operator()(const experis::MSISDN& a_msisdn) const {

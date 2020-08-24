@@ -8,7 +8,7 @@ namespace kokfikoCDR {
 static void TestReadFile() {
     CdrFileReader readFile("127.0.0.1", 1234);
     static int testNum = 0;
-    ifstream file("testFile.txt");
+    ifstream file("data.out");
     try {
         readFile.ReadFile(file);
         PrintResult("read file", true, testNum, ": \t");

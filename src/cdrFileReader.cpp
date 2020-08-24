@@ -17,8 +17,12 @@ void CdrFileReader::ReadFile(istream& a_file) {
     char buffer[FileFormat::BUFFER_SIZE];
     
     while(a_file.getline(buffer, FileFormat::BUFFER_SIZE)) {
-        CdrRecord record = parser->Parsering(buffer);
-        m_sender.SendMessage(record);
+        try {
+            CdrRecord record = parser->Parsering(buffer);
+            m_sender.SendMessage(record);
+        }catch(const exceptions::ExcInvalidRecordValue& exc) {
+            cout << exc.what() << '\n';
+        }
     }
 }
 

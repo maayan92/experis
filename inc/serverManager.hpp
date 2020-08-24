@@ -1,32 +1,34 @@
 #ifndef SERVER_MANAGER_H
 #define SERVER_MANAGER_H
 
-#include "reciever.hpp"
+#include "tcpServer.hpp"
+#include "dataAggregatorHandler.hpp"
+#include "queryHandler.hpp"
 #include <iosfwd>
-#include <fstream>
 
 namespace kokfikoCDR {
 
-class ServerManager {
+class ServerManager : private experis::Uncopyable {
 public:
-    ServerManager(std::ostream& m_outPutRecords);
+    ServerManager(const char* a_ipAddress, size_t a_port, size_t a_numOfThreads = 2);
     //~ServerManager() = default;
 
     void RunServer();
 
-private:
-    ServerManager(const ServerManager& a_serverManager);
-    ServerManager& operator=(const ServerManager& a_serverManager);
+    bool GetCustomerRecord(const experis::MSISDN& a_msisdn, data::Customer& a_customer);
+    bool GetOperatorRecord(const experis::MCC_MNC& a_mccmnc, data::Operator& a_operator);
 
+private:
     void setConnection(int& a_activity);
-    void runAllClientsRequests(int& a_activity);
 
 private:
     static const size_t DATA_SIZE = 200;
 
     TcpServer m_server;
-    std::vector<int> m_clients;
-    std::ostream& m_outPutRecords;
+    data::CustomerBilling m_customerBilling;
+    data::OperatorBilling m_operatorBilling;
+    data::DataAggregatorHandler m_dataAggregatorHandler;
+    data::QueryHandler m_queryHandler; 
 };
 
 } // kokfikoCDR

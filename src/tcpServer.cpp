@@ -15,7 +15,7 @@ TcpServer::TcpServer(const char* a_ipAddress, size_t a_port)
     listenSocket();
 }
 
-void TcpServer::GetSocketConnection(int& a_activity) {
+void TcpServer::SetSocketConnection() {
     struct sockaddr_in sin;
     socklen_t addrLen = sizeof(sin);
     int clientSocket = accept(m_socket.GetSocketNumber(),reinterpret_cast<struct sockaddr*>(&sin), &addrLen);

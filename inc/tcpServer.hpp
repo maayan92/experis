@@ -10,7 +10,7 @@ class TcpServer {
 public:
     TcpServer(const char* a_ipAddress, size_t a_port);
 
-    void GetSocketConnection(int& a_activity);
+    void SetSocketConnection();
     void GetData(char* a_buffer, size_t a_bufferSize);
 
 private:

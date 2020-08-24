@@ -32,6 +32,7 @@ TcpClient::TcpClient(const char* a_ipAddress, size_t a_port)
 
 TcpClient::TcpClient(int a_socketNum)
 : m_socketNum(a_socketNum)
+, m_servAddr()
 , m_isConnected(true)
 {
 }
