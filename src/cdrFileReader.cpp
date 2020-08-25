@@ -1,6 +1,7 @@
 #include  "cdrFileReader.hpp"
 #include "fileFormat.hpp"
 #include "exceptions.hpp"
+#include <unistd.h>
 using namespace std;
 using namespace files;
 using namespace exceptions;
@@ -20,6 +21,7 @@ void CdrFileReader::ReadFile(istream& a_file) {
         try {
             CdrRecord record = parser->Parsering(buffer);
             m_sender.SendMessage(record);
+            sleep(0.00001);
         }catch(const exceptions::ExcInvalidRecordValue& exc) {
             cout << exc.what() << '\n';
         }

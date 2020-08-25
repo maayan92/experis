@@ -33,17 +33,18 @@ void PipeParser::initializeInfo(vector<string>& a_info, const string& a_buffer) 
         toPos = a_buffer.find(delimiter, fromPos);
     }
     fillTheRest(a_info, a_buffer, fromPos, i);
-    
-    if(!checkValuesValidation(a_info)) {
+    /*
+    if(isNotValidationValue(a_info)) {
         throw exceptions::ExcInvalidRecordValue();
     }
+    */
 }
 
-bool PipeParser::checkValuesValidation(vector<string>& a_info)
+bool PipeParser::isNotValidationValue(vector<string>& a_info)
 {
-    return (a_info[CdrRecord::IMSI].size() > 15) ||
+    return ((a_info[CdrRecord::IMSI].size() > 15) ||
             (a_info[CdrRecord::MSISDN].size() > 15) ||
-            (a_info[CdrRecord::SECOND_PARTY_MSISDN].size() > 15);
+            (a_info[CdrRecord::SECOND_PARTY_MSISDN].size() > 15));
 }
 
 void PipeParser::fillTheRest(vector<string>& a_info, const string& a_buffer, size_t a_fromPos, size_t a_pos)
@@ -53,7 +54,7 @@ void PipeParser::fillTheRest(vector<string>& a_info, const string& a_buffer, siz
         a_info[LUT[a_pos++]] = token;
     }
     while(a_pos < CdrRecord::NUM_OF_RECORD_FIELDS) {
-        a_info[LUT[a_pos++]] = "";
+        a_info[LUT[a_pos++]] = " ";
     }
 }
 

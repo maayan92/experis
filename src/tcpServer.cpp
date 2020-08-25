@@ -33,7 +33,7 @@ void TcpServer::GetData(char* a_buffer, size_t a_bufferSize) {
 
 void TcpServer::setSocket() {
     int optval = 1;
-    if (setsockopt(m_socket.GetSocketNumber(), SOL_SOCKET, SO_REUSEADDR,&optval, sizeof(optval)) < 0) {
+    if (setsockopt(m_socket.GetSocketNumber(), SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0) {
 		throw ExcSetSocketFailed();
 	}
 }
