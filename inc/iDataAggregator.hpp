@@ -10,7 +10,7 @@ class IDataAggregator : private experis::Uncopyable {
 public:
     virtual ~IDataAggregator();
 
-    virtual void Update(const kokfikoCDR::CdrRecord& a_record) = 0;
+    virtual void Update(const kofiko::CdrRecord& a_record) = 0;
 
 protected:
     IDataAggregator();

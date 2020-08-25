@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 static void TestSender() {
     static int testNum = 0;
@@ -22,10 +22,10 @@ static void TestSender() {
     }
 }
 
-} // kokfikoCDR
+} // kofiko
 
 int main() {
-    kokfikoCDR::TestSender();
+    kofiko::TestSender();
 
     return 0;
 }

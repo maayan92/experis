@@ -2,7 +2,7 @@
 #include "protocol.hpp"
 using namespace tcp;
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 CdrSender::CdrSender(const char* a_ipAddress, size_t a_port)
 : m_client(a_ipAddress, a_port) {
@@ -17,4 +17,4 @@ void CdrSender::SendMessage(const CdrRecord& a_record) const {
     delete packedMsg;
 }
 
-} // kokfikoCDR
+} // kofiko

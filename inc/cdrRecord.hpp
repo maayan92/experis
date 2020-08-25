@@ -7,7 +7,7 @@
 #include <vector>
 #include <sstream>
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 struct Imsi {
     experis::MCC m_mcc;
@@ -63,6 +63,6 @@ private:
     void setImsi(const std::string& a_strImsi);
 };
 
-} // kokfikoCDR
+} // kofiko
 
 #endif

@@ -6,7 +6,7 @@
 #include <iomanip>
 using namespace std;
 using namespace data;
-using namespace kokfikoCDR;
+using namespace kofiko;
 
 BEGIN_TEST(create_query_handler)
     CustomerBilling customerBilling(5);

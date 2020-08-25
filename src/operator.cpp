@@ -10,7 +10,7 @@ Operator::Operator()
 {
 }
 
-Operator::Operator(const kokfikoCDR::CdrRecord& a_record)
+Operator::Operator(const kofiko::CdrRecord& a_record)
 : m_incomingVC(0)
 , m_outgoingVC(0)
 , m_incomingSms(0)
@@ -28,7 +28,7 @@ Operator& Operator::operator+=(const Operator& a_operator)
     return *this;
 }
 
-void Operator::initialization(const kokfikoCDR::CdrRecord& a_record)
+void Operator::initialization(const kofiko::CdrRecord& a_record)
 {
     if("MTC" == a_record.m_usageType) {
         m_incomingVC = a_record.m_duration;

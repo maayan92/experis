@@ -7,7 +7,7 @@ OperatorBilling::OperatorBilling(size_t a_numOfThreads)
 {
 }
 
-void OperatorBilling::Update(const kokfikoCDR::CdrRecord& a_record)
+void OperatorBilling::Update(const kofiko::CdrRecord& a_record)
 {
     Operator mobileOp(a_record);
     std::string mccmnc(a_record.m_imsi.m_mcc);

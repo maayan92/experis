@@ -4,7 +4,7 @@
 #include <sys/select.h>
 using namespace exceptions;
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 TcpServer::TcpServer(const char* a_ipAddress, size_t a_port)
 : m_socket(a_ipAddress, a_port)
@@ -53,4 +53,4 @@ void TcpServer::listenSocket() {
 	}
 }
 
-} // kokfikoCDR
+} // kofiko

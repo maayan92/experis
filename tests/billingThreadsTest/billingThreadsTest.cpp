@@ -4,7 +4,7 @@
 #include <pthread.h>
 using namespace std;
 using namespace data;
-using namespace kokfikoCDR;
+using namespace kofiko;
 
 #define NUM_OT_THREADS 3
 

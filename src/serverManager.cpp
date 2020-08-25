@@ -7,7 +7,7 @@
 using namespace std;
 using namespace tcp;
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 ServerManager::ServerManager(const char* a_ipAddress, size_t a_port, size_t a_numOfThreads) 
 : m_server(a_ipAddress, a_port)
@@ -20,8 +20,6 @@ ServerManager::ServerManager(const char* a_ipAddress, size_t a_port, size_t a_nu
 
 void ServerManager::RunServer() {
     m_server.SetSocketConnection();
-    ofstream file("result.txt");
-    int count = 0; 
 
     while(true) {
         char message[DATA_SIZE];
@@ -47,4 +45,4 @@ bool ServerManager::GetOperatorRecord(const experis::MCC_MNC& a_mccmnc, data::Op
     return m_queryHandler.GetOperatorQuery(a_mccmnc, a_operator);
 }
 
-} // kokfikoCDR
+} // kofiko

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <unistd.h>
 using namespace std;
-using namespace kokfikoCDR;
+using namespace kofiko;
 using namespace exceptions;
 
 static const size_t BUFFER_SIZE = 200;

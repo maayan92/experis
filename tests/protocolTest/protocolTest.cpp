@@ -2,7 +2,7 @@
 #include "testFunc.hpp"
 #include <iostream>
 using namespace std;
-using namespace kokfikoCDR;
+using namespace kofiko;
 
 #define BUFFER_SIZE 200
 
@@ -50,7 +50,7 @@ static void TestProtocolUnPackMsg(const CdrRecord& a_record) {
 
     try {
         Protocol::PackMessage(a_record, buffer, BUFFER_SIZE);
-        Protocol::Record recordResult = Protocol::UnPackMessage(buffer);
+        CdrRecord recordResult = Protocol::UnPackMessage(buffer);
         bool result = CompareRecords(a_record, recordResult);
 
         PrintResult("protocol unpack message", result, testNum, ": \t");

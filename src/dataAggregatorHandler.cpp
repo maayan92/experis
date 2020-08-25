@@ -8,7 +8,7 @@ DataAggregatorHandler::DataAggregatorHandler(IDataAggregator* a_customerBilling,
 {
 }
 
-void DataAggregatorHandler::InsertNewRecord(const kokfikoCDR::CdrRecord& a_record)
+void DataAggregatorHandler::InsertNewRecord(const kofiko::CdrRecord& a_record)
 {
     m_customerBilling->Update(a_record);
     m_operatorBilling->Update(a_record);

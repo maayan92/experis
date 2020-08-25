@@ -3,7 +3,7 @@
 #include "operatorBilling.hpp"
 #include "testFunc.hpp"
 using namespace data;
-using namespace kokfikoCDR;
+using namespace kofiko;
 
 void FillCustomerResult(Customer& a_customer) {
     map<experis::MSISDN, SecondParty> secondP;

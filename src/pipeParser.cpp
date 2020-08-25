@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 const int PipeParser::LUT[] = {CdrRecord::SEQUENCE_NUM, CdrRecord::IMSI, CdrRecord::IMEI, CdrRecord::USAGE_TYPE, CdrRecord::MSISDN, \
                      CdrRecord::CALL_DATE, CdrRecord::CALL_TIME, CdrRecord::DURATION, CdrRecord::BYTE_RECEIVED, \
@@ -58,4 +58,4 @@ void PipeParser::fillTheRest(vector<string>& a_info, const string& a_buffer, siz
     }
 }
 
-} // kokfikoCDR
+} // kofiko

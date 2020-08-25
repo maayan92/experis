@@ -7,7 +7,7 @@ CustomerBilling::CustomerBilling(size_t a_numOfThreads)
 {
 }
 
-void CustomerBilling::Update(const kokfikoCDR::CdrRecord& a_record)
+void CustomerBilling::Update(const kofiko::CdrRecord& a_record)
 {
     Customer customer(a_record);
     m_customersData.Upsert(a_record.m_msisdn, customer, experis::Combine<Customer>());

@@ -37,7 +37,7 @@ Atomic<T>::Atomic(const Atomic& a_atomic)
 
 template<typename T>
 Atomic<T>& Atomic<T>::operator=(const Atomic& a_atomic) {
-    __sync_val_compare_and_swap(&m_element, m_element, a_atomic.m_element); // TODO, check with __sync_add/sub
+    __sync_val_compare_and_swap(&m_element, m_element, a_atomic.m_element);
 }
 
 template<typename T>

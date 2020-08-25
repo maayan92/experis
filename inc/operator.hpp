@@ -8,7 +8,7 @@ namespace data {
 
 struct Operator {
     Operator();
-    Operator(const kokfikoCDR::CdrRecord& a_record);
+    Operator(const kofiko::CdrRecord& a_record);
 
     experis::INCOMING_VC m_incomingVC;
     experis::OUT_GOING_VC m_outgoingVC;
@@ -18,7 +18,7 @@ struct Operator {
     Operator& operator+=(const Operator& a_operator);
 
 private:
-    void initialization(const kokfikoCDR::CdrRecord& a_record);
+    void initialization(const kofiko::CdrRecord& a_record);
 };
 
 } // data

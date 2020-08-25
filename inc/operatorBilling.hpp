@@ -23,7 +23,7 @@ public:
     OperatorBilling(size_t a_numOfThreads = 2);
     //virtual ~OperatorBilling() = default;
 
-    virtual void Update(const kokfikoCDR::CdrRecord& a_record);
+    virtual void Update(const kofiko::CdrRecord& a_record);
     virtual bool Query(const experis::MCC_MNC& a_mccmnc, Operator& a_operator) const;
 
 private:

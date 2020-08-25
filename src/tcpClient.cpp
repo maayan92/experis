@@ -6,7 +6,7 @@
 #include <cassert>
 using namespace exceptions;
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 static void CheckErrno() {
     assert(EACCES != errno);
@@ -129,4 +129,4 @@ void TcpClient::createSocketAddr(const char* a_ipAddress, size_t a_port) {
     m_servAddr.sin_port = htons(a_port);
 }
 
-} // kokfikoCDR
+} // kofiko

@@ -3,15 +3,14 @@
 
 #include "tcpClient.hpp"
 #include "cdrRecord.hpp"
+#include "uncopyable.hpp"
 
-namespace kokfikoCDR {
+namespace kofiko {
 
-class CdrSender {
+class CdrSender : private experis::Uncopyable {
 public:
     CdrSender(const char* a_ipAddress, size_t a_port);
-    //CdrSender(const CdrSender& a_cdrSender) = default;
     //~CdrSender() = default;
-    //CdrSender& operator=(const CdrSender& a_cdrSender) = default;
 
     void SendMessage(const CdrRecord& a_record) const;
 
@@ -19,6 +18,6 @@ private:
     TcpClient m_client;
 };
 
-} // kokfikoCDR
+} // kofiko
 
 #endif

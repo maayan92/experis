@@ -1,6 +1,6 @@
 #include "cdrRecord.hpp"
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 CdrRecord::CdrRecord(const std::vector<std::string>& a_info)
 : m_sequenceNum(a_info[SEQUENCE_NUM])
@@ -53,4 +53,4 @@ void CdrRecord::calculateRecordSize(const std::vector<std::string>& a_info) {
     }
 }
 
-} // kokfikoCDR
+} // kofiko

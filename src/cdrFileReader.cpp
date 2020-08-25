@@ -6,7 +6,7 @@ using namespace std;
 using namespace files;
 using namespace exceptions;
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 CdrFileReader::CdrFileReader(const char* a_ipAddress, size_t a_port) 
 : m_sender(a_ipAddress, a_port)
@@ -28,4 +28,4 @@ void CdrFileReader::ReadFile(istream& a_file) {
     }
 }
 
-} // kokfikoCDR
+} // kofiko

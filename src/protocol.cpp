@@ -1,6 +1,7 @@
 #include "protocol.hpp"
 #include "exceptions.hpp"
 using namespace std;
+using namespace kofiko;
 using namespace exceptions;
 
 #include <iostream>
@@ -30,7 +31,7 @@ static void setStrToBuffer(const std::string& a_value, char* a_buffer, size_t& a
     a_position += valSize;
 }
 
-static void setImsiToBuffer(const kokfikoCDR::Imsi& a_imsi, char* a_buffer, size_t& a_position) {
+static void setImsiToBuffer(const kofiko::Imsi& a_imsi, char* a_buffer, size_t& a_position) {
     string imsi(a_imsi.m_mcc);
     imsi += a_imsi.m_mnc;
     imsi += a_imsi.m_msin;
@@ -41,7 +42,7 @@ static void setImsiToBuffer(const kokfikoCDR::Imsi& a_imsi, char* a_buffer, size
     a_position += valSize;
 }
 
-void Protocol::PackMessage(const Protocol::Record& a_record, char* a_buffer, size_t a_bufferSize) {
+void Protocol::PackMessage(const CdrRecord& a_record, char* a_buffer, size_t a_bufferSize) {
     if(a_bufferSize < (a_record.m_recordSize + Protocol::NUM_OF_RECORDS)) {
         throw ExcBufferSizeTooSmall();
     }
@@ -74,8 +75,8 @@ static string setStrFromBuffer(const char* a_msg, size_t& a_position, size_t a_s
     return result;
 }
 
-static kokfikoCDR::Imsi setStrToImsiFromBuffer(const char* a_msg, size_t& a_position, size_t a_size) {
-    kokfikoCDR::Imsi imsi;
+static kofiko::Imsi setStrToImsiFromBuffer(const char* a_msg, size_t& a_position, size_t a_size) {
+    kofiko::Imsi imsi;
     imsi.m_mcc = string(a_msg + (++a_position), 3);
     imsi.m_mnc = string(a_msg + (a_position + 3), 2);
     imsi.m_msin = string(a_msg + (a_position + 5), 10);
@@ -83,8 +84,8 @@ static kokfikoCDR::Imsi setStrToImsiFromBuffer(const char* a_msg, size_t& a_posi
     return imsi;
 }
 
-Protocol::Record Protocol::UnPackMessage(const char* a_msg) {
-    Record record;
+CdrRecord Protocol::UnPackMessage(const char* a_msg) {
+    CdrRecord record;
     size_t position = 1;
 
     record.m_recordSize += a_msg[position];

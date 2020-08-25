@@ -2,7 +2,7 @@
 #include "cdrRecord.hpp"
 #include "testFunc.hpp"
 #include <iostream>
-using namespace kokfikoCDR;
+using namespace kofiko;
 using namespace std;
 
 static const size_t BUFFER_SIZE = 200; 
@@ -24,7 +24,7 @@ static void TestGetConnection() {
      try {
          TcpServer server("127.0.0.1", 1234);
          int activity = 1;
-         server.GetSocketConnection(activity);
+         server.SetSocketConnection();
          PrintResult("create sevrer", true, testNum, ": \t");
 
      }catch(const exception& exc) {
@@ -38,7 +38,7 @@ static void TestGetData() {
      try {
          TcpServer server("127.0.0.1", 1234);
          int activity = 1;
-         server.GetSocketConnection(activity);
+         server.SetSocketConnection();
          char buffer[BUFFER_SIZE];
          server.GetData(buffer, BUFFER_SIZE);
          cout << buffer;

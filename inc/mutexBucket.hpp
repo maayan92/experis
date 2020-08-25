@@ -7,7 +7,7 @@
 
 namespace experis {
 
-class MutexBucket : private Uncopyable{
+class MutexBucket : private Uncopyable {
 public:
     explicit MutexBucket(size_t a_numOfThreads);
     ~MutexBucket();

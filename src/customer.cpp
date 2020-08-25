@@ -34,7 +34,7 @@ Customer::Customer()
 {
 }
 
-Customer::Customer(const kokfikoCDR::CdrRecord& a_record) 
+Customer::Customer(const kofiko::CdrRecord& a_record) 
 : m_outgoingVC(0)
 , m_incomingVC(0)
 , m_totalDataTransf(0)
@@ -60,7 +60,7 @@ Customer& Customer::operator+=(const Customer& a_customer) {
 
 // private functions:
 
-void Customer::initialization(const kokfikoCDR::CdrRecord& a_record) {
+void Customer::initialization(const kofiko::CdrRecord& a_record) {
     if("MOC" == a_record.m_usageType) {
         m_outgoingVC = a_record.m_duration;
         setSecondParty(a_record.m_secondPartyMsisdn, m_outgoingVC, 0);

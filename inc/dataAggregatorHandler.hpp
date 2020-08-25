@@ -12,7 +12,7 @@ public:
     DataAggregatorHandler(IDataAggregator* a_customerBilling, IDataAggregator* a_operatorBilling);
     //~DataAggregatorHandler() = default;
 
-    void InsertNewRecord(const kokfikoCDR::CdrRecord& a_record);
+    void InsertNewRecord(const kofiko::CdrRecord& a_record);
 
 private:
     IDataAggregator* m_customerBilling;

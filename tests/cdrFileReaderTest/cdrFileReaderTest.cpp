@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 static void TestReadFile() {
     CdrFileReader readFile("127.0.0.1", 1234);
@@ -19,10 +19,10 @@ static void TestReadFile() {
     }
 }
 
-} // kokfikoCDR
+} // kofiko
 
 int main() {
-    kokfikoCDR::TestReadFile();
+    kofiko::TestReadFile();
 
     return 0;
 }

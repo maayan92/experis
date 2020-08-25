@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 class IParser : private experis::Uncopyable{
 public:
@@ -18,6 +18,6 @@ protected:
     IParser();
 };
 
-} // kokfikoCDR
+} // kofiko
 
 #endif

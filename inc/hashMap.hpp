@@ -10,7 +10,7 @@
 namespace experis {
 
 template<class Key, class Value, class HashFunc, class Equal>
-class HashMapMT : private Uncopyable{
+class HashMapMT : private Uncopyable {
     typedef std::tr1::unordered_map<Key, Value, HashFunc, Equal> Map;
 public:
     explicit HashMapMT(size_t a_conccurency = 2);

@@ -1,6 +1,6 @@
 #include "iParser.hpp"
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 IParser::IParser() {
 }
@@ -8,4 +8,4 @@ IParser::IParser() {
 IParser::~IParser() {
 }
 
-} // kokfikoCDR
+} // kofiko

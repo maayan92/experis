@@ -1,6 +1,6 @@
 #include "operatorBilling.hpp"
 #include <iostream>
-using namespace kokfikoCDR;
+using namespace kofiko;
 using namespace std;
 using namespace data;
 

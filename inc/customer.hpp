@@ -29,7 +29,7 @@ inline bool SecondParty::operator==(const SecondParty& a_secondParty) const {
 struct Customer {
     typedef std::map<experis::MSISDN, SecondParty> SecondParties;
 
-    explicit Customer(const kokfikoCDR::CdrRecord& a_record);
+    explicit Customer(const kofiko::CdrRecord& a_record);
     Customer();
     //~Customer() = default;
 
@@ -44,7 +44,7 @@ struct Customer {
     SecondParties m_secondParties;
 
 private:
-    void initialization(const kokfikoCDR::CdrRecord& a_record);
+    void initialization(const kofiko::CdrRecord& a_record);
     void setSecondParty(experis::MSISDN a_msisdn, size_t a_totalVC, size_t a_totalSms);
 };
 

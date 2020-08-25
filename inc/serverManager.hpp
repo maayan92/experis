@@ -6,7 +6,7 @@
 #include "queryHandler.hpp"
 #include <iosfwd>
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 class ServerManager : private experis::Uncopyable {
 public:
@@ -31,6 +31,6 @@ private:
     data::QueryHandler m_queryHandler; 
 };
 
-} // kokfikoCDR
+} // kofiko
 
 #endif

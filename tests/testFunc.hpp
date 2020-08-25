@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 void FillValues(vector<string>& a_values) {
     a_values.push_back("123");
@@ -66,4 +66,4 @@ void PrintResult(const char* a_test, bool a_result, int& a_testNum, const char* 
                 << "\033[0m" << endl;
 }
 
-} // kokfikoCDR
+} // kofiko

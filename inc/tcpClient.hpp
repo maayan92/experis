@@ -4,9 +4,9 @@
 #include "uncopyable.hpp"
 #include <arpa/inet.h>
 
-namespace kokfikoCDR {
+namespace kofiko {
 
-class TcpClient : private experis::Uncopyable{
+class TcpClient : private experis::Uncopyable {
 public:
     TcpClient(const char* a_ipAddress, size_t a_port);
     explicit TcpClient(int a_socketNum);
@@ -29,6 +29,6 @@ private:
     bool m_isConnected;
 };
 
-} // kokfikoCDR
+} // kofiko
 
 #endif

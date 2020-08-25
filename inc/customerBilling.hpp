@@ -23,7 +23,7 @@ public:
     CustomerBilling(size_t a_numOfThreads = 2);
     //virtual ~CustomerBilling() = default;
 
-    virtual void Update(const kokfikoCDR::CdrRecord& a_record);
+    virtual void Update(const kofiko::CdrRecord& a_record);
     virtual bool Query(const experis::MSISDN& a_msisdn, Customer& a_customer) const;
 
 private:

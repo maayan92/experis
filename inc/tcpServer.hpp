@@ -2,11 +2,12 @@
 #define TCP_SERVER_H
 
 #include "tcpClient.hpp"
+#include "uncopyable.hpp"
 #include <vector>
 
-namespace kokfikoCDR {
+namespace kofiko {
 
-class TcpServer {
+class TcpServer : private experis::Uncopyable {
 public:
     TcpServer(const char* a_ipAddress, size_t a_port);
 
@@ -25,6 +26,6 @@ private:
     std::vector<TcpClient*> m_clients;
 };
 
-} // kokfikoCDR
+} // kofiko
 
 #endif

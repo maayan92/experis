@@ -3,7 +3,7 @@
 
 #include "iParser.hpp"
 
-namespace kokfikoCDR {
+namespace kofiko {
 
 class PipeParser : public IParser {
 public:
@@ -22,6 +22,6 @@ private:
     static const char delimiter = '|';
 };
 
-} // kokfikoCDR
+} // kofiko
 
 #endif
