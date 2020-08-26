@@ -33,11 +33,10 @@ void PipeParser::initializeInfo(vector<string>& a_info, const string& a_buffer) 
         toPos = a_buffer.find(delimiter, fromPos);
     }
     fillTheRest(a_info, a_buffer, fromPos, i);
-    /*
+    
     if(isNotValidationValue(a_info)) {
         throw exceptions::ExcInvalidRecordValue();
     }
-    */
 }
 
 bool PipeParser::isNotValidationValue(vector<string>& a_info)

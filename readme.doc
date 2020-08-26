@@ -1,0 +1,13 @@
+- cdrFileReader: read the file and send records to the server,
+                    to run the file reader ->
+                    create cdrFileReader object and call ReadFile function with a file fill with records,
+                    first line for the file parsing format, can be empty line.
+
+- serverManager: run the server that gets records and set it to the database container,
+                    to run the server ->
+                    create serverManager object and call RunServer function with ip address and port number.
+
+                    to get data from the database container ->
+                    use the query request functions, GetCustomerRecord to get customer information,
+                    or GetOperatorRecord to get mobile operator information.
+                    
