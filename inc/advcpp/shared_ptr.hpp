@@ -2,6 +2,7 @@
 #define SHARED_PTR_HPP
 
 #include "atomic.hpp"
+#include "mutex.hpp"
 #include <iosfwd>
 #include <exception>
 
@@ -33,6 +34,8 @@ public:
     T& operator*();
 
     void Reset();
+    size_t UseCount() const;
+    void Swap(shared_ptr& a_sharedPtr);
 
 private:
     void deletePointers();
@@ -41,6 +44,7 @@ private:
 private:
     T* m_ptr;
     experis::Atomic<size_t>* m_counter;
+    experis::Mutex* m_ptrSafe;
 };
 
 } // advcpp

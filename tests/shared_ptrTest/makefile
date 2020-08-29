@@ -11,7 +11,7 @@ LDLIBS := -lpthread
 
 TARGET := shared_ptrTest 
 
-OBJS := shared_ptrTest.o 
+OBJS := shared_ptrTest.o ../../src/mutex.o
 
 $(TARGET): $(OBJS)
 
@@ -25,6 +25,8 @@ recheck: clean all
 	@clear
 	./$(TARGET)
 	
+#valgrind: valgrind --tool=helgrind --log-file=sharedPtrValgrind.txt ./shared_ptrTest
+
 clean: 
 	@$(RM) -f $(TARGET) $(OBJS)
 

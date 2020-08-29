@@ -5,7 +5,7 @@
 
 class Number {
 public:
-    Number(int a_value) : m_value(a_value) {}
+    Number(int a_value = 0) : m_value(a_value) {}
     virtual ~Number() {}
     virtual int GetValue() const { return m_value; }
 

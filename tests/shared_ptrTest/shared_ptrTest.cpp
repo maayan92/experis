@@ -29,12 +29,19 @@ BEGIN_TEST(shared_ptr_operator_assignment_base)
 END_TEST
 
 BEGIN_TEST(shared_ptr_operator_assignment_inheritance)
-    shared_ptr<Number> sharedPtrNum(new Double(5));
-    shared_ptr<Number> sharedPtrPow;
-    sharedPtrPow = sharedPtrNum;
-    ASSERT_THAT(sharedPtrNum == sharedPtrPow);
+    shared_ptr<Number> sharedPtrDouble(new Double(5));
+    shared_ptr<Number> sharedPtrNum;
+    sharedPtrNum = sharedPtrDouble;
+    ASSERT_THAT(sharedPtrNum == sharedPtrDouble);
 END_TEST
-
+/*
+BEGIN_TEST(shared_ptr_operator_assignment_base_from_derived)
+    shared_ptr<Double> sharedPtrDouble(new Double(5));
+    shared_ptr<Number> sharedPtrNum(new Number());
+    sharedPtrNum = sharedPtrDouble;
+    ASSERT_THAT(sharedPtrNum == sharedPtrDouble);
+END_TEST
+*/
 BEGIN_TEST(shared_ptr_operator_copy_constructor_base)
     shared_ptr<Number> sharedPtrNum(new Number(5));
     shared_ptr<Number> sharedPtrPow(sharedPtrNum);
@@ -91,6 +98,22 @@ BEGIN_TEST(shared_ptr_reset)
     ASSERT_THAT(!sharedPtrNum);
 END_TEST
 
+BEGIN_TEST(shared_ptr_swap)
+    shared_ptr<Number> sharedPtrNum(new Number(5));
+    shared_ptr<Number> sharedPtrPow(new Pow(8));
+    sharedPtrPow.Swap(sharedPtrNum);
+    ASSERT_EQUAL(5, sharedPtrPow->GetValue());
+    ASSERT_EQUAL(64, sharedPtrNum->GetValue());
+END_TEST
+
+BEGIN_TEST(shared_ptr_use_count)
+    shared_ptr<Number> sharedPtrPow(new Pow(8));
+    shared_ptr<Number> sharedPtrCopy(sharedPtrPow);
+    shared_ptr<Number> sharedPtrAssign;
+    sharedPtrAssign = sharedPtrCopy;
+    ASSERT_EQUAL(3, sharedPtrCopy.UseCount());
+END_TEST
+
 BEGIN_SUITE(shared_pointer_tests)
     TEST(create_shared_ptr)
     TEST(create_shared_ptr_inheritance_pow)
@@ -114,5 +137,9 @@ BEGIN_SUITE(shared_pointer_tests)
     TEST(shared_ptr_operator_not_equal_base_derived_true)
 
     TEST(shared_ptr_reset)
+
+    TEST(shared_ptr_swap)
+
+    TEST(shared_ptr_use_count)
 
 END_SUITE
