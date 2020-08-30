@@ -26,6 +26,9 @@ public:
     ~shared_ptr();
     shared_ptr& operator=(const shared_ptr& a_sharedPtr);
 
+    template<typename U>
+    shared_ptr& operator=(const shared_ptr<U>& a_sharedPtr);
+
     const T* operator->() const;
     const T& operator*() const;
     operator BoolResult() const;
@@ -35,7 +38,9 @@ public:
 
     void Reset();
     size_t UseCount() const;
-    void Swap(shared_ptr& a_sharedPtr);
+
+    template<typename U>
+    void Swap(shared_ptr<U>& a_sharedPtr);
 
 private:
     void deletePointers();
@@ -44,7 +49,6 @@ private:
 private:
     T* m_ptr;
     experis::Atomic<size_t>* m_counter;
-    experis::Mutex* m_ptrSafe;
 };
 
 } // advcpp

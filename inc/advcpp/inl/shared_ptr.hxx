@@ -12,63 +12,75 @@ shared_ptr<T>::~shared_ptr()
 template<typename T>
 shared_ptr<T>::shared_ptr(T* a_ptr)
 : m_ptr(a_ptr)
-, m_counter(new experis::Atomic<size_t>(1))
-, m_ptrSafe(new experis::Mutex())
+, m_counter(0)
 {
+    try {
+        m_counter = new experis::Atomic<size_t>(1);
+    }catch(...) {
+        delete m_ptr;
+        throw;
+    }
 }
 
 template<typename T>
-shared_ptr<T>::shared_ptr(const shared_ptr& a_sharedPtr) ///
+shared_ptr<T>::shared_ptr(const shared_ptr& a_sharedPtr)
 {
-    experis::multiThreading::Locker lockCopy(a_sharedPtr.m_ptrSafe);
     copyObject(a_sharedPtr);
 }
 
 template<typename T>
-shared_ptr<T>& shared_ptr<T>::operator=(const shared_ptr& a_sharedPtr) ///
+shared_ptr<T>& shared_ptr<T>::operator=(const shared_ptr& a_sharedPtr)
 {
     if(*this != a_sharedPtr) {
         if(*(a_sharedPtr.m_counter) > 0) {
-            experis::multiThreading::Locker lockCopy(a_sharedPtr.m_ptrSafe);
-            deletePointers();
-            copyObject(a_sharedPtr);
+            shared_ptr<T> temp(a_sharedPtr);
+            this->Swap(temp);
+            temp.deletePointers();
         }
     }
     return *this;
 }
 
 template<typename T>
+template<typename U>
+shared_ptr<T>& shared_ptr<T>::operator=(const shared_ptr<U>& a_sharedPtr)
+{
+    if(*this != a_sharedPtr) {
+        if(*(a_sharedPtr.m_counter) > 0) {
+            shared_ptr<U> temp(a_sharedPtr);
+            temp.Swap(this);
+            temp.deletePointers();
+        }
+    }
+}
+
+template<typename T>
 const T* shared_ptr<T>::operator->() const
 {
-    experis::multiThreading::Locker lock(m_ptrSafe);
     return m_ptr;
 }
 
 template<typename T>
 const T& shared_ptr<T>::operator*() const
 {
-    experis::multiThreading::Locker lock(m_ptrSafe);
     return *m_ptr;
 }
 
 template<typename T>
 shared_ptr<T>::operator BoolResult() const
 {
-    experis::multiThreading::Locker lock(m_ptrSafe);
     return (0 != m_ptr) ? &shared_ptr::BoolFunc : 0;
 }
 
 template<typename T>
 T* shared_ptr<T>::operator->()
 {
-    experis::multiThreading::Locker lock(m_ptrSafe);
     return m_ptr;
 }
 
 template<typename T>
 T& shared_ptr<T>::operator*()
 {
-    experis::multiThreading::Locker lock(m_ptrSafe);
     if(!m_ptr) {
         throw ExcPtrIsNotNULL();
     }
@@ -78,7 +90,6 @@ T& shared_ptr<T>::operator*()
 template<typename T>
 void shared_ptr<T>::Reset()
 {
-    experis::multiThreading::Locker lock(m_ptrSafe);
     m_ptr = 0;
 }
 
@@ -89,10 +100,9 @@ size_t shared_ptr<T>::UseCount() const
 }
 
 template<typename T>
-void shared_ptr<T>::Swap(shared_ptr& a_sharedPtr)
+template<typename U>
+void shared_ptr<T>::Swap(shared_ptr<U>& a_sharedPtr)
 {
-    experis::multiThreading::Locker lock(m_ptrSafe);
-    experis::multiThreading::Locker secondLock(a_sharedPtr.m_ptrSafe);
     if(*this != a_sharedPtr) {
         T* ptr = m_ptr;
         m_ptr = a_sharedPtr.m_ptr;
@@ -101,10 +111,6 @@ void shared_ptr<T>::Swap(shared_ptr& a_sharedPtr)
         experis::Atomic<size_t>* counter = m_counter;
         m_counter = a_sharedPtr.m_counter;
         a_sharedPtr.m_counter = counter;
-
-        experis::Mutex* ptrSafe = m_ptrSafe;
-        m_ptrSafe = a_sharedPtr.m_ptrSafe;
-        a_sharedPtr.m_ptrSafe = ptrSafe;
     }
 }
 
@@ -113,16 +119,9 @@ void shared_ptr<T>::Swap(shared_ptr& a_sharedPtr)
 template<typename T>
 void shared_ptr<T>::deletePointers()
 {
-    {
-        experis::multiThreading::Locker lock(m_ptrSafe);
-        if(0 == --(*m_counter)) {
-            delete m_ptr;
-            delete m_counter;
-            m_counter = 0;
-        }
-    }
-    if(!m_counter) {
-        delete m_ptrSafe;
+    if(0 == --(*m_counter)) {
+        delete m_ptr;
+        delete m_counter;
     }
 }
 
@@ -132,7 +131,6 @@ void shared_ptr<T>::copyObject(const shared_ptr& a_sharedPtr)
     ++(*a_sharedPtr.m_counter);
     m_counter = a_sharedPtr.m_counter;
     m_ptr = a_sharedPtr.m_ptr;
-    m_ptrSafe = a_sharedPtr.m_ptrSafe;
 }
 
 // additional functions:
