@@ -20,9 +20,16 @@ class shared_ptr {
     typedef void (shared_ptr::*BoolResult)();
     template<typename U>
     friend bool operator==(const shared_ptr<U>& a_left, const shared_ptr<U>& a_right);
+
+    template<typename>
+    friend class shared_ptr;
 public:
     explicit shared_ptr(T* a_ptr = 0);
     shared_ptr(const shared_ptr& a_sharedPtr);
+    
+    template<typename U>
+    shared_ptr(const shared_ptr<U>& a_sharedPtr);
+    
     ~shared_ptr();
     shared_ptr& operator=(const shared_ptr& a_sharedPtr);
 
@@ -43,8 +50,8 @@ public:
     void Swap(shared_ptr<U>& a_sharedPtr);
 
 private:
-    void deletePointers();
-    void copyObject(const shared_ptr& a_sharedPtr);
+    template<typename U>
+    void copyObject(const shared_ptr<U>& a_sharedPtr);
 
 private:
     T* m_ptr;
@@ -53,6 +60,6 @@ private:
 
 } // advcpp
 
-#include "shared_ptr.hxx"
+#include "inl/shared_ptr.hxx"
 
 #endif

@@ -5,13 +5,16 @@
 
 class Number {
 public:
-    Number(int a_value = 0) : m_value(a_value) {}
-    virtual ~Number() {}
+    Number(int a_value = 0) : m_value(a_value) { ++count; }
+    virtual ~Number() { --count; }
     virtual int GetValue() const { return m_value; }
 
 private:
+    static int count;
     int m_value;
 };
+
+int Number::count = 0;
 
 class Pow : public Number {
 public:

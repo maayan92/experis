@@ -6,7 +6,10 @@ namespace advcpp {
 template<typename T>
 shared_ptr<T>::~shared_ptr()
 {
-    deletePointers();
+    if(0 == --(*m_counter)) {
+        delete m_ptr;
+        delete m_counter;
+    }
 }
 
 template<typename T>
@@ -29,15 +32,17 @@ shared_ptr<T>::shared_ptr(const shared_ptr& a_sharedPtr)
 }
 
 template<typename T>
+template<typename U>
+shared_ptr<T>::shared_ptr(const shared_ptr<U>& a_sharedPtr)
+{
+    copyObject(a_sharedPtr);
+}
+
+template<typename T>
 shared_ptr<T>& shared_ptr<T>::operator=(const shared_ptr& a_sharedPtr)
 {
-    if(*this != a_sharedPtr) {
-        if(*(a_sharedPtr.m_counter) > 0) {
-            shared_ptr<T> temp(a_sharedPtr);
-            this->Swap(temp);
-            temp.deletePointers();
-        }
-    }
+    shared_ptr<T> temp(a_sharedPtr);
+    this->Swap(temp);
     return *this;
 }
 
@@ -45,13 +50,9 @@ template<typename T>
 template<typename U>
 shared_ptr<T>& shared_ptr<T>::operator=(const shared_ptr<U>& a_sharedPtr)
 {
-    if(*this != a_sharedPtr) {
-        if(*(a_sharedPtr.m_counter) > 0) {
-            shared_ptr<U> temp(a_sharedPtr);
-            temp.Swap(this);
-            temp.deletePointers();
-        }
-    }
+    shared_ptr<U> temp(a_sharedPtr);
+    this->Swap(temp);
+    return *this;
 }
 
 template<typename T>
@@ -103,30 +104,20 @@ template<typename T>
 template<typename U>
 void shared_ptr<T>::Swap(shared_ptr<U>& a_sharedPtr)
 {
-    if(*this != a_sharedPtr) {
-        T* ptr = m_ptr;
-        m_ptr = a_sharedPtr.m_ptr;
-        a_sharedPtr.m_ptr = ptr;
+    U* ptr = static_cast<U*>(m_ptr);
+    m_ptr = a_sharedPtr.m_ptr;
+    a_sharedPtr.m_ptr = ptr;
 
-        experis::Atomic<size_t>* counter = m_counter;
-        m_counter = a_sharedPtr.m_counter;
-        a_sharedPtr.m_counter = counter;
-    }
+    experis::Atomic<size_t>* counter = m_counter;
+    m_counter = a_sharedPtr.m_counter;
+    a_sharedPtr.m_counter = counter;
 }
 
 // private functions:
 
 template<typename T>
-void shared_ptr<T>::deletePointers()
-{
-    if(0 == --(*m_counter)) {
-        delete m_ptr;
-        delete m_counter;
-    }
-}
-
-template<typename T>
-void shared_ptr<T>::copyObject(const shared_ptr& a_sharedPtr)
+template<typename U>
+void shared_ptr<T>::copyObject(const shared_ptr<U>& a_sharedPtr)
 {
     ++(*a_sharedPtr.m_counter);
     m_counter = a_sharedPtr.m_counter;

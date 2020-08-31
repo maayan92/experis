@@ -1,7 +1,7 @@
 CC := $(CXX)
 CXX := g++
 
-CPPFLAGS := -I. -I../../inc/advcpp -I../../inc/advcpp/inl/ -I../../inc/ -I../inc/
+CPPFLAGS := -I. -I../../inc/advcpp -I../../inc/ -I../inc/
 CFLAGS += -Werror -Wall -Wextra
 CFLAGS += -g
 
