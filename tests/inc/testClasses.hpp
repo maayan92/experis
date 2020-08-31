@@ -8,6 +8,9 @@ public:
     Number(int a_value = 0) : m_value(a_value) { ++count; }
     virtual ~Number() { --count; }
     virtual int GetValue() const { return m_value; }
+    virtual void operator()() {
+        m_value *= 2;
+    }
 
 private:
     static int count;
@@ -22,6 +25,9 @@ public:
     //virtual ~Pow() = default;
 
     virtual int GetValue() const { return m_value; }
+    virtual void operator()() {
+        m_value = pow(m_value, 2);
+    }
 
 private:
     int m_value;
@@ -33,6 +39,9 @@ public:
     //virtual ~Double() = default;
 
     virtual int GetValue() const { return m_value; }
+    virtual void operator()() {
+        m_value *= 2;
+    }
 
 private:
     int m_value;
