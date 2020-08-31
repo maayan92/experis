@@ -8,7 +8,7 @@
 
 namespace advcpp {
 
-struct ExcPtrIsNotNULL : public std::exception {
+struct ExcPtrIsNULL : public std::exception {
     const char* what() const throw() {
         return "shared pointer is not allocated!";
     }

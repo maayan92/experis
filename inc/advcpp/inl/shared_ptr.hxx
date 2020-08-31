@@ -83,7 +83,7 @@ template<typename T>
 T& shared_ptr<T>::operator*()
 {
     if(!m_ptr) {
-        throw ExcPtrIsNotNULL();
+        throw ExcPtrIsNULL();
     }
     return *m_ptr;
 }
