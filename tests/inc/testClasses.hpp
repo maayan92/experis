@@ -2,6 +2,13 @@
 #define TEST_CLASSES_HPP
 
 #include <cmath>
+#include <exception>
+
+struct ExcTest : public std::exception {
+    virtual const char* what() const throw() {
+        return "this is a tests!!";
+    }
+};
 
 class Number {
 public:
@@ -10,6 +17,7 @@ public:
     virtual int GetValue() const { return m_value; }
     virtual void operator()() {
         m_value *= 2;
+        throw ExcTest();
     }
 
 private:
@@ -27,6 +35,7 @@ public:
     virtual int GetValue() const { return m_value; }
     virtual void operator()() {
         m_value = pow(m_value, 2);
+        throw ExcTest();
     }
 
 private:
@@ -41,6 +50,7 @@ public:
     virtual int GetValue() const { return m_value; }
     virtual void operator()() {
         m_value *= 2;
+        throw ExcTest();
     }
 
 private:

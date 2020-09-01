@@ -11,13 +11,13 @@
 namespace advcpp {
 
 struct ExcReachedToMaximum : public std::exception {
-    const char* what() const throw() {
+    virtual const char* what() const throw() {
         return "create thread - reached to the maximum number of PIDs!";
     }
 };
 
 struct ExcNotYetTerminated : public std::exception {
-    const char* what() const throw() {
+    virtual const char* what() const throw() {
         return "try join thread - the thread has not yet terminated!";
     }
 };
@@ -28,10 +28,10 @@ public:
     explicit Thread(shared_ptr<T> a_sharedPtr);
     ~Thread() NOEXCEPT;
 
-    void Join() NOEXCEPT;
+    void* Join() NOEXCEPT;
     void Detach() NOEXCEPT;
 
-    void TryJoin();
+    void* TryJoin();
 
     static void Exit(void* a_value) NOEXCEPT;
     static void Sleep(size_t a_nanoseconds) NOEXCEPT; // TODO, nothing in the function
@@ -43,6 +43,7 @@ private:
 private:
     pthread_t m_id;
     experis::AtomicFlag m_joinedOrDetached;
+    shared_ptr<std::exception> m_exception;
 };
 
 } // advcpp

@@ -5,11 +5,13 @@
 
 namespace advcpp {
 
-template<typename T>
+template<typename U>
 struct ThreadElement {
-    shared_ptr<T> m_sharePtr;
+    shared_ptr<U> m_sharePtr;
     experis::ConditionVariable& m_waitFlag;
     experis::AtomicFlag& m_wasNotify;
+    shared_ptr<std::exception> m_exception;
+
     bool operator()() {
         return m_wasNotify.GetValue();
     }
@@ -30,12 +32,13 @@ void* Thread<T>::threadAction(void* a_element)
     shared_ptr<T> actionPtr(element->m_sharePtr);
     assert(actionPtr);
     element->m_wasNotify.CheckAndSet();
+    shared_ptr<std::exception> excCatch = element->m_exception;
     element->m_waitFlag.NotifyOne();
 
     try {
         actionPtr->operator()();
     } catch(const std::exception& exc) {
-        ///
+        *excCatch = exc;
     }
 
     return 0;
@@ -45,11 +48,13 @@ template<typename T>
 Thread<T>::Thread(shared_ptr<T> a_sharedPtr)
 : m_id()
 , m_joinedOrDetached(false)
+, m_exception(new std::exception())
 {
     assert(a_sharedPtr);
     experis::ConditionVariable waitFlag;
     experis::AtomicFlag wasNotify(false);
-    ThreadElement<T> element = { a_sharedPtr, waitFlag, wasNotify };
+    ThreadElement<T> element = { a_sharedPtr, waitFlag, wasNotify, m_exception };
+
     int status = pthread_create(&m_id, 0, threadAction, (void*)&element);
     if(0 != status) {
         assert(EINVAL != status);
@@ -73,15 +78,18 @@ Thread<T>::~Thread() NOEXCEPT
 }
 
 template<typename T>
-void Thread<T>::Join() NOEXCEPT
+void* Thread<T>::Join() NOEXCEPT
 {
     if(m_joinedOrDetached.CheckAndSet()) {
-        int status = pthread_join(m_id, 0);
+        void* val;
+        int status = pthread_join(m_id, &val);
         if(0 != status) {
             joinErrors(status);
             assert(!"undocumented error for pthread_join");
         }
+        return val;
     }
+    return 0;
 }
 
 template<typename T>
@@ -98,10 +106,11 @@ void Thread<T>::Detach() NOEXCEPT
 }
 
 template<typename T>
-void Thread<T>::TryJoin()
+void* Thread<T>::TryJoin()
 {
     if(m_joinedOrDetached.CheckAndSet()) {
-        int status = pthread_tryjoin_np(m_id, 0);
+        void* val;
+        int status = pthread_tryjoin_np(m_id, &val);
         if(0 != status) {
             joinErrors(status);
             if(EBUSY == status) {
@@ -110,7 +119,9 @@ void Thread<T>::TryJoin()
             }
             assert(!"undocumented error for pthread_tryjoin_np");
         }
+        return val;
     }
+    return 0;
 }
 
 template<typename T>
