@@ -13,7 +13,7 @@ namespace advcpp {
 template<typename T>
 class WaitableQueueMT : private experis::Uncopyable {
 public:
-    WaitableQueueMT(size_t maxCapacity = 10000000);
+    explicit WaitableQueueMT(size_t maxCapacity = 10000000);
     //~WaitableQueueMT() = default;
 
     void Enque(const T& a_element);

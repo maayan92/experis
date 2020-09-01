@@ -112,6 +112,21 @@ BEGIN_TEST(test_multi_threads_two_deque)
     ASSERT_EQUAL(1, waQueue.Size());
 END_TEST
 
+BEGIN_TEST(test_multi_threads_default_CTOR)
+    WaitableQueueMT<int> waQueue;
+    shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 5000000));
+    Thread<waitableQueueEnque<int> > threadEnqueFirst(shrPtrEnque);
+    Thread<waitableQueueEnque<int> > threadEnqueSecond(shrPtrEnque);
+
+    shared_ptr<waitableQueueDeque<int> > shrPtrDeque(new waitableQueueDeque<int>(waQueue, 6));
+    Thread<waitableQueueDeque<int> > threadDeque(shrPtrDeque);
+
+    threadEnqueFirst.Join();
+    threadEnqueSecond.Join();
+    threadDeque.Join();
+    ASSERT_EQUAL(9999994, waQueue.Size());
+END_TEST
+
 BEGIN_TEST(test_multi_threads_size)
     WaitableQueueMT<int> waQueue(5);
     shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 10));
@@ -145,6 +160,7 @@ BEGIN_SUITE(test)
     TEST(test_multi_threads_one_enque_one_deque)
     TEST(test_multi_threads_two_enque)
     TEST(test_multi_threads_two_deque)
+    TEST(test_multi_threads_default_CTOR)
     
     TEST(test_multi_threads_size)
 
