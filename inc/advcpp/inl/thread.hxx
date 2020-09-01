@@ -13,7 +13,7 @@ struct ThreadElement {
     shared_ptr<std::exception> m_exception;
 
     bool operator()() {
-        return m_wasNotify.GetValue();
+        return !m_wasNotify.GetValue();
     }
 };
 

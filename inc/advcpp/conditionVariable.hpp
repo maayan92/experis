@@ -41,7 +41,7 @@ public:
 
 template<typename Predicate>
 void ConditionVariable::Wait(MutexLocker &a_mutexLocker, Predicate a_predicate) {
-    while(!a_predicate()) {
+    while(a_predicate()) {
         int status = pthread_cond_wait(&m_condVar, &(a_mutexLocker.m_mutexLocker.m_locker));
         if(0 != status) {
             assert(EINVAL != status);
@@ -53,7 +53,7 @@ void ConditionVariable::Wait(MutexLocker &a_mutexLocker, Predicate a_predicate) 
 
 template<typename Predicate>
 void ConditionVariable::Wait(Mutex &a_mutex, Predicate a_predicate) {
-    while(!a_predicate()) {
+    while(a_predicate()) {
         int status = pthread_cond_wait(&m_condVar, &(a_mutex.m_locker));
         if(0 != status) {
             assert(EINVAL != status);
