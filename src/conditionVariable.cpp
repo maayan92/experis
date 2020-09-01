@@ -1,7 +1,5 @@
 #include "conditionVariable.hpp"
 #include <pthread.h>
-#include <assert.h>
-#include <errno.h>
 #include <iostream>
 
 namespace experis {
@@ -29,15 +27,6 @@ ConditionVariable::~ConditionVariable() throw() {
         assert(EINVAL != status);
         assert(EBUSY != status);
         assert(!"undocumented error for pthread_cond_destroy");
-    }
-}
-
-void ConditionVariable::Wait(Mutex &a_mutex) {
-    int status = pthread_cond_wait(&m_condVar, &(a_mutex.GetMutex()));
-    if(0 != status) {
-        assert(EINVAL != status);
-        assert(EPERM != status);
-        assert(!"undocumented error for pthread_cond_wait");
     }
 }
 

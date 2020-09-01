@@ -3,7 +3,6 @@
 
 #include "uncopyable.hpp"
 #include "shared_ptr.hpp"
-#include "conditionVariable.hpp"
 #include <pthread.h>
 #include <exception>
 
@@ -14,12 +13,6 @@ namespace advcpp {
 struct ExcReachedToMaximum : public std::exception {
     const char* what() const throw() {
         return "create thread - reached to the maximum number of PIDs!";
-    }
-};
-
-struct ExcThreadNotJoinable : public std::exception {
-    const char* what() const throw() {
-        return "join thread - not joinable!";
     }
 };
 
@@ -40,9 +33,9 @@ public:
 
     void TryJoin();
 
-    static void Exit(int& a_code) NOEXCEPT;
+    static void Exit(void* a_value) NOEXCEPT;
     static void Sleep(size_t a_nanoseconds) NOEXCEPT; // TODO, nothing in the function
-    static void Yeild();
+    static void Yeild() NOEXCEPT;
 
 private:
     static void* threadAction(void* a_element);
@@ -50,7 +43,6 @@ private:
 private:
     pthread_t m_id;
     experis::AtomicFlag m_joinedOrDetached;
-    experis::ConditionVariable m_waitFlag;
 };
 
 } // advcpp

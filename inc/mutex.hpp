@@ -36,6 +36,7 @@ public:
 };
 
 class Mutex : private Uncopyable{
+    friend class ConditionVariable;
 public:
     Mutex();
     ~Mutex();

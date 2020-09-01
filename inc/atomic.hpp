@@ -13,6 +13,7 @@ public:
 
     bool CheckAndSet();
     bool GetValue() const;
+    bool CheckAndReset();
 
 private:
     mutable char m_value;

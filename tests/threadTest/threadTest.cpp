@@ -36,11 +36,22 @@ BEGIN_TEST(test_create_two_threads_same_shared_ptr)
     ASSERT_EQUAL(256, sharedPtr->GetValue());
 END_TEST
 
-BEGIN_TEST(test_create_double_join)
+BEGIN_TEST(test_thread_double_join)
     shared_ptr<Pow> sharedPtr(new Pow(2));
     Thread<Pow> thread(sharedPtr);
     thread.Join();
     thread.Join();
+    ASSERT_EQUAL(16, sharedPtr->GetValue());
+END_TEST
+
+BEGIN_TEST(test_thread_try_join)
+    shared_ptr<Pow> sharedPtr(new Pow(2));
+    Thread<Pow> thread(sharedPtr);
+    try {
+        thread.TryJoin();
+    } catch(const std::exception& exc) {
+        thread.Join();
+    }
     ASSERT_EQUAL(16, sharedPtr->GetValue());
 END_TEST
 
@@ -49,5 +60,7 @@ BEGIN_SUITE(test)
     TEST(test_create_thread_derived_to_base)
     TEST(test_create_two_threads_same_shared_ptr)
 
-    TEST(test_create_double_join)
+    TEST(test_thread_double_join)
+
+    TEST(test_thread_try_join)
 END_SUITE

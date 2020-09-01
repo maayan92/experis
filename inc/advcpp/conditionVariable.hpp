@@ -1,7 +1,9 @@
 #ifndef __CONDITION_VARIABLE_H__
 #define __CONDITION_VARIABLE_H__
 
-#include "mutex.hpp"
+#include "mutexLocker.hpp"
+#include <assert.h>
+#include <errno.h>
 
 namespace experis {
 
@@ -12,7 +14,12 @@ public:
 
     void NotifyOne();
     void NotifyAll();
-    void Wait(Mutex& a_mutex);
+
+    template<typename Predicate>
+    void Wait(MutexLocker& a_mutexLocker, Predicate a_predicate);
+
+    template<typename Predicate>
+    void Wait(Mutex& a_mutex, Predicate a_predicate);
 
 private:
     pthread_cond_t m_condVar;
@@ -31,6 +38,30 @@ public:
         return "create error - Insufficient memory exists to initialize";
     }
 };
+
+template<typename Predicate>
+void ConditionVariable::Wait(MutexLocker &a_mutexLocker, Predicate a_predicate) {
+    while(!a_predicate()) {
+        int status = pthread_cond_wait(&m_condVar, &(a_mutexLocker.m_mutexLocker.m_locker));
+        if(0 != status) {
+            assert(EINVAL != status);
+            assert(EPERM != status);
+            assert(!"undocumented error for pthread_cond_wait");
+        }
+    }
+}
+
+template<typename Predicate>
+void ConditionVariable::Wait(Mutex &a_mutex, Predicate a_predicate) {
+    while(!a_predicate()) {
+        int status = pthread_cond_wait(&m_condVar, &(a_mutex.m_locker));
+        if(0 != status) {
+            assert(EINVAL != status);
+            assert(EPERM != status);
+            assert(!"undocumented error for pthread_cond_wait");
+        }
+    }
+}
 
 } // experis
 
