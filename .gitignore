@@ -1,3 +1,7 @@
+*
+!.cpp
+!.hpp
+!.hxx
 *.out
 *.o
 *.so
