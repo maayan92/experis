@@ -17,7 +17,7 @@ public:
     //~WaitableQueueMT() = default;
 
     void Enque(const T& a_element);
-    const T& Deque();
+    T Deque();
     bool Empty() const;
     size_t Size() const;
 

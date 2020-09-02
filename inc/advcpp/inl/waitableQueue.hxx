@@ -38,7 +38,7 @@ void WaitableQueueMT<T>::Enque(const T& a_element)
 }
 
 template<typename T>
-const T& WaitableQueueMT<T>::Deque()
+T WaitableQueueMT<T>::Deque()
 {
     experis::MutexLocker locker(m_mtSafe);
     CompareSize isEmpty = { m_numOfElements, 0 };
@@ -46,7 +46,7 @@ const T& WaitableQueueMT<T>::Deque()
     size_t currentSize = m_numOfElements;
     assert(!Empty());
 
-    T& element = m_waitableQueue.front();
+    T element = m_waitableQueue.front();
     m_waitableQueue.pop();
     --m_numOfElements;
     m_conditionVar.NotifyOne();
