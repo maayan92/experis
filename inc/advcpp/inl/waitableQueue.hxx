@@ -1,15 +1,8 @@
 #include "locker.hpp"
+#include "additionalStructures.hpp"
 #include <iostream>
 
 namespace advcpp {
-
-struct CompareSize {
-    experis::Atomic<size_t>& m_size;
-    size_t m_compareSize;
-    bool operator()() {
-        return (m_size == m_compareSize);
-    }
-};
 
 template<typename T>
 WaitableQueueMT<T>::WaitableQueueMT(size_t maxCapacity)
@@ -25,8 +18,7 @@ template<typename T>
 void WaitableQueueMT<T>::Enque(const T& a_element)
 {
     experis::MutexLocker locker(m_mtSafe);
-    CompareSize isFull = { m_numOfElements, m_capacity };
-    m_conditionVar.Wait(locker, isFull);
+    m_conditionVar.Wait(locker, experis::ObjectFuncExecutor<WaitableQueueMT<T>, &WaitableQueueMT<T>::isFull>(*this));
     size_t currentSize = m_numOfElements;
     
     m_waitableQueue.push(a_element);
@@ -41,8 +33,7 @@ template<typename T>
 T WaitableQueueMT<T>::Deque()
 {
     experis::MutexLocker locker(m_mtSafe);
-    CompareSize isEmpty = { m_numOfElements, 0 };
-    m_conditionVar.Wait(locker, isEmpty);
+    m_conditionVar.Wait(locker, experis::ObjectFuncExecutor<WaitableQueueMT<T>, &WaitableQueueMT<T>::Empty>(*this));
     size_t currentSize = m_numOfElements;
     assert(!Empty());
 
@@ -66,6 +57,12 @@ template<typename T>
 size_t WaitableQueueMT<T>::Size() const
 {
     return m_numOfElements;
+}
+
+template<typename T>
+bool WaitableQueueMT<T>::isFull() const
+{
+    return (m_numOfElements == m_capacity);
 }
 
 } // advcpp

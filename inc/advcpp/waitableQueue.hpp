@@ -22,6 +22,9 @@ public:
     size_t Size() const;
 
 private:
+    bool isFull() const;
+
+private:
     std::queue<T> m_waitableQueue;
     experis::ConditionVariable m_conditionVar;
     experis::Mutex m_mtSafe;
