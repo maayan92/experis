@@ -28,7 +28,7 @@ int Number::count = 0;
 
 class Pow : public Number {
 public:
-    Pow(int a_value) : Number(a_value), m_value(pow(a_value, 2)) {}
+    Pow(int a_value = 0) : Number(a_value), m_value(pow(a_value, 2)) {}
     //virtual ~Pow() = default;
 
     virtual int GetValue() const { return m_value; }
@@ -42,7 +42,7 @@ private:
 
 class Double : public Number {
 public:
-    Double(int a_value) : Number(a_value), m_value(a_value * 2) {}
+    Double(int a_value = 0) : Number(a_value), m_value(a_value * 2) {}
     //virtual ~Double() = default;
 
     virtual int GetValue() const { return m_value; }

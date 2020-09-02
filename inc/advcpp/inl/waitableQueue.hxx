@@ -32,21 +32,20 @@ void WaitableQueue<T>::Enque(const T& a_element)
 }
 
 template<typename T>
-T WaitableQueue<T>::Deque()
+void WaitableQueue<T>::Deque(T& a_element)
 {
     experis::MutexLocker locker(m_mtSafe);
     m_cvDeque.Wait(locker, experis::ObjectFuncExecutor<WaitableQueue<T>, &WaitableQueue<T>::Empty>(*this));
     size_t currentSize = m_numOfElements;
     assert(!Empty());
 
-    T element = m_waitableQueue.front();
+    a_element = m_waitableQueue.front();
     m_waitableQueue.pop();
     --m_numOfElements;
     m_cvEnque.NotifyOne();
 
     assert(m_waitableQueue.size() == m_numOfElements);
     assert((currentSize - 1) == m_numOfElements);
-    return element;
 }
 
 template<typename T>

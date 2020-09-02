@@ -40,7 +40,8 @@ public:
     
     void operator()() {
         for(size_t i = 0 ; i < m_size ; ++i) {
-            m_waQueue.Deque();
+            T val;
+            m_waQueue.Deque(val);
         }
     }
 
@@ -63,7 +64,8 @@ BEGIN_TEST(test_waitable_queue_deque_one)
     WaitableQueue<int> waQueue(5);
     waQueue.Enque(4);
     waQueue.Enque(8);
-    int value = waQueue.Deque();
+    int value;
+    waQueue.Deque(value);
     ASSERT_EQUAL(1, waQueue.Size());
     ASSERT_EQUAL(4, value);
 END_TEST
@@ -75,7 +77,9 @@ BEGIN_TEST(test_waitable_queue_check_fifo)
     }
     
     for(size_t i = 0 ; i < 5 ; ++i) {
-        Pow value = waQueue.Deque();
+        Pow value;
+        waQueue.Deque(value);
+        
         ASSERT_EQUAL(value.GetValue(), pow(i + 1, 2));
     }
     ASSERT_THAT(waQueue.Empty());
