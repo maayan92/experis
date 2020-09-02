@@ -17,7 +17,6 @@ public:
     virtual int GetValue() const { return m_value; }
     virtual void operator()() {
         m_value *= 2;
-        throw ExcTest();
     }
 
 private:
@@ -35,7 +34,6 @@ public:
     virtual int GetValue() const { return m_value; }
     virtual void operator()() {
         m_value = pow(m_value, 2);
-        throw ExcTest();
     }
 
 private:
@@ -50,7 +48,6 @@ public:
     virtual int GetValue() const { return m_value; }
     virtual void operator()() {
         m_value *= 2;
-        throw ExcTest();
     }
 
 private:

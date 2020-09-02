@@ -7,6 +7,16 @@
 using namespace advcpp;
 using namespace std;
 
+template<typename T>
+static void TryCatchJoin(Thread<T>& a_thread)
+{
+    try {
+        a_thread.Join();
+    }catch(const exception& exc) {
+        cout << exc.what() << '\n';
+    }
+}
+
 // **** tests **** //
 
 BEGIN_TEST(test_create_thread)
@@ -39,26 +49,13 @@ BEGIN_TEST(test_create_two_threads_same_shared_ptr)
     try {
         Thread<Number> threadFirst(sharedPtr);
         Thread<Number> threadSecond(sharedPtr);
-        threadFirst.Join();
-        threadSecond.Join();
+        TryCatchJoin(threadFirst);
+        TryCatchJoin(threadSecond);
     }catch(const exception& exc) {
         cout << exc.what() << '\n';
     }
 
     ASSERT_EQUAL(256, sharedPtr->GetValue());
-END_TEST
-
-BEGIN_TEST(test_thread_double_join)
-    shared_ptr<Pow> sharedPtr(new Pow(2));
-    try {
-        Thread<Pow> thread(sharedPtr);
-        thread.Join();
-        thread.Join();
-    } catch(const exception& exc) {
-        cout << exc.what() << '\n';
-    }
-
-    ASSERT_EQUAL(16, sharedPtr->GetValue());
 END_TEST
 
 BEGIN_TEST(test_thread_try_join)
@@ -68,11 +65,7 @@ BEGIN_TEST(test_thread_try_join)
         try {
             thread.TryJoin();
         } catch(const std::exception& exc) {
-            try{
-                thread.Join();
-            } catch(const std::exception& exc) {
-                cout << exc.what() << '\n';
-            }
+            TryCatchJoin(thread);
         }
 
     } catch(const std::exception& exc) {
@@ -88,8 +81,8 @@ BEGIN_TEST(test_thread_yeild)
         Thread<Pow> threadFirst(sharedPtr);
         Thread<Pow> threadSecond(sharedPtr);
         threadFirst.Yeild();
-        threadSecond.Join();
-        threadFirst.Join();
+        TryCatchJoin(threadSecond);
+        TryCatchJoin(threadFirst);
     } catch(const exception& exc) {
         cout << exc.what() << '\n';
     }
@@ -101,8 +94,6 @@ BEGIN_SUITE(test)
     TEST(test_create_thread)
     TEST(test_create_thread_derived_to_base)
     TEST(test_create_two_threads_same_shared_ptr)
-
-    TEST(test_thread_double_join)
 
     TEST(test_thread_try_join)
 
