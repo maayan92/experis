@@ -1,5 +1,6 @@
 #include "waitableQueue.hpp"
 #include "thread.hpp"
+#include "testClasses.hpp"
 #include "mu_test.h"
 #include <climits>
 #include<iostream>
@@ -50,24 +51,34 @@ private:
 
 // **** tests **** //
 
-BEGIN_TEST(test_create_waitable_queue)
-    WaitableQueueMT<int> waQueue;
-    ASSERT_THAT(waQueue.Empty());
-END_TEST
-
 BEGIN_TEST(test_waitable_queue_enque_one)
     WaitableQueueMT<int> waQueue(5);
-    waQueue.Enque(5);
-    ASSERT_EQUAL(1, waQueue.Size());
+    ASSERT_THAT(waQueue.Empty());
+
+    waQueue.Enque(1);
+    ASSERT_THAT(!waQueue.Empty());
 END_TEST
 
 BEGIN_TEST(test_waitable_queue_deque_one)
     WaitableQueueMT<int> waQueue(5);
-    waQueue.Enque(5);
+    waQueue.Enque(4);
     waQueue.Enque(8);
     int value = waQueue.Deque();
     ASSERT_EQUAL(1, waQueue.Size());
-    ASSERT_EQUAL(5, value);
+    ASSERT_EQUAL(4, value);
+END_TEST
+
+BEGIN_TEST(test_waitable_queue_check_fifo)
+    WaitableQueueMT<Pow> waQueue(5);
+    for(int i = 0 ; i < 5 ; ++i) {
+        waQueue.Enque(Pow(i + 1));
+    }
+    
+    for(size_t i = 0 ; i < 5 ; ++i) {
+        Pow value = waQueue.Deque();
+        ASSERT_EQUAL(value.GetValue(), pow(i + 1, 2));
+    }
+    ASSERT_THAT(waQueue.Empty());
 END_TEST
 
 BEGIN_TEST(test_multi_threads_one_enque_one_deque)
@@ -83,7 +94,7 @@ BEGIN_TEST(test_multi_threads_one_enque_one_deque)
     ASSERT_EQUAL(5, waQueue.Size());
 END_TEST
 
-BEGIN_TEST(test_multi_threads_two_enque)
+BEGIN_TEST(test_multi_threads_two_enque_one_deque)
     WaitableQueueMT<int> waQueue(5);
     shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 5));
     Thread<waitableQueueEnque<int> > threadEnqueFirst(shrPtrEnque);
@@ -98,7 +109,7 @@ BEGIN_TEST(test_multi_threads_two_enque)
     ASSERT_EQUAL(4, waQueue.Size());
 END_TEST
 
-BEGIN_TEST(test_multi_threads_two_deque)
+BEGIN_TEST(test_multi_threads_one_enque_two_deque)
     WaitableQueueMT<int> waQueue(5);
     shared_ptr<waitableQueueDeque<int> > shrPtrDeque(new waitableQueueDeque<int>(waQueue, 2));
     Thread<waitableQueueDeque<int> > threadDequeFirst(shrPtrDeque);
@@ -112,6 +123,32 @@ BEGIN_TEST(test_multi_threads_two_deque)
     threadDequeSecond.Join();
     threadEnque.Join();
     ASSERT_EQUAL(1, waQueue.Size());
+END_TEST
+
+BEGIN_TEST(test_multi_threads_N_enque_M_deque)
+    WaitableQueueMT<int> waQueue(1000);
+    
+    shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 1000));
+    Thread<waitableQueueEnque<int> > threadEnqueFirst(shrPtrEnque);
+    Thread<waitableQueueEnque<int> > threadEnqueSecond(shrPtrEnque);
+    Thread<waitableQueueEnque<int> > threadEnqueThird(shrPtrEnque);
+    Thread<waitableQueueEnque<int> > threadEnqueFourth(shrPtrEnque);
+    
+    shared_ptr<waitableQueueDeque<int> > shrPtrDeque(new waitableQueueDeque<int>(waQueue, 1000));
+    Thread<waitableQueueDeque<int> > threadDequeFirst(shrPtrDeque);
+    Thread<waitableQueueDeque<int> > threadDequeSecond(shrPtrDeque);
+    Thread<waitableQueueDeque<int> > threadDequeThird(shrPtrDeque);
+
+    threadEnqueFirst.Join();
+    threadEnqueSecond.Join();
+    threadEnqueThird.Join();
+    threadEnqueFourth.Join();
+
+    threadDequeFirst.Join();
+    threadDequeSecond.Join();
+    threadDequeThird.Join();
+
+    ASSERT_EQUAL(1000, waQueue.Size());
 END_TEST
 
 BEGIN_TEST(test_multi_threads_default_CTOR)
@@ -153,15 +190,16 @@ BEGIN_TEST(test_waitable_queue_not_empty)
     ASSERT_THAT(!waQueue.Empty());
 END_TEST
 
-BEGIN_SUITE(test)
-    TEST(test_create_waitable_queue)
-
+BEGIN_SUITE(test_waitable_queue)
     TEST(test_waitable_queue_enque_one)
     TEST(test_waitable_queue_deque_one)
 
+    TEST(test_waitable_queue_check_fifo)
+
     TEST(test_multi_threads_one_enque_one_deque)
-    TEST(test_multi_threads_two_enque)
-    TEST(test_multi_threads_two_deque)
+    TEST(test_multi_threads_two_enque_one_deque)
+    TEST(test_multi_threads_one_enque_two_deque)
+    TEST(test_multi_threads_N_enque_M_deque)
     TEST(test_multi_threads_default_CTOR)
     
     TEST(test_multi_threads_size)
