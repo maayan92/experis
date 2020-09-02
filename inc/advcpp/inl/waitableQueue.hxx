@@ -7,7 +7,7 @@ struct CompareSize {
     experis::Atomic<size_t>& m_size;
     size_t m_compareSize;
     bool operator()() {
-        return ((size_t)m_size == m_compareSize);
+        return (m_size == m_compareSize);
     }
 };
 
@@ -51,13 +51,13 @@ const T& WaitableQueueMT<T>::Deque()
 template<typename T>
 bool WaitableQueueMT<T>::Empty() const
 {
-    return (0 == (size_t)m_numOfElements);
+    return (0 == Size());
 }
 
 template<typename T>
 size_t WaitableQueueMT<T>::Size() const
 {
-    return (size_t)m_numOfElements;
+    return m_numOfElements;
 }
 
 } // advcpp
