@@ -22,13 +22,26 @@ struct ExcNotYetTerminated : public std::exception {
     }
 };
 
+struct ExcCaughtFromUser : public std::exception {
+    ExcCaughtFromUser(std::string& a_excetion)
+    : m_exception(a_excetion)
+    {}
+    virtual ~ExcCaughtFromUser() throw() {}
+    virtual const char* what() const throw() {
+        return m_exception.c_str();
+    }
+
+private:
+    std::string m_exception;
+};
+
 template<typename T>
 class Thread : private experis::Uncopyable{
 public:
     explicit Thread(shared_ptr<T> a_sharedPtr);
     ~Thread() NOEXCEPT;
 
-    void* Join() NOEXCEPT;
+    void* Join();
     void Detach() NOEXCEPT;
 
     void* TryJoin();
@@ -43,7 +56,7 @@ private:
 private:
     pthread_t m_id;
     experis::AtomicFlag m_joinedOrDetached;
-    shared_ptr<std::exception> m_exception;
+    std::string m_exception;
 };
 
 } // advcpp

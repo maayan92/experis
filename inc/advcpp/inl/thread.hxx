@@ -10,7 +10,7 @@ struct ThreadElement {
     shared_ptr<U> m_sharePtr;
     experis::ConditionVariable& m_waitFlag;
     experis::AtomicFlag& m_wasNotify;
-    shared_ptr<std::exception> m_exception;
+    std::string& m_exception;
 
     bool operator()() {
         return !m_wasNotify.GetValue();
@@ -32,13 +32,13 @@ void* Thread<T>::threadAction(void* a_element)
     shared_ptr<T> actionPtr(element->m_sharePtr);
     assert(actionPtr);
     element->m_wasNotify.CheckAndSet();
-    shared_ptr<std::exception> excCatch = element->m_exception;
+    std::string& excCatch = element->m_exception;
     element->m_waitFlag.NotifyOne();
 
     try {
         actionPtr->operator()();
     } catch(const std::exception& exc) {
-        *excCatch = exc;
+        excCatch = exc.what();
     }
 
     return 0;
@@ -48,7 +48,7 @@ template<typename T>
 Thread<T>::Thread(shared_ptr<T> a_sharedPtr)
 : m_id()
 , m_joinedOrDetached(false)
-, m_exception(new std::exception())
+, m_exception()
 {
     assert(a_sharedPtr);
     experis::ConditionVariable waitFlag;
@@ -78,11 +78,14 @@ Thread<T>::~Thread() NOEXCEPT
 }
 
 template<typename T>
-void* Thread<T>::Join() NOEXCEPT
+void* Thread<T>::Join()
 {
     if(m_joinedOrDetached.CheckAndSet()) {
         void* val;
         int status = pthread_join(m_id, &val);
+        if(0 < m_exception.size()) {
+            throw ExcCaughtFromUser(m_exception);
+        }
         if(0 != status) {
             joinErrors(status);
             assert(!"undocumented error for pthread_join");

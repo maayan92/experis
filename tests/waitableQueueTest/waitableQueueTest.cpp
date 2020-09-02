@@ -48,6 +48,8 @@ private:
     size_t m_size;
 };
 
+// **** tests **** //
+
 BEGIN_TEST(test_create_waitable_queue)
     WaitableQueueMT<int> waQueue;
     ASSERT_THAT(waQueue.Empty());

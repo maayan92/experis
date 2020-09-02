@@ -68,7 +68,11 @@ BEGIN_TEST(test_thread_try_join)
         try {
             thread.TryJoin();
         } catch(const std::exception& exc) {
-            thread.Join();
+            try{
+                thread.Join();
+            } catch(const std::exception& exc) {
+                cout << exc.what() << '\n';
+            }
         }
 
     } catch(const std::exception& exc) {
