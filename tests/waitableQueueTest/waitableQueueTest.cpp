@@ -10,7 +10,7 @@ using namespace advcpp;
 template<typename T>
 class waitableQueueEnque {
 public:
-    waitableQueueEnque(WaitableQueueMT<T>& a_waQueue, size_t a_size)
+    waitableQueueEnque(WaitableQueue<T>& a_waQueue, size_t a_size)
     : m_waQueue(a_waQueue)
     , m_size(a_size)
     {}
@@ -22,7 +22,7 @@ public:
     }
 
 private:
-    WaitableQueueMT<T>& m_waQueue;
+    WaitableQueue<T>& m_waQueue;
     size_t m_size;
     static size_t val;
 };
@@ -33,7 +33,7 @@ size_t waitableQueueEnque<T>::val = 1;
 template<typename T>
 class waitableQueueDeque {
 public:
-    waitableQueueDeque(WaitableQueueMT<T>& a_waQueue, size_t a_size)
+    waitableQueueDeque(WaitableQueue<T>& a_waQueue, size_t a_size)
     : m_waQueue(a_waQueue)
     , m_size(a_size)
     {}
@@ -45,14 +45,14 @@ public:
     }
 
 private:
-    WaitableQueueMT<T>& m_waQueue;
+    WaitableQueue<T>& m_waQueue;
     size_t m_size;
 };
 
 // **** tests **** //
 
 BEGIN_TEST(test_waitable_queue_enque_one)
-    WaitableQueueMT<int> waQueue(5);
+    WaitableQueue<int> waQueue(5);
     ASSERT_THAT(waQueue.Empty());
 
     waQueue.Enque(1);
@@ -60,7 +60,7 @@ BEGIN_TEST(test_waitable_queue_enque_one)
 END_TEST
 
 BEGIN_TEST(test_waitable_queue_deque_one)
-    WaitableQueueMT<int> waQueue(5);
+    WaitableQueue<int> waQueue(5);
     waQueue.Enque(4);
     waQueue.Enque(8);
     int value = waQueue.Deque();
@@ -69,7 +69,7 @@ BEGIN_TEST(test_waitable_queue_deque_one)
 END_TEST
 
 BEGIN_TEST(test_waitable_queue_check_fifo)
-    WaitableQueueMT<Pow> waQueue(5);
+    WaitableQueue<Pow> waQueue(5);
     for(int i = 0 ; i < 5 ; ++i) {
         waQueue.Enque(Pow(i + 1));
     }
@@ -82,7 +82,7 @@ BEGIN_TEST(test_waitable_queue_check_fifo)
 END_TEST
 
 BEGIN_TEST(test_multi_threads_one_enque_one_deque)
-    WaitableQueueMT<int> waQueue(5);
+    WaitableQueue<int> waQueue(5);
     shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 6));
     Thread<waitableQueueEnque<int> > threadEnque(shrPtrEnque);
 
@@ -95,7 +95,7 @@ BEGIN_TEST(test_multi_threads_one_enque_one_deque)
 END_TEST
 
 BEGIN_TEST(test_multi_threads_two_enque_one_deque)
-    WaitableQueueMT<int> waQueue(5);
+    WaitableQueue<int> waQueue(5);
     shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 5));
     Thread<waitableQueueEnque<int> > threadEnqueFirst(shrPtrEnque);
     Thread<waitableQueueEnque<int> > threadEnqueSecond(shrPtrEnque);
@@ -110,7 +110,7 @@ BEGIN_TEST(test_multi_threads_two_enque_one_deque)
 END_TEST
 
 BEGIN_TEST(test_multi_threads_one_enque_two_deque)
-    WaitableQueueMT<int> waQueue(5);
+    WaitableQueue<int> waQueue(5);
     shared_ptr<waitableQueueDeque<int> > shrPtrDeque(new waitableQueueDeque<int>(waQueue, 2));
     Thread<waitableQueueDeque<int> > threadDequeFirst(shrPtrDeque);
     Thread<waitableQueueDeque<int> > threadDequeSecond(shrPtrDeque);
@@ -126,7 +126,7 @@ BEGIN_TEST(test_multi_threads_one_enque_two_deque)
 END_TEST
 
 BEGIN_TEST(test_multi_threads_N_enque_M_deque)
-    WaitableQueueMT<int> waQueue(1000);
+    WaitableQueue<int> waQueue(1000);
     
     shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 1000));
     Thread<waitableQueueEnque<int> > threadEnqueFirst(shrPtrEnque);
@@ -152,7 +152,7 @@ BEGIN_TEST(test_multi_threads_N_enque_M_deque)
 END_TEST
 
 BEGIN_TEST(test_multi_threads_default_CTOR)
-    WaitableQueueMT<int> waQueue;
+    WaitableQueue<int> waQueue;
     shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 5000000));
     Thread<waitableQueueEnque<int> > threadEnqueFirst(shrPtrEnque);
     Thread<waitableQueueEnque<int> > threadEnqueSecond(shrPtrEnque);
@@ -167,7 +167,7 @@ BEGIN_TEST(test_multi_threads_default_CTOR)
 END_TEST
 
 BEGIN_TEST(test_multi_threads_size)
-    WaitableQueueMT<int> waQueue(5);
+    WaitableQueue<int> waQueue(5);
     shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 10));
     Thread<waitableQueueEnque<int> > threadEnque(shrPtrEnque);
 
@@ -180,12 +180,12 @@ BEGIN_TEST(test_multi_threads_size)
 END_TEST
 
 BEGIN_TEST(test_waitable_queue_empty)
-    WaitableQueueMT<int> waQueue(5);
+    WaitableQueue<int> waQueue(5);
     ASSERT_THAT(waQueue.Empty());
 END_TEST
 
 BEGIN_TEST(test_waitable_queue_not_empty)
-    WaitableQueueMT<int> waQueue(5);
+    WaitableQueue<int> waQueue(5);
     waQueue.Enque(1);
     ASSERT_THAT(!waQueue.Empty());
 END_TEST

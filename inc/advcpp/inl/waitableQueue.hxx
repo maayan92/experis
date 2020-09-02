@@ -5,7 +5,7 @@
 namespace advcpp {
 
 template<typename T>
-WaitableQueueMT<T>::WaitableQueueMT(size_t maxCapacity)
+WaitableQueue<T>::WaitableQueue(size_t maxCapacity)
 : m_waitableQueue()
 , m_cvEnque()
 , m_cvDeque()
@@ -16,11 +16,12 @@ WaitableQueueMT<T>::WaitableQueueMT(size_t maxCapacity)
 }
 
 template<typename T>
-void WaitableQueueMT<T>::Enque(const T& a_element)
+void WaitableQueue<T>::Enque(const T& a_element)
 {
     experis::MutexLocker locker(m_mtSafe);
-    m_cvEnque.Wait(locker, experis::ObjectFuncExecutor<WaitableQueueMT<T>, &WaitableQueueMT<T>::isFull>(*this));
+    m_cvEnque.Wait(locker, experis::ObjectFuncExecutor<WaitableQueue<T>, &WaitableQueue<T>::isFull>(*this));
     size_t currentSize = m_numOfElements;
+    assert(!isFull());
     
     m_waitableQueue.push(a_element);
     ++m_numOfElements;
@@ -31,10 +32,10 @@ void WaitableQueueMT<T>::Enque(const T& a_element)
 }
 
 template<typename T>
-T WaitableQueueMT<T>::Deque()
+T WaitableQueue<T>::Deque()
 {
     experis::MutexLocker locker(m_mtSafe);
-    m_cvDeque.Wait(locker, experis::ObjectFuncExecutor<WaitableQueueMT<T>, &WaitableQueueMT<T>::Empty>(*this));
+    m_cvDeque.Wait(locker, experis::ObjectFuncExecutor<WaitableQueue<T>, &WaitableQueue<T>::Empty>(*this));
     size_t currentSize = m_numOfElements;
     assert(!Empty());
 
@@ -49,19 +50,19 @@ T WaitableQueueMT<T>::Deque()
 }
 
 template<typename T>
-bool WaitableQueueMT<T>::Empty() const
+bool WaitableQueue<T>::Empty() const
 {
     return (0 == Size());
 }
 
 template<typename T>
-size_t WaitableQueueMT<T>::Size() const
+size_t WaitableQueue<T>::Size() const
 {
     return m_numOfElements;
 }
 
 template<typename T>
-bool WaitableQueueMT<T>::isFull() const
+bool WaitableQueue<T>::isFull() const
 {
     return (m_numOfElements == m_capacity);
 }
