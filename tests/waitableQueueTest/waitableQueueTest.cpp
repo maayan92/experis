@@ -14,17 +14,19 @@ public:
     waitableQueueEnque(WaitableQueue<T>& a_waQueue, size_t a_size)
     : m_waQueue(a_waQueue)
     , m_size(a_size)
+    , m_value()
     {}
 
     void operator()() {
         for(size_t i = 0 ; i < m_size ; ++i) {
-            m_waQueue.Enque(i);
+            m_waQueue.Enque(++m_value);
         }
     }
 
 private:
     WaitableQueue<T>& m_waQueue;
     size_t m_size;
+    Atomic<T> m_value;
 };
 
 template<typename T>
@@ -33,18 +35,25 @@ public:
     waitableQueueDeque(WaitableQueue<T>& a_waQueue, size_t a_size)
     : m_waQueue(a_waQueue)
     , m_size(a_size)
+    , m_value()
+    , m_result(true)
     {}
     
     void operator()() {
         for(size_t i = 0 ; i < m_size ; ++i) {
             T val;
             m_waQueue.Deque(val);
+            m_result &= (++m_value == val);
         }
     }
+
+    bool IsAllGood() const { return m_result; }
 
 private:
     WaitableQueue<T>& m_waQueue;
     size_t m_size;
+    Atomic<T> m_value;
+    bool m_result;
 };
 
 // **** tests **** //
@@ -84,6 +93,9 @@ END_TEST
 
 BEGIN_TEST(test_multi_threads_one_enque_one_deque)
     WaitableQueue<int> waQueue(5);
+    const size_t EQ = 6;
+    const size_t DQ = 1;
+
     shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 6));
     Thread<waitableQueueEnque<int> > threadEnque(shrPtrEnque);
 
@@ -92,11 +104,15 @@ BEGIN_TEST(test_multi_threads_one_enque_one_deque)
 
     threadEnque.Join();
     threadDeque.Join();
-    ASSERT_EQUAL(5, waQueue.Size());
+    ASSERT_EQUAL(EQ - DQ, waQueue.Size());
+    ASSERT_THAT(shrPtrDeque->IsAllGood());
 END_TEST
 
 BEGIN_TEST(test_multi_threads_two_enque_one_deque)
     WaitableQueue<int> waQueue(5);
+    const size_t EQ = 5;
+    const size_t DQ = 6;
+
     shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 5));
     Thread<waitableQueueEnque<int> > threadEnqueFirst(shrPtrEnque);
     Thread<waitableQueueEnque<int> > threadEnqueSecond(shrPtrEnque);
@@ -107,28 +123,33 @@ BEGIN_TEST(test_multi_threads_two_enque_one_deque)
     threadEnqueFirst.Join();
     threadEnqueSecond.Join();
     threadDeque.Join();
-    ASSERT_EQUAL(4, waQueue.Size());
+    ASSERT_EQUAL((EQ * 2) - DQ, waQueue.Size());
+    ASSERT_THAT(shrPtrDeque->IsAllGood());
 END_TEST
 
 BEGIN_TEST(test_multi_threads_one_enque_two_deque)
     WaitableQueue<int> waQueue(5);
-    shared_ptr<waitableQueueDeque<int> > shrPtrDeque(new waitableQueueDeque<int>(waQueue, 2));
+    const size_t EQ = 5;
+    const size_t DQ = 2;
+
+    shared_ptr<waitableQueueDeque<int> > shrPtrDeque(new waitableQueueDeque<int>(waQueue, DQ));
     Thread<waitableQueueDeque<int> > threadDequeFirst(shrPtrDeque);
     Thread<waitableQueueDeque<int> > threadDequeSecond(shrPtrDeque);
     
-    shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 5));
+    shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, EQ));
     Thread<waitableQueueEnque<int> > threadEnque(shrPtrEnque);
-
 
     threadDequeFirst.Join();
     threadDequeSecond.Join();
     threadEnque.Join();
-    ASSERT_EQUAL(1, waQueue.Size());
+    ASSERT_EQUAL(EQ - (DQ * 2), waQueue.Size());
 END_TEST
 
 BEGIN_TEST(test_multi_threads_N_enque_M_deque)
     WaitableQueue<int> waQueue(1000);
-    
+    const size_t EQ = 1000;
+    const size_t DQ = 1000;
+
     shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 1000));
     Thread<waitableQueueEnque<int> > threadEnqueFirst(shrPtrEnque);
     Thread<waitableQueueEnque<int> > threadEnqueSecond(shrPtrEnque);
@@ -149,35 +170,42 @@ BEGIN_TEST(test_multi_threads_N_enque_M_deque)
     threadDequeSecond.Join();
     threadDequeThird.Join();
 
-    ASSERT_EQUAL(1000, waQueue.Size());
+    ASSERT_EQUAL((EQ * 4) - (DQ * 3), waQueue.Size());
 END_TEST
 
 BEGIN_TEST(test_multi_threads_default_CTOR)
     WaitableQueue<int> waQueue;
-    shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 5000000));
+    const size_t EQ = 5000000;
+    const size_t DQ = 500;
+
+    shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, EQ));
     Thread<waitableQueueEnque<int> > threadEnqueFirst(shrPtrEnque);
     Thread<waitableQueueEnque<int> > threadEnqueSecond(shrPtrEnque);
 
-    shared_ptr<waitableQueueDeque<int> > shrPtrDeque(new waitableQueueDeque<int>(waQueue, 6));
+    shared_ptr<waitableQueueDeque<int> > shrPtrDeque(new waitableQueueDeque<int>(waQueue, DQ));
     Thread<waitableQueueDeque<int> > threadDeque(shrPtrDeque);
 
     threadEnqueFirst.Join();
     threadEnqueSecond.Join();
     threadDeque.Join();
-    ASSERT_EQUAL(9999994, waQueue.Size());
+    ASSERT_EQUAL((EQ * 2) - DQ, waQueue.Size());
+    ASSERT_THAT(shrPtrDeque->IsAllGood());
 END_TEST
 
 BEGIN_TEST(test_multi_threads_size)
     WaitableQueue<int> waQueue(5);
-    shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, 10));
+    const size_t EQ = 10;
+    const size_t DQ = 8;
+
+    shared_ptr<waitableQueueEnque<int> > shrPtrEnque(new waitableQueueEnque<int>(waQueue, EQ));
     Thread<waitableQueueEnque<int> > threadEnque(shrPtrEnque);
 
-    shared_ptr<waitableQueueDeque<int> > shrPtrDeque(new waitableQueueDeque<int>(waQueue, 8));
+    shared_ptr<waitableQueueDeque<int> > shrPtrDeque(new waitableQueueDeque<int>(waQueue, DQ));
     Thread<waitableQueueDeque<int> > threadDeque(shrPtrDeque);
 
     threadEnque.Join();
     threadDeque.Join();
-    ASSERT_EQUAL(2, waQueue.Size());
+    ASSERT_EQUAL((EQ - DQ), waQueue.Size());
 END_TEST
 
 BEGIN_TEST(test_waitable_queue_empty)
