@@ -27,10 +27,14 @@ void WaitableQueueMT<T>::Enque(const T& a_element)
     experis::MutexLocker locker(m_mtSafe);
     CompareSize isFull = { m_numOfElements, m_capacity };
     m_conditionVar.Wait(locker, isFull);
+    size_t currentSize = m_numOfElements;
     
     m_waitableQueue.push(a_element);
     ++m_numOfElements;
     m_conditionVar.NotifyOne();
+
+    assert(m_waitableQueue.size() == m_numOfElements);
+    assert((currentSize + 1) == m_numOfElements);
 }
 
 template<typename T>
@@ -39,12 +43,16 @@ const T& WaitableQueueMT<T>::Deque()
     experis::MutexLocker locker(m_mtSafe);
     CompareSize isEmpty = { m_numOfElements, 0 };
     m_conditionVar.Wait(locker, isEmpty);
+    size_t currentSize = m_numOfElements;
+    assert(!Empty());
 
     T& element = m_waitableQueue.front();
     m_waitableQueue.pop();
     --m_numOfElements;
     m_conditionVar.NotifyOne();
 
+    assert(m_waitableQueue.size() == m_numOfElements);
+    assert((currentSize - 1) == m_numOfElements);
     return element;
 }
 
