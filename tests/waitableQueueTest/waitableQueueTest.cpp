@@ -6,6 +6,7 @@
 #include<iostream>
 #include<iomanip>
 using namespace advcpp;
+using namespace experis;
 
 template<typename T>
 class waitableQueueEnque {
@@ -17,18 +18,14 @@ public:
 
     void operator()() {
         for(size_t i = 0 ; i < m_size ; ++i) {
-            m_waQueue.Enque(val++);
+            m_waQueue.Enque(i);
         }
     }
 
 private:
     WaitableQueue<T>& m_waQueue;
     size_t m_size;
-    static size_t val;
 };
-
-template<typename T>
-size_t waitableQueueEnque<T>::val = 1;
 
 template<typename T>
 class waitableQueueDeque {

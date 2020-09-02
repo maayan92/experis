@@ -25,7 +25,20 @@ recheck: clean all
 	@clear
 	./$(TARGET)
 
-#valgrind: valgrind --tool=helgrind --log-file=sharedPtrValgrind.txt ./shared_ptrTest
+VAL_ARGS = --show-leak-kinds=all
+VAL_ARGS += --track-origins=yes
+VAL_ARGS += --verbose
+VAL_ARGS += --log-file=valgrind_out.txt
+
+valla: $(TARGET)
+	valgrind --leak-check=full $(VAL_ARGS) ./$(TARGET)
+
+DRD_ARGS = --verbose
+DRD_ARGS += --check-stack-var=yes
+
+hell: $(TARGET)
+	valgrind --tool=helgrind
+	./$(TARGET)
 
 clean: 
 	@$(RM) -f $(TARGET) $(OBJS)
