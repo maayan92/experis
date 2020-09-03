@@ -6,7 +6,6 @@ namespace experis {
 
 ConditionVariable::ConditionVariable()
 : m_condVar() 
-, m_countWaiting(0)
 {
     int status = pthread_cond_init(&m_condVar, NULL);
     if(0 != status) {
@@ -33,10 +32,6 @@ ConditionVariable::~ConditionVariable() throw() {
 }
 
 void ConditionVariable::NotifyOne() {
-    if(0 == m_countWaiting) {
-        return;
-    }
-
     int status = pthread_cond_signal(&m_condVar);
     if(0 != status) {
         assert(EINVAL != status);
@@ -45,10 +40,6 @@ void ConditionVariable::NotifyOne() {
 }
 
 void ConditionVariable::NotifyAll() {
-    if(0 == m_countWaiting) {
-        return;
-    }
-    
     int status = pthread_cond_broadcast(&m_condVar);
     if(0 != status) {
         assert(EINVAL != status);

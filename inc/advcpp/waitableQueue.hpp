@@ -3,7 +3,7 @@
 
 #include "mutex.hpp"
 #include "atomic.hpp"
-#include "conditionVariable.hpp"
+#include "waitersConditionVar.hpp"
 #include "uncopyable.hpp"
 #include <queue>
 #include <iosfwd>
@@ -29,8 +29,8 @@ private:
     typedef std::queue<T> Queue;
 
     Queue m_waitableQueue;
-    experis::ConditionVariable m_cvEnque;
-    experis::ConditionVariable m_cvDeque;
+    experis::WaitersConditionVar m_cvEnque;
+    experis::WaitersConditionVar m_cvDeque;
     experis::Mutex m_mtSafe;
     experis::Atomic<size_t> m_numOfElements;
     size_t m_capacity;

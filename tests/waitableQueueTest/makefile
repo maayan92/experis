@@ -11,7 +11,7 @@ LDLIBS := -lpthread
 
 TARGET := waitableQueueTest
 
-OBJS := waitableQueueTest.o ../../src/mutex.o ../../src/atomicFlag.o ../../src/conditionVariable.o
+OBJS := waitableQueueTest.o ../../src/mutex.o ../../src/atomicFlag.o ../../src/conditionVariable.o ../../src/waitersConditionVar.o
 
 $(TARGET): $(OBJS)
 
