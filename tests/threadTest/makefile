@@ -11,7 +11,7 @@ LDLIBS := -lpthread
 
 TARGET := threadTest
 
-OBJS := threadTest.o ../../src/mutex.o ../../src/atomicFlag.o ../../src/conditionVariable.o
+OBJS := threadTest.o ../../src/mutex.o ../../src/atomicFlag.o ../../src/additionalFunctionality.o ../../src/conditionVariable.o
 
 $(TARGET): $(OBJS)
 

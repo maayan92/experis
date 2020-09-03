@@ -1,7 +1,7 @@
 #include "conditionVariable.hpp"
+#include "additionalFunctionality.hpp"
 #include <cassert>
 #include <errno.h>
-#include <unistd.h>
 
 namespace advcpp {
 
@@ -136,8 +136,7 @@ void Thread<T>::Exit(void* a_value) NOEXCEPT
 template<typename T>
 void Thread<T>::Sleep(size_t a_nanoseconds) NOEXCEPT
 {
-    //const size_t fromNanoToMicro = 1000;
-    //useconds_t timeToSleep =  a_nanoseconds / fromNanoToMicro;
+    experis::GoToSleep(a_nanoseconds);
 }
 
 template<typename T>

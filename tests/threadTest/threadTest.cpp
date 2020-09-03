@@ -90,6 +90,18 @@ BEGIN_TEST(test_thread_yeild)
     ASSERT_EQUAL(256, sharedPtr->GetValue());
 END_TEST
 
+BEGIN_TEST(test_thread_sleep)
+    shared_ptr<Pow> sharedPtr(new Pow(2));
+    try {
+        Thread<Pow> thread(sharedPtr);
+        thread.Join();
+        Thread<Pow>::Sleep(10000000000);
+    } catch(const exception& exc) {
+        cout << exc.what() << '\n';
+    }
+    ASSERT_EQUAL(16, sharedPtr->GetValue());
+END_TEST
+
 BEGIN_SUITE(test)
     TEST(test_create_thread)
     TEST(test_create_thread_derived_to_base)
@@ -98,4 +110,6 @@ BEGIN_SUITE(test)
     TEST(test_thread_try_join)
 
     TEST(test_thread_yeild)
+
+    TEST(test_thread_sleep)
 END_SUITE
