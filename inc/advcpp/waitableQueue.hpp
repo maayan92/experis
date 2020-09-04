@@ -28,10 +28,10 @@ private:
     static const size_t DEFAULT_MAX_CAPACITY = 10000000;
     typedef std::queue<T> Queue;
 
-    Queue m_waitableQueue;
-    experis::WaitersConditionVar m_cvEnque;
-    experis::WaitersConditionVar m_cvDeque;
     experis::Mutex m_mtSafe;
+    experis::WaitersConditionVar m_cvEnque;
+    Queue m_waitableQueue;
+    experis::WaitersConditionVar m_cvDeque;
     experis::Atomic<size_t> m_numOfElements;
     size_t m_capacity;
 };

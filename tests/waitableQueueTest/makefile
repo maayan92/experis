@@ -37,7 +37,7 @@ DRD_ARGS = --verbose
 DRD_ARGS += --check-stack-var=yes
 
 hell: $(TARGET)
-	valgrind --tool=helgrind
+	valgrind --tool=drd $(DRD_ARGS) ./$(TARGET)
 	./$(TARGET)
 
 clean: 

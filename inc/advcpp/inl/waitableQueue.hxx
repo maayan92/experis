@@ -6,10 +6,10 @@ namespace advcpp {
 
 template<typename T>
 WaitableQueue<T>::WaitableQueue(size_t maxCapacity)
-: m_waitableQueue()
+: m_mtSafe()
 , m_cvEnque()
+, m_waitableQueue()
 , m_cvDeque()
-, m_mtSafe()
 , m_numOfElements(0)
 , m_capacity(maxCapacity)
 {
