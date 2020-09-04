@@ -58,7 +58,7 @@ static T FillValues(T a_value, T a_copy)
 }
 
 template<typename T>
-static bool CompareValues(vector<T> a_left, vector<T> a_right)
+static bool CompareValues(vector<T>& a_left, vector<T>& a_right)
 {
     if(a_left.front() == a_right.front()) {
         a_left.erase(a_left.begin());
@@ -70,7 +70,7 @@ static bool CompareValues(vector<T> a_left, vector<T> a_right)
 }
 
 template<typename T>
-static bool CheckResult(vector<vector<T> > a_result, vector<vector<T> > a_values, size_t a_size)
+static bool CheckResult(vector<vector<T> >& a_result, vector<vector<T> >& a_values, size_t a_size)
 {
     typedef typename vector<vector<T> >::iterator iterator;
     iterator itrFind;
@@ -92,7 +92,7 @@ template<typename T, typename Action>
 static void EnqueThreads(ThreadGroup<T, Action>& a_threads, vector<vector<T> >& a_values, size_t a_size)
 {
     for(size_t i = 0 ; i < a_values.size() ; ++i) {
-        size_t startValue = ((i % 2 == 0) ? 1 : -1) * (a_size * (i - 1) + 1);
+        size_t startValue = ((i % 2 == 0) ? 1 : -1) * (a_size * (i/2) + 1);
         a_values[i] = vector<T>(a_size, startValue);
 
         typename vector<T>::iterator itr = ++a_values[i].begin();
