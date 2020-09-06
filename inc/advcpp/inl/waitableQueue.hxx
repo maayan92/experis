@@ -3,10 +3,10 @@
 #include <iostream>
 
 namespace advcpp {
-/*
+
 template<typename Obj, bool(Obj::*Func)() const, bool(Obj::*FuncSecond)() const>
-struct WasShutDown {
-    WasShutDown(const Obj& a_object)
+struct ExecutorByTwoCondition {
+    ExecutorByTwoCondition(const Obj& a_object)
     : m_ofExecutor(a_object)
     , m_object(a_object)
     {}
@@ -19,7 +19,7 @@ private:
     experis::ObjectFuncExecutor<Obj, Func> m_ofExecutor;
     const Obj& m_object;
 };
-*/
+
 template<typename T>
 WaitableQueue<T>::WaitableQueue(size_t maxCapacity)
 : m_mtSafe()
@@ -36,10 +36,13 @@ template<typename T>
 void WaitableQueue<T>::Enque(const T& a_element)
 {
     experis::MutexLocker locker(m_mtSafe);
-    m_cvEnque.Wait(locker, experis::ObjectFuncExecutor<WaitableQueue<T>, &WaitableQueue<T>::isFull>(*this));
-    //m_cvEnque.Wait(locker, WasShutDown<WaitableQueue<T>, &WaitableQueue<T>::isFull, &WaitableQueue<T>::wasNotShutDown>(*this));
+    m_cvEnque.Wait(locker, ExecutorByTwoCondition<WaitableQueue<T>, &WaitableQueue<T>::isFull, &WaitableQueue<T>::wasNotShutDown>(*this));
     size_t currentSize = m_numOfElements;
     
+    if(m_shutDown.GetValue()) {
+        return;
+    }
+
     assert(!isFull());
     m_waitableQueue.push(a_element);
     ++m_numOfElements;
@@ -53,9 +56,13 @@ template<typename T>
 void WaitableQueue<T>::Deque(T& a_element)
 {
     experis::MutexLocker locker(m_mtSafe);
-    m_cvDeque.Wait(locker, experis::ObjectFuncExecutor<WaitableQueue<T>, &WaitableQueue<T>::Empty>(*this));
+    m_cvDeque.Wait(locker, ExecutorByTwoCondition<WaitableQueue<T>, &WaitableQueue<T>::Empty, &WaitableQueue<T>::wasNotShutDown>(*this));
     size_t currentSize = m_numOfElements;
     
+    if(m_shutDown.GetValue()) {
+        return;
+    }
+
     assert(!Empty());
     a_element = m_waitableQueue.front();
     m_waitableQueue.pop();
@@ -77,6 +84,7 @@ size_t WaitableQueue<T>::Size() const
 {
     return m_numOfElements;
 }
+
 template<typename T>
 void WaitableQueue<T>::ShutDown()
 {

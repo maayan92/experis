@@ -235,8 +235,8 @@ BEGIN_TEST(test_multi_threads_one_enque_one_deque_shut_down)
     Thread<ShutDown<int> > threadShutDown(shrPtr);
 
     threadShutDown.Yeild();
-    threadsEnque.DetachAll();
-    threadsDeque.DetachAll();
+    threadsEnque.JoinAll();
+    threadsDeque.JoinAll();
     //waQueue.ShutDown();
     threadShutDown.Join();
 
@@ -278,8 +278,8 @@ BEGIN_SUITE(test_waitable_queue)
     TEST(test_multi_threads_two_enque_one_deque)
     TEST(test_multi_threads_one_enque_two_deque)
     TEST(test_multi_threads_N_enque_M_deque)
-    TEST(test_multi_threads_default_CTOR)
-    //TEST(test_multi_threads_one_enque_one_deque_shut_down)
+    //TEST(test_multi_threads_default_CTOR)
+    TEST(test_multi_threads_one_enque_one_deque_shut_down)
     
     TEST(test_waitable_queue_size)
 

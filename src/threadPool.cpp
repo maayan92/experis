@@ -26,14 +26,14 @@ ThreadPool::ThreadPool(size_t a_numOfThread)
     }
 }
 
-static void join(shared_ptr<Thread<Tasks> > a_thread)
+static void detach(shared_ptr<Thread<Tasks> > a_thread)
 {
-    a_thread->Join();
+    a_thread->Detach();
 }
 
 ThreadPool::~ThreadPool()
 {
-    for_each(m_threads.begin(), m_threads.end(), join);
+    for_each(m_threads.begin(), m_threads.end(), detach);
     ShutDown();
 }
 
