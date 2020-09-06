@@ -21,8 +21,12 @@ public:
     bool Empty() const;
     size_t Size() const;
 
+    // after calling this function no Enqueue or Dequeue is possible.
+    void ShutDown();
+
 private:
     bool isFull() const;
+    bool wasNotShutDown() const;
 
 private:
     static const size_t DEFAULT_MAX_CAPACITY = 10000000;
@@ -34,6 +38,7 @@ private:
     experis::WaitersConditionVar m_cvDeque;
     experis::Atomic<size_t> m_numOfElements;
     size_t m_capacity;
+    experis::AtomicFlag m_shutDown;
 };
 
 } // advcpp

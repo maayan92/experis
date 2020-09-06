@@ -227,10 +227,10 @@ END_TEST
 
 BEGIN_TEST(test_multi_threads_default_CTOR)
     WaitableQueue<int> waQueue;
-    const size_t EQ = 6000000;
+    const size_t EQ = 3000000;
     const size_t DQ = 2000000;
 
-    vector<vector<int> > values(2);
+    vector<vector<int> > values(4);
     ThreadGroup<int, waitableQueueEnque<int> > threadsEnque(waQueue);
     EnqueThreads(threadsEnque, values, EQ);
     
@@ -241,7 +241,49 @@ BEGIN_TEST(test_multi_threads_default_CTOR)
     threadsEnque.JoinAll();
     threadsDeque.JoinAll();
 
-    ASSERT_EQUAL((EQ * 2) - DQ, waQueue.Size());
+    ASSERT_EQUAL((EQ * 4) - DQ, waQueue.Size());
+END_TEST
+
+template<typename T>
+struct ShutDown {
+    ShutDown(WaitableQueue<T>& a_waQueue)
+    : m_waQueue(a_waQueue)
+    {}
+    
+    void operator()() {
+        m_waQueue.ShutDown();
+    }
+
+private:
+    WaitableQueue<T>& m_waQueue;
+};
+
+BEGIN_TEST(test_multi_threads_one_enque_one_deque_shut_down)
+    size_t capacity = 5;
+    WaitableQueue<int> waQueue(capacity);
+    const size_t EQ = 10;
+    const size_t DQ = 3;
+
+    vector<vector<int> > values(1);
+    ThreadGroup<int, waitableQueueEnque<int> > threadsEnque(waQueue);
+    EnqueThreads(threadsEnque, values, EQ);
+
+    vector<vector<int> > result(1);
+    ThreadGroup<int, waitableQueueDeque<int> > threadsDeque(waQueue);
+    DequeThreads(threadsDeque, result, DQ);
+
+    //shared_ptr<ShutDown<int> > shrPtr(new ShutDown<int>(waQueue));
+    //Thread<ShutDown<int> > threadShutDown(shrPtr);
+
+    threadsEnque.JoinAll();
+    threadsDeque.JoinAll();
+    waQueue.ShutDown();
+    //threadShutDown.Join();
+
+    size_t sizeResult = ((EQ - DQ) > capacity) ? capacity : 0;
+    cout << waQueue.Size() << '\n';
+    ASSERT_EQUAL(sizeResult, waQueue.Size());
+    ASSERT_THAT(CheckResult(result, values, sizeResult));
 END_TEST
 
 BEGIN_TEST(test_waitable_queue_size)
@@ -278,6 +320,7 @@ BEGIN_SUITE(test_waitable_queue)
     TEST(test_multi_threads_one_enque_two_deque)
     TEST(test_multi_threads_N_enque_M_deque)
     TEST(test_multi_threads_default_CTOR)
+    //TEST(test_multi_threads_one_enque_one_deque_shut_down)
     
     TEST(test_waitable_queue_size)
 
