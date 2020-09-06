@@ -1,5 +1,6 @@
 #include "threadGroup.hpp"
 #include "testClasses.hpp"
+#include "threadClasses.hpp"
 #include "mu_test.h"
 #include <climits>
 #include<iostream>
@@ -8,50 +9,6 @@
 using namespace advcpp;
 using namespace experis;
 using namespace std;
-
-template<typename T>
-class waitableQueueEnque {
-public:
-    waitableQueueEnque(WaitableQueue<T>& a_waQueue, vector<T>& a_values)
-    : m_waQueue(a_waQueue)
-    , m_values(a_values)
-    {}
-
-    void operator()() {
-        for(size_t i = 0 ; i < m_values.size() ; ++i) {
-            if(!m_waQueue.Enque(m_values[i])) {
-                return;
-            }
-        }
-    }
-
-private:
-    WaitableQueue<T>& m_waQueue;
-    vector<T> m_values;
-};
-
-template<typename T>
-class waitableQueueDeque {
-public:
-    waitableQueueDeque(WaitableQueue<T>& a_waQueue, vector<T>& a_result)
-    : m_waQueue(a_waQueue)
-    , m_result(a_result)
-    {}
-    
-    void operator()() {
-        for(size_t i = 0 ; i < m_result.size() ; ++i) {
-            T val;
-            m_waQueue.Deque(val);
-            m_result[i] = val;
-        }
-    }
-
-    vector<T> GerResult() const { return m_result; }
-
-private:
-    WaitableQueue<T>& m_waQueue;
-    vector<T>& m_result;
-};
 
 template<typename T>
 static T FillValues(T a_value, T a_copy)
