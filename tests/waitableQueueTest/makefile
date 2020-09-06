@@ -35,6 +35,7 @@ valla: $(TARGET)
 
 DRD_ARGS = --verbose
 DRD_ARGS += --check-stack-var=yes
+DRD_ARGS += --log-file=hellgrind_out.txt
 
 hell: $(TARGET)
 	valgrind --tool=drd $(DRD_ARGS) ./$(TARGET)

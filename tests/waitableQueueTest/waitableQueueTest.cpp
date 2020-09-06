@@ -19,7 +19,9 @@ public:
 
     void operator()() {
         for(size_t i = 0 ; i < m_values.size() ; ++i) {
-            m_waQueue.Enque(m_values[i]);
+            if(!m_waQueue.Enque(m_values[i])) {
+                return;
+            }
         }
     }
 
@@ -272,18 +274,18 @@ BEGIN_TEST(test_multi_threads_one_enque_one_deque_shut_down)
     ThreadGroup<int, waitableQueueDeque<int> > threadsDeque(waQueue);
     DequeThreads(threadsDeque, result, DQ);
 
-    //shared_ptr<ShutDown<int> > shrPtr(new ShutDown<int>(waQueue));
-    //Thread<ShutDown<int> > threadShutDown(shrPtr);
+    shared_ptr<ShutDown<int> > shrPtr(new ShutDown<int>(waQueue));
+    Thread<ShutDown<int> > threadShutDown(shrPtr);
 
-    threadsEnque.JoinAll();
-    threadsDeque.JoinAll();
-    waQueue.ShutDown();
-    //threadShutDown.Join();
+    threadShutDown.Yeild();
+    threadsEnque.DetachAll();
+    threadsDeque.DetachAll();
+    //waQueue.ShutDown();
+    threadShutDown.Join();
 
     size_t sizeResult = ((EQ - DQ) > capacity) ? capacity : 0;
-    cout << waQueue.Size() << '\n';
     ASSERT_EQUAL(sizeResult, waQueue.Size());
-    ASSERT_THAT(CheckResult(result, values, sizeResult));
+    ASSERT_THAT(CheckResult(result, values, DQ));
 END_TEST
 
 BEGIN_TEST(test_waitable_queue_size)

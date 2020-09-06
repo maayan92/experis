@@ -16,6 +16,7 @@ public:
     void CreateNewThread(std::vector<T>& a_vector);
 
     void JoinAll();
+    void DetachAll();
 
 private:
     std::vector<advcpp::Thread<Action>* > m_threads;
@@ -36,6 +37,12 @@ template<typename Action>
 static void join(advcpp::Thread<Action>* a_thread)
 {
     a_thread->Join();
+}
+
+template<typename Action>
+static void detach(advcpp::Thread<Action>* a_thread)
+{
+    a_thread->Detach();
 }
 
 template<typename T, typename Action>
@@ -62,6 +69,12 @@ template<typename T, typename Action>
 void ThreadGroup<T, Action>::JoinAll()
 {
     for_each(m_threads.begin(), m_threads.end(), join<Action>);
+}
+
+template<typename T, typename Action>
+void ThreadGroup<T, Action>::DetachAll()
+{
+    for_each(m_threads.begin(), m_threads.end(), detach<Action>);
 }
 
 } // experis
