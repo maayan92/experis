@@ -118,6 +118,48 @@ BEGIN_TEST(test_thread_pool_submit_task)
     ASSERT_EQUAL(1, threads.NumOfTasks());
 END_TEST
 
+BEGIN_TEST(test_thread_pool_shut_down)
+    const size_t NUM_OF_THREAD = 5;
+    const size_t NEW_NUM_OF_THREAD = 3;
+    ThreadPool threads(NUM_OF_THREAD);
+    
+    threads.ShutDown();
+    ASSERT_EQUAL(0, threads.NumOfThread());
+
+    threads.AddThread(NEW_NUM_OF_THREAD);
+    size_t count = 0;
+    shared_ptr<Incrementer> newTask(new Incrementer(count));
+    threads.Submit(newTask);
+
+    ASSERT_EQUAL(0, threads.NumOfThread());
+    ASSERT_EQUAL(0, threads.NumOfTasks());
+    ASSERT_EQUAL(count, 0);
+END_TEST
+
+BEGIN_TEST(test_thread_pool_shut_down_immediately)
+    ThreadPool threads(1);
+    
+    size_t count = 0;
+    shared_ptr<Incrementer> newTask(new Incrementer(count));
+
+    size_t N = 10000;
+    for(size_t i = 0 ; i < N ; ++i) {
+        threads.Submit(newTask);
+    }
+
+    threads.ShutDownImmediately();
+    
+    ASSERT_EQUAL(0, threads.NumOfThread());
+
+    size_t numOfTasks = threads.NumOfTasks();
+    threads.AddThread(1);
+    threads.Submit(newTask);
+
+    ASSERT_EQUAL(0, threads.NumOfThread());
+    ASSERT_EQUAL(numOfTasks, threads.NumOfTasks());
+    ASSERT_NOT_EQUAL(count, N);
+END_TEST
+
 BEGIN_TEST(test_thread_pool_turn_on)
     const size_t NUM_OF_THREAD = 5;
     const size_t NEW_NUM_OF_THREAD = 3;
@@ -147,5 +189,8 @@ BEGIN_SUITE(test_thread_pool)
 
     TEST(test_thread_pool_submit_task)
 
-    TEST(test_thread_pool_turn_on)
+    TEST(test_thread_pool_shut_down)
+    TEST(test_thread_pool_shut_down_immediately)
+
+    //TEST(test_thread_pool_turn_on)
 END_SUITE

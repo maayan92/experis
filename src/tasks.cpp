@@ -4,23 +4,22 @@ using namespace experis;
 
 namespace advcpp {
 
-Tasks::Tasks(WaitableQueue<shared_ptr<experis::IRunnable> >& a_tasks, experis::WaitersConditionVar& a_cvWaitForTasks)
-: m_mutex()
-, m_tasks(a_tasks)
+Tasks::Tasks(WaitQueue& a_tasks, WaitersConditionVar& a_cvWaitForTasks, experis::AtomicFlag& a_shutDownImmediately)
+: m_tasks(a_tasks)
 , m_cvWaitForTasks(a_cvWaitForTasks)
+, m_shutDownImmediately(a_shutDownImmediately)
 {
 }
 
 void Tasks::operator()()
 {
-    for(;;){
+    while(!m_shutDownImmediately.GetValue()){
         shared_ptr<IRunnable> task;
         m_tasks.Deque(task);
-        if(!task) {
+        if(m_shutDownImmediately.GetValue()) {
             break;
         }
         (*task)();
-        MutexLocker locker(m_mutex);
         if(m_tasks.Empty()) {
             m_cvWaitForTasks.NotifyOne();
         }

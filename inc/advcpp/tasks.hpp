@@ -8,16 +8,17 @@
 namespace advcpp {
 
 class Tasks : private experis::Uncopyable {
+    typedef WaitableQueue<shared_ptr<experis::IRunnable> > WaitQueue;
 public:
-    Tasks(WaitableQueue<shared_ptr<experis::IRunnable> >& a_tasks, experis::WaitersConditionVar& a_cvWaitForTasks);
+    Tasks(WaitQueue& a_tasks, experis::WaitersConditionVar& a_cvWaitForTasks, experis::AtomicFlag& a_shutDownImmediately);
     //~Tasks() = default;
 
     void operator()();
 
 private:
-    experis::Mutex m_mutex;
-    WaitableQueue<shared_ptr<experis::IRunnable> >& m_tasks;
+    WaitQueue& m_tasks;
     experis::WaitersConditionVar& m_cvWaitForTasks;
+    experis::AtomicFlag& m_shutDownImmediately;
 };
 
 } // advcpp
