@@ -20,8 +20,13 @@ public:
     void ShutDown();
 
 private:
+    bool isNotEmpty() const;
+
+private:
+    experis::Mutex m_mutex;
     WaitableQueue<shared_ptr<experis::IRunnable> > m_tasks;
     experis::AtomicFlag m_wasShutDown;
+    experis::ConditionVariable m_cvWaitForTasks;
 };
 
 } // advcpp

@@ -3,12 +3,6 @@
 using namespace advcpp;
 using namespace experis;
 
-class ShutDownTask : public IRunnable {
-public:
-    virtual void operator()() {
-    }
-};
-
 ThreadPool::ThreadPool(size_t a_numOfThread)
 : m_threads()
 , m_tasks(new Tasks())
@@ -50,9 +44,5 @@ void ThreadPool::AddNewThread()
 
 void ThreadPool::ShutDown()
 {
-    shared_ptr<IRunnable> newTask(new ShutDownTask());
-    for(size_t i = 0 ; i < m_threads.size() ; ++i) {
-        m_tasks->Submit(newTask);
-    }
     m_tasks->ShutDown();
 }
