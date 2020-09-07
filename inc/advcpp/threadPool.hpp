@@ -15,14 +15,17 @@ public:
 
     void Submit(shared_ptr<experis::IRunnable> a_newTask);
     void ShutDown();
-    void AddNewThread();
+    void AddThread(size_t a_numOfThreads = 1);
+
+    size_t NumOfThread() const;
+    size_t NumOfTasks() const;
 
 private:
     void threadsInitialization(size_t a_numOfThread);
     bool isNotEmpty() const;
 
 private:
-    experis::Mutex m_mutex;
+    mutable experis::Mutex m_mutex;
     std::vector<shared_ptr<advcpp::Thread<Tasks> > > m_threads;
     WaitableQueue<shared_ptr<experis::IRunnable> > m_tasksQueue;
     experis::AtomicFlag m_wasShutDown;

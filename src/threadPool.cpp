@@ -44,11 +44,15 @@ void ThreadPool::Submit(shared_ptr<IRunnable> a_newTask)
     }
 }
 
-void ThreadPool::AddNewThread()
+void ThreadPool::AddThread(size_t a_numOfThreads)
 {
     MutexLocker locker(m_mutex);
-    shared_ptr<Thread<Tasks> > shrPtr(new Thread<Tasks>(m_tasks));
-    m_threads.push_back(shrPtr);
+
+    m_threads.reserve(m_threads.size() + a_numOfThreads);
+    for(size_t i = 0 ; i < a_numOfThreads ; ++i) {
+        shared_ptr<Thread<Tasks> > shrPtr(new Thread<Tasks>(m_tasks));
+        m_threads.push_back(shrPtr);
+    }
 }
 
 void ThreadPool::ShutDown()
@@ -61,6 +65,17 @@ void ThreadPool::ShutDown()
     m_cvWaitForTasks.Wait(locker, ObjectFuncExecutor<ThreadPool, &ThreadPool::isNotEmpty>(*this));
 
     m_tasksQueue.ShutDown();
+}
+
+size_t ThreadPool::NumOfThread() const
+{
+    MutexLocker locker(m_mutex);
+    return m_threads.size();
+}
+
+size_t ThreadPool::NumOfTasks() const
+{
+    return m_tasksQueue.Size();
 }
 
 // private functions:
