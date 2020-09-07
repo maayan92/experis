@@ -10,77 +10,45 @@ using namespace experis;
 using namespace advcpp;
 using namespace std;
 
-template<typename T>
-static T FillValues(T a_value, T a_copy)
-{
-    return  (a_value < 0) ? --a_copy : ++a_copy;
-}
+class Incrementer : public IRunnable {
+public:
+    Incrementer(size_t& a_count)
+    : m_count(a_count)
+    {}
 
-BEGIN_TEST(test_two_threads_two_tasks_one_enque_one_deque)
-    WaitableQueue<int> waQueue(5);
-    const size_t EQ = 6;
-    const size_t DQ = 3;
+    void operator()() {
+        ++m_count;
+    }
 
-    ThreadPool threads(2);
+private:
+    size_t& m_count;
+};
 
-    vector<int> values(EQ, 1);
-    transform(++values.begin(), values.end(), values.begin(), ++values.begin(), FillValues<int>);
-    shared_ptr<waitableQueueEnque<int> > enqueTask(new waitableQueueEnque<int>(waQueue, values));
-    threads.Submit(enqueTask);
+BEGIN_TEST(test_thread_pool_one_threads_N_tasks)
+    ThreadPool threads(1);
 
-    vector<int> result(DQ);
-    shared_ptr<waitableQueueDeque<int> > dequeTask(new waitableQueueDeque<int>(waQueue, result));
-    threads.Submit(dequeTask);
+    size_t count = 0;
+    shared_ptr<Incrementer > newTask(new Incrementer(count));
+
+    size_t N = 10000;
+    for(size_t i = 0 ; i < N ; ++i) {
+        threads.Submit(newTask);
+    }
 
     threads.ShutDown();
 
-    ASSERT_EQUAL(EQ - DQ, waQueue.Size());
+    ASSERT_EQUAL(count, N);
 END_TEST
 
-static void FillTasksEnque(WaitableQueue<int>& a_waQueue, ThreadPool& a_threads, size_t a_numOfEnque, size_t a_size)
-{
-    vector<vector<int> > values;
-    values.reserve(a_numOfEnque);
-    
-    for(size_t i = 0 ; i < a_numOfEnque ; ++i) {
-        values.push_back(vector<int>(a_size, 1));
-        typename vector<int>::iterator itr = ++values[i].begin();
-        transform(itr, values[i].end(), values[i].begin(), itr, FillValues<int>);
-        shared_ptr<waitableQueueEnque<int> > enqueTask(new waitableQueueEnque<int>(a_waQueue, values[i]));
-        a_threads.Submit(enqueTask);
-    }
-}
-
-static void FillTasksDeque(WaitableQueue<int>& a_waQueue, ThreadPool& a_threads, size_t a_numOfDeque, size_t a_size)
-{
-    vector<vector<int> > result;
-    result.reserve(a_numOfDeque);
-    
-    for(size_t i = 0 ; i < a_numOfDeque ; ++i) {
-        result.push_back(vector<int>(a_size));
-        shared_ptr<waitableQueueEnque<int> > dequeTask(new waitableQueueEnque<int>(a_waQueue, result[i]));
-        a_threads.Submit(dequeTask);
-    }
-}
-
 BEGIN_TEST(test_N_threads_M_tasks_N_enque_M_deque)
-    WaitableQueue<int> waQueue(20);
-    const size_t EQ = 6;
-    const size_t DQ = 7;
-    const size_t NUM_OF_ENQUE = 10;
-    const size_t NUM_OF_DEQUE = 5;
-    
     ThreadPool threads(10);
-
-    FillTasksEnque(waQueue, threads, NUM_OF_ENQUE, EQ);
-    FillTasksDeque(waQueue, threads, NUM_OF_DEQUE, DQ);
 
     threads.ShutDown();
 
-    ASSERT_EQUAL((EQ * NUM_OF_ENQUE) - (DQ * NUM_OF_DEQUE), waQueue.Size());
+    //ASSERT_EQUAL();
 END_TEST
 
 BEGIN_SUITE(test_thread_pool)
-    TEST(test_two_threads_two_tasks_one_enque_one_deque)
+    TEST(test_thread_pool_one_threads_N_tasks)
     //TEST(test_N_threads_M_tasks_N_enque_M_deque)
 END_SUITE

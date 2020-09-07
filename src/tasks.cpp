@@ -23,10 +23,10 @@ Tasks::Tasks()
 
 void Tasks::operator()()
 {
-    while(!m_wasShutDown.GetValue()){
+    for(;;){
         shared_ptr<IRunnable> task;
         m_tasks.Deque(task);
-        if(m_wasShutDown.GetValue()) {
+        if(!task) {
             break;
         }
         (*task)();
@@ -38,7 +38,6 @@ void Tasks::operator()()
 
 void Tasks::Submit(shared_ptr<IRunnable> a_newTask)
 {
-    MutexLocker locker(m_mutex);
     if(!m_wasShutDown.GetValue()) {
         m_tasks.Enque(a_newTask);
     }
@@ -46,10 +45,13 @@ void Tasks::Submit(shared_ptr<IRunnable> a_newTask)
 
 void Tasks::ShutDown()
 {
+    if(!m_wasShutDown.CheckAndSet()) {
+        return;
+    }
+
     MutexLocker locker(m_mutex);
     m_cvWaitForTasks.Wait(locker, ObjectFuncExecutor<Tasks, &Tasks::isNotEmpty>(*this));
 
-    m_wasShutDown.CheckAndSet();
     m_tasks.ShutDown();
 }
 

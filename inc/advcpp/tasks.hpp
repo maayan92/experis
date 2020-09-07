@@ -4,7 +4,7 @@
 #include "runnable.hpp"
 #include "shared_ptr.hpp"
 #include "waitableQueue.hpp"
-#include "uncopyable.hpp"
+//#include "uncopyable.hpp"
 
 namespace advcpp {
 
@@ -26,7 +26,7 @@ private:
     experis::Mutex m_mutex;
     WaitableQueue<shared_ptr<experis::IRunnable> > m_tasks;
     experis::AtomicFlag m_wasShutDown;
-    experis::ConditionVariable m_cvWaitForTasks;
+    experis::WaitersConditionVar m_cvWaitForTasks;
 };
 
 } // advcpp
