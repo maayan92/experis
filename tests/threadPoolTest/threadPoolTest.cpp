@@ -37,6 +37,22 @@ public:
 private:
     Atomic<size_t>& m_count;
 };
+/*
+class ShutDownExecutor : public IRunnable {
+public:
+    ShutDownExecutor(ThreadPool& a_threads)
+    : m_threads(a_threads)
+    {}
+
+    void operator()() {
+        m_threads.ShutDown();
+    }
+
+private:
+    ThreadPool& m_threads;
+};
+*/
+// **** tests: **** //
 
 BEGIN_TEST(test_thread_pool_one_threads_N_tasks)
     ThreadPool threads(1);
@@ -102,6 +118,26 @@ BEGIN_TEST(test_thread_pool_submit_task)
     ASSERT_EQUAL(1, threads.NumOfTasks());
 END_TEST
 
+BEGIN_TEST(test_thread_pool_turn_on)
+    const size_t NUM_OF_THREAD = 5;
+    const size_t NEW_NUM_OF_THREAD = 3;
+    ThreadPool threads(NUM_OF_THREAD);
+    
+    threads.ShutDown();
+    ASSERT_EQUAL(0, threads.NumOfThread());
+
+    threads.TurnOn(NEW_NUM_OF_THREAD);
+    ASSERT_EQUAL(NEW_NUM_OF_THREAD, threads.NumOfThread());
+
+    threads.AddThread(NEW_NUM_OF_THREAD);
+    size_t count = 0;
+    shared_ptr<Incrementer> newTask(new Incrementer(count));
+    threads.Submit(newTask);
+
+    ASSERT_EQUAL(NEW_NUM_OF_THREAD * 2, threads.NumOfThread());
+    //ASSERT_EQUAL(count, 1);
+END_TEST
+
 BEGIN_SUITE(test_thread_pool)
     TEST(test_thread_pool_one_threads_N_tasks)
     TEST(test_thread_pool_N_threads_M_tasks)
@@ -110,4 +146,6 @@ BEGIN_SUITE(test_thread_pool)
     TEST(test_thread_pool_add_N_threads)
 
     TEST(test_thread_pool_submit_task)
+
+    TEST(test_thread_pool_turn_on)
 END_SUITE

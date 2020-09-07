@@ -9,6 +9,7 @@ ThreadPool::ThreadPool(size_t a_numOfThread)
 , m_threads()
 , m_tasksQueue()
 , m_wasShutDown(false)
+, m_wasTurnOn(true)
 , m_cvWaitForTasks()
 , m_tasks(new Tasks(m_tasksQueue, m_cvWaitForTasks))
 {
@@ -20,21 +21,16 @@ ThreadPool::ThreadPool(size_t a_numOfThread, size_t a_maxCapacityOfTasks)
 , m_threads()
 , m_tasksQueue(a_maxCapacityOfTasks)
 , m_wasShutDown(false)
+, m_wasTurnOn(true)
 , m_cvWaitForTasks()
 , m_tasks(new Tasks(m_tasksQueue, m_cvWaitForTasks))
 {
     threadsInitialization(a_numOfThread);   
 }
 
-static void join(shared_ptr<Thread<Tasks> > a_thread)
-{
-    a_thread->Join();
-}
-
 ThreadPool::~ThreadPool()
 {
     ShutDown();
-    for_each(m_threads.begin(), m_threads.end(), join);
 }
 
 void ThreadPool::Submit(shared_ptr<IRunnable> a_newTask)
@@ -46,12 +42,14 @@ void ThreadPool::Submit(shared_ptr<IRunnable> a_newTask)
 
 void ThreadPool::AddThread(size_t a_numOfThreads)
 {
-    MutexLocker locker(m_mutex);
+    if(!m_wasShutDown.GetValue()) {
+        MutexLocker locker(m_mutex);
 
-    m_threads.reserve(m_threads.size() + a_numOfThreads);
-    for(size_t i = 0 ; i < a_numOfThreads ; ++i) {
-        shared_ptr<Thread<Tasks> > shrPtr(new Thread<Tasks>(m_tasks));
-        m_threads.push_back(shrPtr);
+        m_threads.reserve(m_threads.size() + a_numOfThreads);
+        for(size_t i = 0 ; i < a_numOfThreads ; ++i) {
+            shared_ptr<Thread<Tasks> > shrPtr(new Thread<Tasks>(m_tasks));
+            m_threads.push_back(shrPtr);
+        }
     }
 }
 
@@ -65,6 +63,18 @@ void ThreadPool::ShutDown()
     m_cvWaitForTasks.Wait(locker, ObjectFuncExecutor<ThreadPool, &ThreadPool::isNotEmpty>(*this));
 
     m_tasksQueue.ShutDown();
+    joinAll();
+    m_threads.clear();
+    m_wasTurnOn.CheckAndReset();
+}
+
+void ThreadPool::TurnOn(size_t a_numOfThreads)
+{
+    MutexLocker locker(m_mutex);
+    if(m_wasTurnOn.CheckAndSet()) {
+        threadsInitialization(a_numOfThreads);
+        m_wasShutDown.CheckAndReset();
+    }
 }
 
 size_t ThreadPool::NumOfThread() const
@@ -98,4 +108,14 @@ void ThreadPool::threadsInitialization(size_t a_numOfThread)
 bool ThreadPool::isNotEmpty() const
 {
     return !m_tasksQueue.Empty();
+}
+
+static void join(shared_ptr<Thread<Tasks> > a_thread)
+{
+    a_thread->Join();
+}
+
+void ThreadPool::joinAll()
+{
+    for_each(m_threads.begin(), m_threads.end(), join);
 }
