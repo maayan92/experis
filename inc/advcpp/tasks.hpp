@@ -4,16 +4,15 @@
 #include "runnable.hpp"
 #include "shared_ptr.hpp"
 #include "waitableQueue.hpp"
+#include "uncopyable.hpp"
 
 namespace advcpp {
 
-class Tasks {
+class Tasks : private experis::Uncopyable {
 public:
     Tasks();
     explicit Tasks(size_t a_maxCapacityOfTasks);
-    //Tasks(const Tasks& a_tasks) = default;
     //~Tasks() = default;
-    //Tasks& operator=(const Tasks& a_tasks) = default;
 
     void operator()();
 

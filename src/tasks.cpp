@@ -1,7 +1,6 @@
 #include "tasks.hpp"
 #include "mutexLocker.hpp"
 #include "additionalStructures.hpp"
-#include <iostream>
 using namespace experis;
 
 namespace advcpp {
