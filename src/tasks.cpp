@@ -6,6 +6,22 @@ using namespace experis;
 
 namespace advcpp {
 
+Tasks::Tasks(size_t a_maxCapacityOfTasks)
+: m_mutex()
+, m_tasks(a_maxCapacityOfTasks)
+, m_wasShutDown(false)
+, m_cvWaitForTasks()
+{
+}
+
+Tasks::Tasks()
+: m_mutex()
+, m_tasks()
+, m_wasShutDown(false)
+, m_cvWaitForTasks()
+{
+}
+
 void Tasks::operator()()
 {
     while(!m_wasShutDown.GetValue()){
