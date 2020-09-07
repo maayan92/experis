@@ -89,6 +89,7 @@ template<typename T>
 void WaitableQueue<T>::ShutDown()
 {
     m_shutDown.CheckAndSet();
+    experis::MutexLocker locker(m_mtSafe);
     m_cvEnque.NotifyAll();
     m_cvDeque.NotifyAll();
 }

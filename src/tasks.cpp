@@ -30,6 +30,7 @@ void Tasks::operator()()
             break;
         }
         (*task)();
+        MutexLocker locker(m_mutex);
         if(m_tasks.Empty()) {
             m_cvWaitForTasks.NotifyOne();
         }
