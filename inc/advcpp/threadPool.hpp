@@ -7,6 +7,12 @@
 
 namespace advcpp {
 
+struct ExcNumOfThreadTooBig : public std::exception {
+    virtual const char* what() const throw() {
+        return "number of threads to remove bigger than the number of threads!";
+    }
+};
+
 class ThreadPool : private experis::Uncopyable {
 public:
     explicit ThreadPool(size_t a_numOfThread);
@@ -29,6 +35,7 @@ private:
     void joinAll();
     void shutAllDown();
     void setRemovingTasks(size_t a_numOfThreads, WaitableQueue<pthread_t>& a_removingQueue);
+    void removeTheThreads(size_t a_numOfThreads, WaitableQueue<pthread_t>& a_removingQueue);
 
 private:
     mutable experis::Mutex m_mutex;

@@ -90,20 +90,15 @@ void ThreadPool::AddThread(size_t a_numOfThreads)
 
 void ThreadPool::RemoveThread(size_t a_numOfThreads)
 {
-    if(!m_shutDown.GetValue()) {
-        MutexLocker locker(m_mutex);
-        WaitableQueue<pthread_t> removingQueue(a_numOfThreads);
-        setRemovingTasks(a_numOfThreads, removingQueue);
-
-        for(size_t i = 0 ; i < a_numOfThreads ; ++i) {
-            pthread_t val;
-            removingQueue.Deque(val);
-            vector<shared_ptr<advcpp::Thread<Tasks> > >::iterator itr = find_if(m_threads.begin(), m_threads.end(), CheckThreadId(val));
-            assert(itr != m_threads.end());
-            (*itr)->Join();
-            m_threads.erase(itr);
-        }
+    if(a_numOfThreads > NumOfThread()) {
+        throw ExcNumOfThreadTooBig();
     }
+
+    MutexLocker locker(m_mutex);
+    WaitableQueue<pthread_t> removingQueue(a_numOfThreads);
+    setRemovingTasks(a_numOfThreads, removingQueue);
+
+    removeTheThreads(a_numOfThreads, removingQueue);
 }
 
 void ThreadPool::ShutDown()
@@ -196,5 +191,17 @@ void ThreadPool::setRemovingTasks(size_t a_numOfThreads, WaitableQueue<pthread_t
     for(size_t i = 0 ; i < a_numOfThreads ; ++i) {
         shared_ptr<RemoveThreadExecutor> removeTasks(new RemoveThreadExecutor(a_removingQueue));
         m_tasksQueue.EnqueFront(removeTasks);
+    }
+}
+
+void ThreadPool::removeTheThreads(size_t a_numOfThreads, WaitableQueue<pthread_t>& a_removingQueue)
+{
+    for(size_t i = 0 ; i < a_numOfThreads ; ++i) {
+        pthread_t val;
+        a_removingQueue.Deque(val);
+        vector<shared_ptr<advcpp::Thread<Tasks> > >::iterator itr = find_if(m_threads.begin(), m_threads.end(), CheckThreadId(val));
+        assert(itr != m_threads.end());
+        (*itr)->Join();
+        m_threads.erase(itr);
     }
 }
