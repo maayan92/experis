@@ -28,10 +28,6 @@ void Tasks::operator()()
         catch(...) {
             throw;
         }
-        
-        if(m_tasks.Empty()) {
-            m_cvWaitForTasks.NotifyOne();
-        }
     }
 }
 

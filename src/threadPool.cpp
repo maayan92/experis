@@ -6,8 +6,13 @@ using namespace std;
 using namespace advcpp;
 using namespace experis;
 
-class RemoveThreadExecutor : public IRunnable {
-public:
+struct ShutDownExecutor : public IRunnable {
+    void operator()() {
+        throw EndOfWork();
+    }
+};
+
+struct RemoveThreadExecutor : public IRunnable {
     RemoveThreadExecutor(WaitableQueue<pthread_t>& a_removingQueue)
     : m_removingQueue(a_removingQueue)
     {}
@@ -109,10 +114,11 @@ void ThreadPool::ShutDown()
         return;
     }
 
-    MutexLocker locker(m_mutex);
-    m_cvWaitForTasks.Wait(locker, ObjectFuncExecutor<ThreadPool, &ThreadPool::isNotEmpty>(*this));
+    for(size_t i = 0 ; i < m_threads.size() ; ++i) {
+        shared_ptr<ShutDownExecutor> shutDownTask(new ShutDownExecutor());
+        m_tasksQueue.Enque(shutDownTask);
+    }
     
-    m_shutDownImmediately.CheckAndSet();
     shutAllDown();
 }
 
@@ -182,7 +188,6 @@ void ThreadPool::joinAll()
 
 void ThreadPool::shutAllDown()
 {
-    m_tasksQueue.ShutDown();
     joinAll();
     m_threads.clear();
     m_turnOn.CheckAndReset();
