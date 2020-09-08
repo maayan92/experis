@@ -4,9 +4,8 @@ using namespace experis;
 
 namespace advcpp {
 
-Tasks::Tasks(WaitQueue& a_tasks, WaitersConditionVar& a_cvWaitForTasks, experis::AtomicFlag& a_shutDownImmediately)
+Tasks::Tasks(WaitQueue& a_tasks, experis::AtomicFlag& a_shutDownImmediately)
 : m_tasks(a_tasks)
-, m_cvWaitForTasks(a_cvWaitForTasks)
 , m_shutDownImmediately(a_shutDownImmediately)
 {
 }

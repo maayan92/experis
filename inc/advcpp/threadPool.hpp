@@ -37,7 +37,6 @@ private:
     experis::AtomicFlag m_shutDown;
     experis::AtomicFlag m_turnOn;
     experis::AtomicFlag m_shutDownImmediately;
-    experis::WaitersConditionVar m_cvWaitForTasks;
     shared_ptr<Tasks> m_tasks;
 };
 

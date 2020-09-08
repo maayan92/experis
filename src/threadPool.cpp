@@ -46,8 +46,7 @@ ThreadPool::ThreadPool(size_t a_numOfThread)
 , m_shutDown(false)
 , m_turnOn(true)
 , m_shutDownImmediately(false)
-, m_cvWaitForTasks()
-, m_tasks(new Tasks(m_tasksQueue, m_cvWaitForTasks, m_shutDownImmediately))
+, m_tasks(new Tasks(m_tasksQueue, m_shutDownImmediately))
 {
     threadsInitialization(a_numOfThread);
 }
@@ -59,8 +58,7 @@ ThreadPool::ThreadPool(size_t a_numOfThread, size_t a_maxCapacityOfTasks)
 , m_shutDown(false)
 , m_turnOn(true)
 , m_shutDownImmediately(false)
-, m_cvWaitForTasks()
-, m_tasks(new Tasks(m_tasksQueue, m_cvWaitForTasks, m_shutDownImmediately))
+, m_tasks(new Tasks(m_tasksQueue, m_shutDownImmediately))
 {
     threadsInitialization(a_numOfThread);   
 }
