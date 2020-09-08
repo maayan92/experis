@@ -161,9 +161,10 @@ BEGIN_TEST(test_thread_pool_turn_on)
     size_t count = 0;
     shared_ptr<Incrementer> newTask(new Incrementer(count));
     threads.Submit(newTask);
-
     ASSERT_EQUAL(NEW_NUM_OF_THREAD * 2, threads.NumOfThread());
-    //ASSERT_EQUAL(count, 1);
+
+    threads.ShutDown();
+    ASSERT_EQUAL(count, 1);
 END_TEST
 
 BEGIN_TEST(test_thread_pool_remove_thread_default)
@@ -207,7 +208,7 @@ BEGIN_SUITE(test_thread_pool)
     TEST(test_thread_pool_shut_down)
     TEST(test_thread_pool_shut_down_immediately)
 
-    //TEST(test_thread_pool_turn_on)
+    TEST(test_thread_pool_turn_on)
 
     TEST(test_thread_pool_remove_thread_default)
     TEST(test_thread_pool_remove_N_threads)
