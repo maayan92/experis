@@ -1,7 +1,4 @@
-*
-!*.cpp
-!*.hpp
-!*.hxx
+*.txt
 *.out
 *.o
 *.so
