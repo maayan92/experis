@@ -128,6 +128,12 @@ void* Thread<T>::TryJoin()
 }
 
 template<typename T>
+bool Thread<T>::operator==(pthread_t a_id) const
+{
+    return (m_id == a_id);
+}
+
+template<typename T>
 void Thread<T>::Exit(void* a_value) NOEXCEPT
 {
     pthread_exit(a_value);

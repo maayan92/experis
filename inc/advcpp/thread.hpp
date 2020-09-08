@@ -46,6 +46,8 @@ public:
 
     void* TryJoin();
 
+    bool operator==(pthread_t a_id) const;
+
     static void Exit(void* a_value) NOEXCEPT;
     static void Sleep(size_t a_nanoseconds) NOEXCEPT;
     static void Yeild() NOEXCEPT;

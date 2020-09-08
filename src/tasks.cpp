@@ -19,7 +19,16 @@ void Tasks::operator()()
         if(m_shutDownImmediately.GetValue()) {
             break;
         }
-        (*task)();
+
+        try {
+            (*task)();
+        } catch(const EndOfWork& exc) {
+            break;
+        }
+        catch(...) {
+            throw;
+        }
+        
         if(m_tasks.Empty()) {
             m_cvWaitForTasks.NotifyOne();
         }

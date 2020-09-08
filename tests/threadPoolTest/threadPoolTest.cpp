@@ -37,21 +37,7 @@ public:
 private:
     Atomic<size_t>& m_count;
 };
-/*
-class ShutDownExecutor : public IRunnable {
-public:
-    ShutDownExecutor(ThreadPool& a_threads)
-    : m_threads(a_threads)
-    {}
 
-    void operator()() {
-        m_threads.ShutDown();
-    }
-
-private:
-    ThreadPool& m_threads;
-};
-*/
 // **** tests: **** //
 
 BEGIN_TEST(test_thread_pool_one_threads_N_tasks)
@@ -180,6 +166,35 @@ BEGIN_TEST(test_thread_pool_turn_on)
     //ASSERT_EQUAL(count, 1);
 END_TEST
 
+BEGIN_TEST(test_thread_pool_remove_thread_default)
+    const size_t NUM_OF_THREAD = 5;
+    ThreadPool threads(NUM_OF_THREAD);
+    ASSERT_EQUAL(NUM_OF_THREAD, threads.NumOfThread());
+
+    threads.RemoveThread();
+    ASSERT_EQUAL(NUM_OF_THREAD - 1, threads.NumOfThread());
+END_TEST
+
+BEGIN_TEST(test_thread_pool_remove_N_threads)
+    const size_t NUM_OF_THREAD = 5;
+    const size_t REMOVE_NUM = 2;
+    ThreadPool threads(NUM_OF_THREAD);
+    ASSERT_EQUAL(NUM_OF_THREAD, threads.NumOfThread());
+    Atomic<size_t> count;
+    shared_ptr<AtomicIncrementer> newTask(new AtomicIncrementer(count));
+
+    size_t N = 10000;
+    for(size_t i = 0 ; i < N ; ++i) {
+        threads.Submit(newTask);
+    }
+
+    threads.RemoveThread(REMOVE_NUM);
+    ASSERT_EQUAL(NUM_OF_THREAD - REMOVE_NUM, threads.NumOfThread());
+    
+    threads.ShutDown();
+    ASSERT_EQUAL(count, N);
+END_TEST
+
 BEGIN_SUITE(test_thread_pool)
     TEST(test_thread_pool_one_threads_N_tasks)
     TEST(test_thread_pool_N_threads_M_tasks)
@@ -193,4 +208,7 @@ BEGIN_SUITE(test_thread_pool)
     TEST(test_thread_pool_shut_down_immediately)
 
     //TEST(test_thread_pool_turn_on)
+
+    TEST(test_thread_pool_remove_thread_default)
+    TEST(test_thread_pool_remove_N_threads)
 END_SUITE

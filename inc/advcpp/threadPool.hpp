@@ -17,6 +17,7 @@ public:
     void ShutDown();
     void ShutDownImmediately();
     void AddThread(size_t a_numOfThreads = 1);
+    void RemoveThread(size_t a_numOfThreads = 1);
     void TurnOn(size_t a_numOfThreads = 1);
 
     size_t NumOfThread() const;
@@ -27,6 +28,7 @@ private:
     bool isNotEmpty() const;
     void joinAll();
     void shutAllDown();
+    void setRemovingTasks(size_t a_numOfThreads, WaitableQueue<pthread_t>& a_removingQueue);
 
 private:
     mutable experis::Mutex m_mutex;

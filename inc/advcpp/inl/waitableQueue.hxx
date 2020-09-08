@@ -35,21 +35,13 @@ WaitableQueue<T>::WaitableQueue(size_t maxCapacity)
 template<typename T>
 void WaitableQueue<T>::Enque(const T& a_element)
 {
-    experis::MutexLocker locker(m_mtSafe);
-    m_cvEnque.Wait(locker, ExecutorByTwoCondition<WaitableQueue<T>, &WaitableQueue<T>::isFull, &WaitableQueue<T>::wasNotShutDown>(*this));
-    size_t currentSize = m_numOfElements;
-    
-    if(m_shutDown.GetValue()) {
-        return;
-    }
+    enque(a_element, true);
+}
 
-    assert(!isFull());
-    m_waitableQueue.push(a_element);
-    ++m_numOfElements;
-    m_cvDeque.NotifyOne();
-
-    assert(m_waitableQueue.size() == m_numOfElements);
-    assert((currentSize + 1) == m_numOfElements);
+template<typename T>
+void WaitableQueue<T>::EnqueFront(const T& a_element)
+{
+    enque(a_element, false);
 }
 
 template<typename T>
@@ -65,7 +57,7 @@ void WaitableQueue<T>::Deque(T& a_element)
 
     assert(!Empty());
     a_element = m_waitableQueue.front();
-    m_waitableQueue.pop();
+    m_waitableQueue.pop_front();
     --m_numOfElements;
     m_cvEnque.NotifyOne();
 
@@ -106,6 +98,32 @@ template<typename T>
 bool WaitableQueue<T>::wasNotShutDown() const
 {
     return !m_shutDown.GetValue();
+}
+
+template<typename T>
+void WaitableQueue<T>::enque(const T& a_element, bool a_pushBack)
+{
+    experis::MutexLocker locker(m_mtSafe);
+    m_cvEnque.Wait(locker, ExecutorByTwoCondition<WaitableQueue<T>, &WaitableQueue<T>::isFull, &WaitableQueue<T>::wasNotShutDown>(*this));
+    size_t currentSize = m_numOfElements;
+    
+    if(m_shutDown.GetValue()) {
+        return;
+    }
+
+    assert(!isFull());
+    if(a_pushBack) {
+        m_waitableQueue.push_back(a_element);
+    }
+    else {
+        m_waitableQueue.push_front(a_element);
+    }
+
+    ++m_numOfElements;
+    m_cvDeque.NotifyOne();
+
+    assert(m_waitableQueue.size() == m_numOfElements);
+    assert((currentSize + 1) == m_numOfElements);
 }
 
 } // advcpp

@@ -5,7 +5,7 @@
 #include "atomic.hpp"
 #include "waitersConditionVar.hpp"
 #include "uncopyable.hpp"
-#include <queue>
+#include <deque>
 #include <iosfwd>
 
 namespace advcpp {
@@ -17,6 +17,7 @@ public:
     //~WaitableQueue() = default;
 
     void Enque(const T& a_element);
+    void EnqueFront(const T& a_element);
     void Deque(T& a_element);
     bool Empty() const;
     size_t Size() const;
@@ -27,10 +28,11 @@ public:
 private:
     bool isFull() const;
     bool wasNotShutDown() const;
+    void enque(const T& a_element, bool a_pushBack);
 
 private:
     static const size_t DEFAULT_MAX_CAPACITY = 10000000;
-    typedef std::queue<T> Queue;
+    typedef std::deque<T> Queue;
 
     experis::Mutex m_mtSafe;
     experis::WaitersConditionVar m_cvEnque;

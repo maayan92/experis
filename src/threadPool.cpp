@@ -1,8 +1,38 @@
 #include "threadPool.hpp"
 #include "additionalStructures.hpp"
 #include <algorithm>
+#include <cassert>
+using namespace std;
 using namespace advcpp;
 using namespace experis;
+
+class RemoveThreadExecutor : public IRunnable {
+public:
+    RemoveThreadExecutor(WaitableQueue<pthread_t>& a_removingQueue)
+    : m_removingQueue(a_removingQueue)
+    {}
+
+    void operator()() {
+        m_removingQueue.Enque(pthread_self());
+        throw EndOfWork();
+    }
+
+private:
+    WaitableQueue<pthread_t>& m_removingQueue;
+};
+
+struct CheckThreadId {
+    CheckThreadId(pthread_t a_val)
+    : m_val(a_val)
+    {}
+
+    bool operator()(shared_ptr<advcpp::Thread<Tasks> > a_thread) {
+        return (*a_thread) == m_val;
+    }
+
+private:
+    pthread_t m_val;
+};
 
 ThreadPool::ThreadPool(size_t a_numOfThread)
 : m_mutex()
@@ -51,6 +81,24 @@ void ThreadPool::AddThread(size_t a_numOfThreads)
         for(size_t i = 0 ; i < a_numOfThreads ; ++i) {
             shared_ptr<Thread<Tasks> > shrPtr(new Thread<Tasks>(m_tasks));
             m_threads.push_back(shrPtr);
+        }
+    }
+}
+
+void ThreadPool::RemoveThread(size_t a_numOfThreads)
+{
+    if(!m_shutDown.GetValue()) {
+        MutexLocker locker(m_mutex);
+        WaitableQueue<pthread_t> removingQueue(a_numOfThreads);
+        setRemovingTasks(a_numOfThreads, removingQueue);
+
+        for(size_t i = 0 ; i < a_numOfThreads ; ++i) {
+            pthread_t val;
+            removingQueue.Deque(val);
+            vector<shared_ptr<advcpp::Thread<Tasks> > >::iterator itr = find_if(m_threads.begin(), m_threads.end(), CheckThreadId(val));
+            assert(itr != m_threads.end());
+            (*itr)->Join();
+            m_threads.erase(itr);
         }
     }
 }
@@ -138,4 +186,12 @@ void ThreadPool::shutAllDown()
     joinAll();
     m_threads.clear();
     m_turnOn.CheckAndReset();
+}
+
+void ThreadPool::setRemovingTasks(size_t a_numOfThreads, WaitableQueue<pthread_t>& a_removingQueue)
+{
+    for(size_t i = 0 ; i < a_numOfThreads ; ++i) {
+        shared_ptr<RemoveThreadExecutor> removeTasks(new RemoveThreadExecutor(a_removingQueue));
+        m_tasksQueue.EnqueFront(removeTasks);
+    }
 }
