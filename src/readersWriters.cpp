@@ -7,7 +7,7 @@ using namespace advcpp;
 void ReadersWriters::ReaderLock()
 {
     {
-        MutexLocker locker(m_mtxReader);
+        MutexLocker locker(m_mutex);
         m_cvReaders.Wait(locker, ObjectFuncExecutor<ReadersWriters, &ReadersWriters::threreAreWriters>(*this));
     }
 
@@ -26,8 +26,8 @@ void ReadersWriters::ReaderUnLock()
 void ReadersWriters::WriterLock()
 {
     ++m_countWriters;
-    m_mtxWriter.Lock();
-    m_cvWriters.Wait(m_mtxWriter, ObjectFuncExecutor<ReadersWriters, &ReadersWriters::threreAreReaders>(*this));
+    m_mutex.Lock();
+    m_cvWriters.Wait(m_mutex, ObjectFuncExecutor<ReadersWriters, &ReadersWriters::threreAreReaders>(*this));
 }
 
 void ReadersWriters::WriterUnLock()
@@ -37,7 +37,7 @@ void ReadersWriters::WriterUnLock()
         m_cvReaders.NotifyAll();
     }
 
-    m_mtxWriter.Unlock();
+    m_mutex.Unlock();
 }
 
 bool ReadersWriters::threreAreReaders() const

@@ -24,11 +24,10 @@ private:
     bool threreAreWriters() const;
 
 private:
-    experis::Mutex m_mtxReader;
+    experis::Mutex m_mutex;
     experis::Atomic<size_t> m_countReaders;
     experis::WaitersConditionVar m_cvReaders;
 
-    experis::Mutex m_mtxWriter;
     experis::Atomic<size_t> m_countWriters;
     experis::WaitersConditionVar m_cvWriters;
 };
