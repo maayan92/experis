@@ -5,6 +5,7 @@
 #include "shared_ptr.hpp"
 #include <pthread.h>
 #include <exception>
+#include <string>
 
 #define NOEXCEPT throw()
 
