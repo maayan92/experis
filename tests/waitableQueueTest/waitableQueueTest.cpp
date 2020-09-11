@@ -1,4 +1,4 @@
-#include "threadGroup.hpp"
+#include "threadGroups.hpp"
 #include "testClasses.hpp"
 #include "threadClasses.hpp"
 #include "mu_test.h"
