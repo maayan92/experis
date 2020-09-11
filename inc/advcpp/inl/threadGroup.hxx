@@ -63,7 +63,9 @@ void ThreadGroup<Action>::RemoveThread(pthread_t a_threadId)
     
     typedef typename std::vector<shared_ptr<Thread<Action> > >::iterator Iterator;
     Iterator itr = std::find_if(m_threads.begin(), m_threads.end(), CheckThreadId<Action>(a_threadId));
-    assert(itr != m_threads.end());
+    if(itr == m_threads.end()) {
+        throw ExcThreadIsNotInThreadGroup();
+    }
     (*itr)->Join();
     m_threads.erase(itr);
 }

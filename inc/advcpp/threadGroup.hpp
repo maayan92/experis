@@ -6,6 +6,12 @@
 
 namespace advcpp {
 
+struct ExcThreadIsNotInThreadGroup : public std::exception {
+    const char* what() const throw() {
+        return "thread remove, pthread_t id does not match any thread id in the thread group!";
+    }
+};
+
 template<typename Action>
 class ThreadGroup {
 public:
