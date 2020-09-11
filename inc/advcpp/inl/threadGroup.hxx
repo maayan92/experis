@@ -19,6 +19,13 @@ private:
 };
 
 template<typename Action>
+ThreadGroup<Action>::ThreadGroup()
+: m_mutex()
+, m_threads()
+{
+}
+
+template<typename Action>
 ThreadGroup<Action>::ThreadGroup(shared_ptr<Action> a_action, size_t a_numOfThread)
 : m_mutex()
 , m_threads()

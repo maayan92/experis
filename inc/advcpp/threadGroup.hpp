@@ -15,6 +15,7 @@ struct ExcThreadIsNotInThreadGroup : public std::exception {
 template<typename Action>
 class ThreadGroup {
 public:
+    ThreadGroup();
     ThreadGroup(shared_ptr<Action> a_action, size_t a_numOfThread = 1);
     ~ThreadGroup();
 

@@ -80,7 +80,9 @@ size_t WaitableQueue<T>::Size() const
 template<typename T>
 void WaitableQueue<T>::ShutDown()
 {
-    m_shutDown.CheckAndSet();
+    if(!m_shutDown.CheckAndSet()) {
+        return;
+    }
     experis::MutexLocker locker(m_mtSafe);
     m_cvEnque.NotifyAll();
     m_cvDeque.NotifyAll();
