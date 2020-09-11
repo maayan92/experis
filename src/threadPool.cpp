@@ -39,34 +39,36 @@ private:
     pthread_t m_val;
 };
 
+// CTOR/DTOR
+
 ThreadPool::ThreadPool(size_t a_numOfThread)
 : m_mutex()
-, m_threads()
+, m_tasks(new Tasks(m_tasksQueue, m_shutDownImmediately))
 , m_tasksQueue()
 , m_shutDown(false)
 , m_turnOn(true)
 , m_shutDownImmediately(false)
-, m_tasks(new Tasks(m_tasksQueue, m_shutDownImmediately))
+, m_threads(m_tasks, a_numOfThread)
 {
-    threadsInitialization(a_numOfThread);
 }
 
 ThreadPool::ThreadPool(size_t a_numOfThread, size_t a_maxCapacityOfTasks)
 : m_mutex()
-, m_threads()
+, m_tasks(new Tasks(m_tasksQueue, m_shutDownImmediately))
 , m_tasksQueue(a_maxCapacityOfTasks)
 , m_shutDown(false)
 , m_turnOn(true)
 , m_shutDownImmediately(false)
-, m_tasks(new Tasks(m_tasksQueue, m_shutDownImmediately))
+, m_threads(m_tasks, a_numOfThread)
 {
-    threadsInitialization(a_numOfThread);   
 }
 
 ThreadPool::~ThreadPool()
 {
     ShutDown();
 }
+
+// mem functions
 
 void ThreadPool::Submit(shared_ptr<IRunnable> a_newTask)
 {
@@ -78,13 +80,7 @@ void ThreadPool::Submit(shared_ptr<IRunnable> a_newTask)
 void ThreadPool::AddThread(size_t a_numOfThreads)
 {
     if(!m_shutDown.GetValue()) {
-        MutexLocker locker(m_mutex);
-
-        m_threads.reserve(m_threads.size() + a_numOfThreads);
-        for(size_t i = 0 ; i < a_numOfThreads ; ++i) {
-            shared_ptr<Thread<Tasks> > shrPtr(new Thread<Tasks>(m_tasks));
-            m_threads.push_back(shrPtr);
-        }
+        m_threads.AddThreads(m_tasks, a_numOfThreads);
     }
 }
 
@@ -107,7 +103,7 @@ void ThreadPool::ShutDown()
         return;
     }
 
-    for(size_t i = 0 ; i < m_threads.size() ; ++i) {
+    for(size_t i = 0 ; i < m_threads.NumOfThread() ; ++i) {
         shared_ptr<ShutDownExecutor> shutDownTask(new ShutDownExecutor());
         m_tasksQueue.Enque(shutDownTask);
     }
@@ -131,15 +127,14 @@ void ThreadPool::TurnOn(size_t a_numOfThreads)
         return;
     }
 
-    threadsInitialization(a_numOfThreads);
+    m_threads.AddThreads(m_tasks, a_numOfThreads);
     m_shutDown.CheckAndReset();
     m_shutDownImmediately.CheckAndReset();
 }
 
 size_t ThreadPool::NumOfThread() const
 {
-    MutexLocker locker(m_mutex);
-    return m_threads.size();
+    return m_threads.NumOfThread();
 }
 
 size_t ThreadPool::NumOfTasks() const
@@ -149,40 +144,15 @@ size_t ThreadPool::NumOfTasks() const
 
 // private functions:
 
-void ThreadPool::threadsInitialization(size_t a_numOfThread)
-{
-    m_threads.reserve(a_numOfThread);
-    try {
-        for(size_t i = 0 ; i < a_numOfThread ; ++i) {
-            shared_ptr<Thread<Tasks> > shrPtr(new Thread<Tasks>(m_tasks));
-            m_threads.push_back(shrPtr);
-        }
-
-    } catch(...) {
-        m_threads.clear();
-        throw;
-    }
-}
-
 bool ThreadPool::isNotEmpty() const
 {
     return !m_tasksQueue.Empty();
 }
 
-static void join(shared_ptr<Thread<Tasks> > a_thread)
-{
-    a_thread->Join();
-}
-
-void ThreadPool::joinAll()
-{
-    for_each(m_threads.begin(), m_threads.end(), join);
-}
-
 void ThreadPool::shutAllDown()
 {
-    joinAll();
-    m_threads.clear();
+    m_threads.JoinAll();
+    m_threads.Clear();
     m_turnOn.CheckAndReset();
 }
 
@@ -199,9 +169,7 @@ void ThreadPool::removeTheThreads(size_t a_numOfThreads, WaitableQueue<pthread_t
     for(size_t i = 0 ; i < a_numOfThreads ; ++i) {
         pthread_t val;
         a_removingQueue.Deque(val);
-        vector<shared_ptr<advcpp::Thread<Tasks> > >::iterator itr = find_if(m_threads.begin(), m_threads.end(), CheckThreadId(val));
-        assert(itr != m_threads.end());
-        (*itr)->Join();
-        m_threads.erase(itr);
+        
+        m_threads.RemoveThread(val);
     }
 }

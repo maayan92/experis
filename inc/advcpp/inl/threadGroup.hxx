@@ -77,6 +77,13 @@ size_t ThreadGroup<Action>::NumOfThread() const
     return m_threads.size();
 }
 
+template<typename Action>
+void ThreadGroup<Action>::Clear()
+{
+    experis::MutexLocker locker(m_mutex);
+    m_threads.clear();
+}
+
 // private functions:
 
 template<typename Action>

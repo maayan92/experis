@@ -23,6 +23,7 @@ public:
     void JoinAll();
     
     size_t NumOfThread() const;
+    void Clear();
 
 private:
     void threadsInitialization(shared_ptr<Action> a_action, size_t a_numOfThread);

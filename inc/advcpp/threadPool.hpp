@@ -1,8 +1,7 @@
 #ifndef THREAD_POOL_HPP
 #define THREAD_POOL_HPP
 
-#include <vector>
-#include "thread.hpp"
+#include "threadGroup.hpp"
 #include "tasks.hpp"
 
 namespace advcpp {
@@ -32,19 +31,19 @@ public:
 private:
     void threadsInitialization(size_t a_numOfThread);
     bool isNotEmpty() const;
-    void joinAll();
+    //void joinAll();
     void shutAllDown();
     void setRemovingTasks(size_t a_numOfThreads, WaitableQueue<pthread_t>& a_removingQueue);
     void removeTheThreads(size_t a_numOfThreads, WaitableQueue<pthread_t>& a_removingQueue);
 
 private:
     mutable experis::Mutex m_mutex;
-    std::vector<shared_ptr<advcpp::Thread<Tasks> > > m_threads;
+    shared_ptr<Tasks> m_tasks;
     WaitableQueue<shared_ptr<experis::IRunnable> > m_tasksQueue;
     experis::AtomicFlag m_shutDown;
     experis::AtomicFlag m_turnOn;
     experis::AtomicFlag m_shutDownImmediately;
-    shared_ptr<Tasks> m_tasks;
+    ThreadGroup<Tasks> m_threads;
 };
 
 } // advcpp
