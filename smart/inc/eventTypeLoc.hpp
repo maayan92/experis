@@ -10,6 +10,7 @@ struct EventTypeLoc {
     experis::EventType m_type;
     Location m_location;
         
+    bool operator==(const EventTypeLoc& a_eventTypeLoc) const;
 };
 
 } // smart_house
