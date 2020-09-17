@@ -11,6 +11,7 @@ struct EventTypeLoc {
     Location m_location;
         
     bool operator==(const EventTypeLoc& a_eventTypeLoc) const;
+    bool operator<(const EventTypeLoc& a_eventTypeLoc) const;
 };
 
 } // smart_house
