@@ -1,6 +1,7 @@
 *.txt
 *.out
 *.o
+*.d
 *.so
 *.a
 *.vscode

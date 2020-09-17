@@ -2,6 +2,7 @@ CC := $(CXX)
 CXX := g++
 
 CPPFLAGS := -I. -I../../../inc/advcpp -I../../../inc/ -I../../../tests/inc/ -I../../inc/
+CPPFLAGS += -MMD -MP
 CFLAGS += -Werror -Wall -Wextra
 CFLAGS += -g
 
@@ -11,9 +12,12 @@ LDLIBS := -lpthread
 
 TARGET := subscriptionsTest 
 
-OBJS := subscriptionsTest.o ../../src/iObserver.o ../../src/iPayload.o ../../src/iSubscription.o \
-		 ../../src/controllerTest.o ../../src/eventTypeLocation.o ../../src/location.o ../../src/subscriptionHandler.o \
-		 ../../src/subscriptions.o
+SRC_DIR = ../../src
+
+MODULES = iObserver iPayload iSubscription controllerTest eventTypeLocation location subscriptionHandler subscriptions
+PATH_MODULE = $(MODULES:%=$(SRC_DIR)/%)
+
+OBJS = $(PATH_MODULE:%=%.o)
 
 $(TARGET): $(OBJS)
 
@@ -45,5 +49,8 @@ hell: $(TARGET)
 
 clean: 
 	@$(RM) -f $(TARGET) $(OBJS)
+
+DEPENDS = $(PATH_MODULE:%=%.d)
+-include $(DEPENDS)
 
 .PHONY: all clean check recheck
