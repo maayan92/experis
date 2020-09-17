@@ -6,9 +6,9 @@
 namespace smart_house {
 
 struct EventTypeLoc {
-    EventTypeLoc(experis::EventType& a_type, Location& a_location);
+    EventTypeLoc(const experis::EventType& a_type, const Location& a_location);
     EventTypeLoc();
-    
+
     bool operator==(const EventTypeLoc& a_eventTypeLoc) const;
     bool operator<(const EventTypeLoc& a_eventTypeLoc) const;
     

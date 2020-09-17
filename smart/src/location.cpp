@@ -3,7 +3,7 @@ using namespace experis;
 
 namespace smart_house {
 
-Location::Location(Floor& a_floor, Room& a_room)
+Location::Location(const Floor& a_floor, const Room& a_room)
 : m_floor(a_floor)
 , m_room(a_room)
 {

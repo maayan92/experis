@@ -3,7 +3,7 @@ using namespace experis;
 
 namespace smart_house {
 
-EventTypeLoc::EventTypeLoc(EventType& a_type, Location& a_location)
+EventTypeLoc::EventTypeLoc(const EventType& a_type, const Location& a_location)
 : m_type(a_type)
 , m_location(a_location)
 {

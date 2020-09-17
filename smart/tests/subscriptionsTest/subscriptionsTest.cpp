@@ -11,10 +11,7 @@ BEGIN_TEST(test_subscribe_one_event)
     time_t currentTime;
     time(&currentTime);
 
-    EventTypeLoc typeLoc;
-    typeLoc.m_type = "SMOKE_DETECTED";
-    typeLoc.m_location.m_floor = "1";
-    typeLoc.m_location.m_room = "room_1_a";
+    EventTypeLoc typeLoc("SMOKE_DETECTED", Location("1", "room_1_a"));
 
     Subscriptions subscriptions;
     SubscriptionHandler sub(subscriptions);
