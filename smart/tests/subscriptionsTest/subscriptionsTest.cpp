@@ -28,6 +28,14 @@ BEGIN_TEST(test_subscribe_one_event)
         ASSERT_FAIL(exc.what());
     }
 
+    time_t t;
+    time(&t);
+    PayloadSmoke ps;
+
+    Event e = {localtime(&t), &ps, typeLoc};
+    (*ob.begin())->Notify(e);
+
+    ASSERT_THAT(typeLoc == cs.GetEventTypeLocation());
     ASSERT_EQUAL(1, ob.size());
 END_TEST
 
