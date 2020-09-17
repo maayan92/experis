@@ -1,10 +1,10 @@
-#include "controllerSmoke.hpp"
+#include "controllerTest.hpp"
 #include <iostream>
 using namespace std;
 
 namespace smart_house {
 
-ControllerSmoke::ControllerSmoke(ISubscription* a_subscription)
+ControllerTest::ControllerTest(ISubscription* a_subscription)
 : m_subscription(a_subscription)
 , m_eventTypeLocation()
 {
@@ -16,12 +16,12 @@ ControllerSmoke::ControllerSmoke(ISubscription* a_subscription)
     m_subscription->Subscribe(eventTL, this);
 }
 
-void ControllerSmoke::Notify(const Event& a_newEvent)
+void ControllerTest::Notify(const Event& a_newEvent)
 {
     m_eventTypeLocation = a_newEvent.m_typeAndLocation;
 }
 
-EventTypeLoc ControllerSmoke::GetEventTypeLocation() const
+EventTypeLoc ControllerTest::GetEventTypeLocation() const
 {
     return m_eventTypeLocation;
 }

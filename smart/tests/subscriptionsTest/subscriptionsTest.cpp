@@ -1,5 +1,5 @@
 #include "subscriptionHandler.hpp"
-#include "controllerSmoke.hpp"
+#include "controllerTest.hpp"
 #include "payloadSmoke.hpp"
 #include "event.hpp"
 #include "mu_test.h"
@@ -15,7 +15,7 @@ BEGIN_TEST(test_subscribe_one_event)
 
     Subscriptions subscriptions;
     SubscriptionHandler sub(subscriptions);
-    ControllerSmoke cs(&sub);
+    ControllerTest cs(&sub);
     subscriptions.Upsert(typeLoc, &cs);
 
     set<IObserver*> ob;

@@ -6,10 +6,10 @@
 
 namespace smart_house {
 
-class ControllerSmoke : public IObserver {
+class ControllerTest : public IObserver {
 public:
-    explicit ControllerSmoke(ISubscription* a_subscription);
-    //virtual ~ControllerSmoke() = default;
+    explicit ControllerTest(ISubscription* a_subscription);
+    //virtual ~ControllerTest() = default;
     
     virtual void Notify(const Event& a_newEvent);
     EventTypeLoc GetEventTypeLocation() const;

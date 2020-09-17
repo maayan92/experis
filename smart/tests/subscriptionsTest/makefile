@@ -12,7 +12,7 @@ LDLIBS := -lpthread
 TARGET := subscriptionsTest 
 
 OBJS := subscriptionsTest.o ../../src/iObserver.o ../../src/iPayload.o ../../src/iSubscription.o \
-		 ../../src/controllerSmoke.o ../../src/eventTypeLocation.o ../../src/location.o ../../src/subscriptionHandler.o \
+		 ../../src/controllerTest.o ../../src/eventTypeLocation.o ../../src/location.o ../../src/subscriptionHandler.o \
 		 ../../src/subscriptions.o
 
 $(TARGET): $(OBJS)
