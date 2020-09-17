@@ -15,6 +15,9 @@ public:
     EventTypeLoc GetEventTypeLocation() const;
 
 private:
+    static const EventTypeLoc eventTLSmoke;
+    static const EventTypeLoc eventTLEntrance;
+    
     ISubscription* m_subscription;
     EventTypeLoc m_eventTypeLocation;
 };
