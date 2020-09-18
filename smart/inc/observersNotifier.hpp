@@ -1,7 +1,7 @@
 #ifndef OBSERVERS_NOTIFIER_HPP
 #define OBSERVERS_NOTIFIER_HPP
 
-#include "IObserversNotifier.hpp"
+#include "iObserversNotifier.hpp"
 
 namespace smart_house {
 

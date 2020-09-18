@@ -1,4 +1,4 @@
-#include "IObserversNotifier.hpp"
+#include "iObserversNotifier.hpp"
 
 namespace smart_house {
 

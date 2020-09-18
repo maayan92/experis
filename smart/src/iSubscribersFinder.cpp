@@ -1,4 +1,4 @@
-#include "ISubscribersFinder.hpp"
+#include "iSubscribersFinder.hpp"
 
 namespace smart_house {
 

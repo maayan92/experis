@@ -5,8 +5,7 @@ namespace smart_house {
 
 void ObserversNotifier::NotifiAll(const Event& a_event, set<IObserver*>& a_observers)
 {
-    set<IObserver*>::iterator itrEnd = a_observers.end();
-    for(set<IObserver*>::iterator itr = a_observers.begin(); itr != itrEnd; ++itr) {
+    for(set<IObserver*>::iterator itr = a_observers.begin(); itr != a_observers.end(); ++itr) {
         (*itr)->Notify(a_event);
     }
 }

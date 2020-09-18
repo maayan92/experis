@@ -1,9 +1,10 @@
+#include "mu_test.h"
+#include <iostream>
+
 #include "subscriptionHandler.hpp"
 #include "controllerTest.hpp"
 #include "payloadSmoke.hpp"
 #include "event.hpp"
-#include "mu_test.h"
-#include <iostream>
 using namespace std;
 using namespace smart_house;
 

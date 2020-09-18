@@ -1,12 +1,12 @@
 #ifndef SUBSCRIBERS_FINDER_HPP
 #define  SUBSCRIBERS_FINDER_HPP
 
-#include "ISubscribersFinder.hpp"
+#include "iSubscribersFinder.hpp"
 #include "subscriptions.hpp"
 
 namespace smart_house {
 
-class SubscribersFinder {
+class SubscribersFinder : public ISubscribersFinder {
 public:
     SubscribersFinder(Subscriptions& a_subscriptions);
     //~SubscribersFinder() = default;
