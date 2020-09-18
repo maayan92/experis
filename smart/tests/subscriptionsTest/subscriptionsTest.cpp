@@ -39,28 +39,32 @@ static bool FindAndCheck(Subscriptions& a_subscriptions, EventTypeLoc& a_typeLoc
 // **** tests: **** //
 
 BEGIN_TEST(test_subscribe_one_event)
-    EventTypeLoc typeLoc("SMOKE_DETECTED", Location("1", "room_1_a"));
-
     Subscriptions subscriptions;
     SubscriptionHandler sub(subscriptions);
-    ControllerTest controllers[1] = { ControllerTest(&sub) };
-    subscriptions.Upsert(typeLoc, &controllers[0]);
 
-    ASSERT_THAT(FindAndCheck<1>(subscriptions, typeLoc, controllers));
+    vector<EventTypeLoc> typeLoc;
+    typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
+    
+    ControllerTest controllers[1] = { ControllerTest(&sub, typeLoc) };
+    subscriptions.Upsert(typeLoc[0], &controllers[0]);
+
+    ASSERT_THAT(FindAndCheck<1>(subscriptions, typeLoc[0], controllers));
 END_TEST
 
 BEGIN_TEST(test_subscribe_two_events_one_observer)
     time_t currentTime;
     time(&currentTime);
 
-    EventTypeLoc typeLocSmoke("SMOKE_DETECTED", Location("1", "room_1_a"));
+    vector<EventTypeLoc> typeLoc;
+    typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
+
     EventTypeLoc typeLocNoise("NOISE_LEVEL", Location("1", "room_2_a"));
 
     Subscriptions subscriptions;
     SubscriptionHandler sub(subscriptions);
-    ControllerTest controllers[1] = { ControllerTest(&sub) };
+    ControllerTest controllers[1] = { ControllerTest(&sub, typeLoc) };
 
-    ASSERT_THAT(FindAndCheck<1>(subscriptions, typeLocSmoke, controllers));
+    ASSERT_THAT(FindAndCheck<1>(subscriptions, typeLoc[0], controllers));
 
     ControllerTest controllersNoise[0] = {};
     ASSERT_THAT(FindAndCheck<0>(subscriptions, typeLocNoise, controllersNoise));
@@ -70,15 +74,17 @@ BEGIN_TEST(test_subscribe_two_events_two_observer)
     time_t currentTime;
     time(&currentTime);
 
-    EventTypeLoc typeLocSmoke("SMOKE_DETECTED", Location("1", "room_1_a"));
-    EventTypeLoc typeLocEntrance("ENTRANCE_REQUEST", Location("2", "room_1_b"));
+    vector<EventTypeLoc> typeLoc;
+    typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
+    typeLoc.push_back(EventTypeLoc("ENTRANCE_REQUEST", Location("2", "room_1_a")));
 
     Subscriptions subscriptions;
     SubscriptionHandler sub(subscriptions);
-    ControllerTest controllers[2] = { ControllerTest(&sub), ControllerTest(&sub) };
 
-    ASSERT_THAT(FindAndCheck<2>(subscriptions, typeLocSmoke, controllers));
-    ASSERT_THAT(FindAndCheck<2>(subscriptions, typeLocEntrance, controllers));
+    ControllerTest controllers[2] = { ControllerTest(&sub, typeLoc), ControllerTest(&sub, typeLoc) };
+
+    ASSERT_THAT(FindAndCheck<2>(subscriptions, typeLoc[0], controllers));
+    ASSERT_THAT(FindAndCheck<2>(subscriptions, typeLoc[1], controllers));
 END_TEST
 
 BEGIN_SUITE(test_subscriptions)

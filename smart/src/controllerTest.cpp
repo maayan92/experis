@@ -1,26 +1,24 @@
 #include "controllerTest.hpp"
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
 namespace smart_house {
 
-const EventTypeLoc ControllerTest::eventTLSmoke("SMOKE_DETECTED", Location("1", "room_1_a"));
-const EventTypeLoc ControllerTest::eventTLEntrance("ENTRANCE_REQUEST", Location("2", "room_1_b"));
-
-ControllerTest::ControllerTest(ISubscription* a_subscription)
+ControllerTest::ControllerTest(ISubscription* a_subscription, const vector<EventTypeLoc>& a_typeLocArr)
 : m_subscription(a_subscription)
 , m_eventTypeLocation()
+, m_typeLocArr(a_typeLocArr)
 {
-    m_subscription->Subscribe(eventTLSmoke, this);
-    m_subscription->Subscribe(eventTLEntrance, this);
+    for(size_t i = 0; i < a_typeLocArr.size(); ++i) {
+        m_subscription->Subscribe(a_typeLocArr[i], this);
+    }
 }
 
 void ControllerTest::Notify(const Event& a_newEvent)
 {
-    if(a_newEvent.m_typeAndLocation == eventTLSmoke) {
-        m_eventTypeLocation = a_newEvent.m_typeAndLocation;
-    }
-    else if(a_newEvent.m_typeAndLocation == eventTLEntrance) {
+    vector<EventTypeLoc>::iterator itr = find(m_typeLocArr.begin(), m_typeLocArr.end(), a_newEvent.m_typeAndLocation);
+    if(m_typeLocArr.end() != itr) {
         m_eventTypeLocation = a_newEvent.m_typeAndLocation;
     }
 }
