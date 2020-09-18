@@ -48,7 +48,7 @@ hell: $(TARGET)
 	./$(TARGET)
 
 clean: 
-	@$(RM) -f $(TARGET) $(OBJS)
+	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS)
 
 DEPENDS = $(PATH_MODULE:%=%.d)
 -include $(DEPENDS)

@@ -38,9 +38,6 @@ static bool FindAndCheck(Subscriptions& a_subscriptions, EventTypeLoc& a_typeLoc
 // **** tests: **** //
 
 BEGIN_TEST(test_subscribe_one_event)
-    time_t currentTime;
-    time(&currentTime);
-
     EventTypeLoc typeLoc("SMOKE_DETECTED", Location("1", "room_1_a"));
 
     Subscriptions subscriptions;
