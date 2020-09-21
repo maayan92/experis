@@ -10,13 +10,15 @@
 using namespace std;
 using namespace smart_house;
 
+template<size_t SIZE>
 static bool equal(set<IObserver*>& a_observers, ControllerTest* a_controllers)
 {
-    for(size_t i = 0; i < a_observers.size(); ++i) {
+    for(size_t i = 0; i < SIZE; ++i) {
         set<IObserver*>::iterator itr = find(a_observers.begin(), a_observers.end(), &a_controllers[i]);
         if(itr == a_observers.end()) {
             return false;
         }
+        a_observers.erase(itr);
     }
 
     return true;
@@ -40,13 +42,10 @@ BEGIN_TEST(test_subscribe_one_event_N_times)
     set<IObserver*> observers;
     subscriptions.Find(typeLoc[0], observers);
     ASSERT_EQUAL(1, observers.size());
-    ASSERT_THAT(equal(observers, controllers));
+    ASSERT_THAT(equal<1>(observers, controllers));
 END_TEST
 
 BEGIN_TEST(test_subscribe_two_events_one_observer)
-    time_t currentTime;
-    time(&currentTime);
-
     vector<EventTypeLoc> typeLoc;
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
 
@@ -59,7 +58,7 @@ BEGIN_TEST(test_subscribe_two_events_one_observer)
     set<IObserver*> observers;
     subscriptions.Find(typeLoc[0], observers);
     ASSERT_EQUAL(1, observers.size());
-    ASSERT_THAT(equal(observers, controllers));
+    ASSERT_THAT(equal<1>(observers, controllers));
 
     observers.clear();
     try {
@@ -67,6 +66,27 @@ BEGIN_TEST(test_subscribe_two_events_one_observer)
     } catch(const exception& exc) {
         ASSERT_EQUAL(0, observers.size());
     }
+END_TEST
+
+BEGIN_TEST(test_subscribe_N_events_same_type_M_observer_with_all)
+    vector<EventTypeLoc> typeLoc(1, EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
+
+    Subscriptions subscriptions;
+    SubscriptionHandler sub(subscriptions);
+    ControllerTest controllers[] = { ControllerTest(&sub, typeLoc) };
+
+    vector<EventTypeLoc> typeLocAllFloors(1, EventTypeLoc("SMOKE_DETECTED", Location("All", "room_1_a")));
+    ControllerTest controllersAllFloors[] = { ControllerTest(&sub, typeLocAllFloors) };
+    
+    vector<EventTypeLoc> typeLocAllRooms(1, EventTypeLoc("SMOKE_DETECTED", Location("1", "All")));
+    ControllerTest controllersAllRooms[] = { ControllerTest(&sub, typeLocAllRooms) };
+
+    set<IObserver*> observers;
+    SubscribersFinder(subscriptions).FindControllers(typeLoc[0], observers);
+    ASSERT_EQUAL(3, observers.size());
+    ASSERT_THAT(equal<1>(observers, controllers));
+    ASSERT_THAT(equal<1>(observers, controllersAllFloors));
+    ASSERT_THAT(equal<1>(observers, controllersAllRooms));
 END_TEST
 
 BEGIN_TEST(test_subscribe_N_events_two_observer)
@@ -82,12 +102,12 @@ BEGIN_TEST(test_subscribe_N_events_two_observer)
     set<IObserver*> observers;
     subscriptions.Find(typeLoc[0], observers);
     ASSERT_EQUAL(2, observers.size());
-    ASSERT_THAT(equal(observers, controllers));
+    ASSERT_THAT(equal<2>(observers, controllers));
 
     observers.clear();
     subscriptions.Find(typeLoc[1], observers);
     ASSERT_EQUAL(2, observers.size());
-    ASSERT_THAT(equal(observers, controllers));
+    ASSERT_THAT(equal<2>(observers, controllers));
 END_TEST
 
 BEGIN_TEST(test_find_all_subscribers_one_event)
@@ -102,13 +122,13 @@ BEGIN_TEST(test_find_all_subscribers_one_event)
     finder.FindControllers(typeLocSmoke[0], observers);
 
     ASSERT_EQUAL(1, observers.size());
-    ASSERT_THAT(equal(observers, controllers));
+    ASSERT_THAT(equal<1>(observers, controllers));
 END_TEST
 
 BEGIN_SUITE(test_subscriptions)
     TEST(test_subscribe_one_event_N_times)
     TEST(test_subscribe_two_events_one_observer)
+    TEST(test_subscribe_N_events_same_type_M_observer_with_all)
     TEST(test_subscribe_N_events_two_observer)
-
     TEST(test_find_all_subscribers_one_event)
 END_SUITE
