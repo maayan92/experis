@@ -56,9 +56,10 @@ hell: $(TARGET)
 	./$(TARGET)
 
 clean: 
-	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS)
+	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP)
 
 DEPENDS = $(PATH_MODULE:%=%.d)
--include $(DEPENDS)
+DEPENDS_ADVCPP = $(PATH_MODULE_ADVCPP:%=%.d)
+-include $(DEPENDS) $(DEPENDS_ADVCPP)
 
 .PHONY: all clean check recheck
