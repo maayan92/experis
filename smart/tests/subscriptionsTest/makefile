@@ -14,7 +14,8 @@ TARGET := subscriptionsTest
 
 SRC_DIR = ../../src
 
-MODULES = iObserver iPayload iSubscription controllerTest eventTypeLocation location subscriptionHandler subscriptions
+MODULES = iObserver iPayload iSubscription controllerTest eventTypeLocation location subscriptionHandler subscriptions \
+			iSubscribersFinder subscribersFinder
 PATH_MODULE = $(MODULES:%=$(SRC_DIR)/%)
 
 OBJS = $(PATH_MODULE:%=%.o)

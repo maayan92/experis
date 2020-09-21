@@ -11,7 +11,7 @@ class IObserversNotifier {
 public:
     virtual ~IObserversNotifier();
 
-    virtual void NotifiAll(const Event& a_event, std::set<IObserver*>& a_observers) = 0;
+    virtual void NotifyAll(const Event& a_event, std::set<IObserver*>& a_observers) = 0;
 };
 
 } // smart_house

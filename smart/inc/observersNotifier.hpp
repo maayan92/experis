@@ -10,7 +10,7 @@ public:
     //ObserversNotifier() = default;
     //~ObserversNotifier() = default;
 
-    virtual void NotifiAll(const Event& a_event, std::set<IObserver*>& a_observers);
+    virtual void NotifyAll(const Event& a_event, std::set<IObserver*>& a_observers);
 };
 
 } // smart_house
