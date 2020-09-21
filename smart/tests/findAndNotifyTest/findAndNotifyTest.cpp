@@ -1,4 +1,5 @@
 #include "mu_test.h"
+#include "testsFunctions.hpp"
 #include <iostream>
 #include <vector>
 
@@ -9,27 +10,6 @@
 #include "payloadSmoke.hpp"
 using namespace std;
 using namespace smart_house;
-
-static Event CreateEvent(EventTypeLoc& a_typeLoc)
-{
-    time_t t;
-    time(&t);
-    PayloadSmoke ps;
-    Event event = {localtime(&t), &ps, a_typeLoc};
-    return event;
-}
-
-template<size_t SIZE>
-static bool CheckResult(const EventTypeLoc& a_typeLocSmoke, ControllerTest* a_controllers)
-{
-    for(size_t i = 0; i < SIZE; ++i) {
-        if(!(a_typeLocSmoke == a_controllers[i].GetEventTypeLocation())) {
-            return false;
-        }
-    }
-
-    return true;
-}
 
 template<size_t SIZE>
 static bool CheckAllControllers(vector<ControllerTest*>& a_allControllers, EventTypeLoc& a_typeLoc, Subscriptions& a_subs)
