@@ -26,7 +26,7 @@ static bool equal(set<IObserver*>& a_observers, ControllerTest* a_controllers)
 
 // **** tests: **** //
 
-BEGIN_TEST(test_subscribe_one_event_N_times)
+BEGIN_TEST(test_subscribe_N_times_one_event_one_cntlr)
     Subscriptions subscriptions;
     SubscriptionHandler sub(subscriptions);
 
@@ -34,10 +34,11 @@ BEGIN_TEST(test_subscribe_one_event_N_times)
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
     
     ControllerTest controllers[1] = { ControllerTest(&sub, typeLoc) };
-    subscriptions.Upsert(typeLoc[0], &controllers[0]);
-    subscriptions.Upsert(typeLoc[0], &controllers[0]);
-    subscriptions.Upsert(typeLoc[0], &controllers[0]);
-    subscriptions.Upsert(typeLoc[0], &controllers[0]);
+    sub.Subscribe(typeLoc[0], &controllers[0]);
+    sub.Subscribe(typeLoc[0], &controllers[0]);
+    sub.Subscribe(typeLoc[0], &controllers[0]);
+    sub.Subscribe(typeLoc[0], &controllers[0]);
+    sub.Subscribe(typeLoc[0], &controllers[0]);
     
     set<IObserver*> observers;
     subscriptions.Find(typeLoc[0], observers);
@@ -126,7 +127,7 @@ BEGIN_TEST(test_find_all_subscribers_one_event)
 END_TEST
 
 BEGIN_SUITE(test_subscriptions)
-    TEST(test_subscribe_one_event_N_times)
+    TEST(test_subscribe_N_times_one_event_one_cntlr)
     TEST(test_subscribe_two_events_one_observer)
     TEST(test_subscribe_N_events_same_type_M_observer_with_all)
     TEST(test_subscribe_N_events_two_observer)
