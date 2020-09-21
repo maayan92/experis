@@ -3,6 +3,8 @@
 #include <algorithm>
 using namespace std;
 
+#include <unistd.h>
+
 namespace smart_house {
 
 ControllerTest::ControllerTest(ISubscription* a_subscription, const vector<EventTypeLoc>& a_typeLocArr)
@@ -21,6 +23,7 @@ void ControllerTest::Notify(const Event& a_newEvent)
     if(m_typeLocArr.end() != itr) {
         m_eventTypeLocation = a_newEvent.m_typeAndLocation;
     }
+    sleep(0.00001);
 }
 
 EventTypeLoc ControllerTest::GetEventTypeLocation() const
