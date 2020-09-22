@@ -18,6 +18,8 @@ public:
     void Upsert(const EventTypeLoc& a_key, IObserver* a_value);
     void Find(const EventTypeLoc& a_key, std::set<IObserver*>& a_result) const;
 
+    size_t Size() const;
+
 private:
     Map m_subscribers;
 };

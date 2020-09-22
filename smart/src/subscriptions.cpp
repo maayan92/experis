@@ -20,4 +20,14 @@ void Subscriptions::Find(const EventTypeLoc& a_key, std::set<IObserver*>& a_resu
     a_result = itr->second;
 }
 
+size_t Subscriptions::Size() const
+{
+    size_t size = 0;
+    for(Map::const_iterator itr = m_subscribers.begin(); itr != m_subscribers.end(); ++itr) {
+        size += itr->second.size();
+    }
+    
+    return size;
+}
+
 } // smart_house
