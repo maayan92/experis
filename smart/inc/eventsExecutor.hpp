@@ -15,8 +15,10 @@ public:
     //~EventsExecutor() = default;
 
     void SendAllEvents(Subscriptions& a_subscriptions);
+    void ShutDown();
 
 private:
+    experis::AtomicFlag m_shutDown;
     advcpp::WaitableQueue<Event>& m_eventQueue;
     IObserversNotifier* m_notifier;
 };
