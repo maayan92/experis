@@ -74,24 +74,25 @@ BEGIN_TEST(test_notifier_K_thread_N_event_M_observers)
     SubscriptionHandler subHandler(subs);
     vector<EventTypeLoc> typeLoc;
     
+    const size_t SIZE = 8;
+    vector<ControllerTest*> controllers;
+    controllers.reserve(SIZE * 3);
+
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
-    ControllerTest controllersS[] = { ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc)
-                                    , ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc)
-                                    , ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc)
-                                    , ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc) };
-    
+    for(size_t i = 0; i < SIZE; ++i) {
+        controllers.push_back(new ControllerTest(&subHandler, typeLoc));
+    }
+
     typeLoc.push_back(EventTypeLoc("NOISE_LEVEL", Location("1", "room_1_a")));
-    ControllerTest controllersSN[] = { ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc)
-                                    , ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc)
-                                    , ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc)
-                                    , ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc) };
-
-    typeLoc.push_back(EventTypeLoc("ENTRANCE_REQUEST", Location("1", "room_1_a")));
-    ControllerTest controllersSNE[] = { ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc)
-                                    , ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc)
-                                    , ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc)
-                                    , ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc) };
-
+    for(size_t i = 0; i < SIZE; ++i) {
+        controllers.push_back(new ControllerTest(&subHandler, typeLoc));
+    }
+    
+    typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("2", "room_1_a")));
+    for(size_t i = 0; i < SIZE; ++i) {
+        controllers.push_back(new ControllerTest(&subHandler, typeLoc));
+    }
+    
     typeLoc.push_back(EventTypeLoc("All", Location("1", "room_1_a")));
 
     set<IObserver*> observers;
@@ -106,9 +107,13 @@ BEGIN_TEST(test_notifier_K_thread_N_event_M_observers)
         }
     }
 
-    ASSERT_THAT(CheckResult<8>(typeLoc[0], controllersS));
-    ASSERT_THAT(CheckResult<8>(typeLoc[0], controllersSN));
-    ASSERT_THAT(CheckResult<8>(typeLoc[0], controllersSNE));
+    ASSERT_THAT(CheckResult<SIZE>(typeLoc[0], controllers));
+
+    vector<ControllerTest*>::iterator itr = controllers.begin();
+    ASSERT_THAT(CheckResult<SIZE>(typeLoc[0], vector<ControllerTest*>(itr + SIZE, itr + (SIZE * 2))));
+    ASSERT_THAT(CheckResult<SIZE>(typeLoc[0], vector<ControllerTest*>(itr + (SIZE * 2), controllers.end())));
+
+    for_each(controllers.begin(), controllers.end(), Delete);
 END_TEST
 
 BEGIN_TEST(test_notifier_N_thread_M_event_lots_of_observers)
