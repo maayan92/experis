@@ -127,6 +127,7 @@ BEGIN_TEST(test_events_executor_M_events_with_all_N_observers_K_threads)
     for(size_t i = 0; i < SIZE; ++i) {
         controllers.push_back(new ControllerTest(&subHandler, typeLoc));
     }
+    ASSERT_EQUAL(900, subs.Size());
     
     WaitableQueue<Event> events;
     for(size_t i = 0; i < 5; ++i) {
@@ -158,7 +159,8 @@ BEGIN_TEST(test_events_executor_M_event_enque_thread_N_observers_K_threads)
     for(size_t i = 0; i < SIZE; ++i) {
         controllers.push_back(new ControllerTest(&subHandler, typeLoc));
     }
-    
+    ASSERT_EQUAL(500, subs.Size());
+
     WaitableQueue<Event> events;
     Thread<EventEnque> eventEnque(shared_ptr<EventEnque>(new EventEnque(events, typeLoc)));
     
