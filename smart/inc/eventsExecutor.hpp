@@ -2,6 +2,7 @@
 #define EVENTS_EXECUTOR_HPP
 
 #include "iObserversNotifier.hpp"
+#include "subscriptions.hpp"
 #include "waitableQueue.hpp"
 #include "threadPool.hpp"
 #include "event.hpp"

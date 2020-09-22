@@ -8,7 +8,7 @@ namespace smart_house {
 
 class SubscribersFinder : public ISubscribersFinder {
 public:
-    SubscribersFinder(Subscriptions& a_subscriptions);
+    explicit SubscribersFinder(Subscriptions& a_subscriptions);
     //~SubscribersFinder() = default;
 
     virtual void FindControllers(const EventTypeLoc& a_typeLocation, std::set<IObserver*>& a_observers);

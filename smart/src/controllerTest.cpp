@@ -19,11 +19,13 @@ ControllerTest::ControllerTest(ISubscription* a_subscription, const vector<Event
 
 void ControllerTest::Notify(const Event& a_newEvent)
 {
+    m_eventTypeLocation = a_newEvent.m_typeAndLocation;
+    /*
     vector<EventTypeLoc>::iterator itr = find(m_typeLocArr.begin(), m_typeLocArr.end(), a_newEvent.m_typeAndLocation);
     if(m_typeLocArr.end() != itr) {
-        m_eventTypeLocation = a_newEvent.m_typeAndLocation;
     }
-    sleep(0.00001);
+    */
+    sleep(0.001);
 }
 
 EventTypeLoc ControllerTest::GetEventTypeLocation() const
