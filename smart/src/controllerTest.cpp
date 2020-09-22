@@ -1,9 +1,8 @@
 #include "controllerTest.hpp"
 #include <iostream>
 #include <algorithm>
-using namespace std;
-
 #include <unistd.h>
+using namespace std;
 
 namespace smart_house {
 
@@ -20,12 +19,7 @@ ControllerTest::ControllerTest(ISubscription* a_subscription, const vector<Event
 void ControllerTest::Notify(const Event& a_newEvent)
 {
     m_eventTypeLocation = a_newEvent.m_typeAndLocation;
-    /*
-    vector<EventTypeLoc>::iterator itr = find(m_typeLocArr.begin(), m_typeLocArr.end(), a_newEvent.m_typeAndLocation);
-    if(m_typeLocArr.end() != itr) {
-    }
-    */
-    sleep(0.001);
+    //sleep(0.001);
 }
 
 EventTypeLoc ControllerTest::GetEventTypeLocation() const
