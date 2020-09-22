@@ -55,6 +55,7 @@ BEGIN_TEST(test_subscribe_two_events_one_observer)
     Subscriptions subscriptions;
     SubscriptionHandler sub(subscriptions);
     ControllerTest controllers[1] = { ControllerTest(&sub, typeLoc) };
+    ASSERT_EQUAL(1, subscriptions.Size());
 
     set<IObserver*> observers;
     subscriptions.Find(typeLoc[0], observers);
@@ -81,6 +82,7 @@ BEGIN_TEST(test_subscribe_N_events_same_type_M_observer_with_all)
     
     vector<EventTypeLoc> typeLocAllRooms(1, EventTypeLoc("SMOKE_DETECTED", Location("1", "All")));
     ControllerTest controllersAllRooms[] = { ControllerTest(&sub, typeLocAllRooms) };
+    ASSERT_EQUAL(3, subscriptions.Size());
 
     set<IObserver*> observers;
     SubscribersFinder(subscriptions).FindControllers(typeLoc[0], observers);
@@ -126,10 +128,25 @@ BEGIN_TEST(test_find_all_subscribers_one_event)
     ASSERT_THAT(equal<1>(observers, controllers));
 END_TEST
 
+BEGIN_TEST(test_subscribe_size_N_events_two_observer)
+    vector<EventTypeLoc> typeLoc;
+    typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
+    typeLoc.push_back(EventTypeLoc("ENTRANCE_REQUEST", Location("2", "room_1_a")));
+
+    Subscriptions subscriptions;
+    SubscriptionHandler sub(subscriptions);
+
+    ControllerTest controllers[2] = { ControllerTest(&sub, typeLoc), ControllerTest(&sub, typeLoc) };
+
+    ASSERT_EQUAL(4, subscriptions.Size());
+END_TEST
+
 BEGIN_SUITE(test_subscriptions)
     TEST(test_subscribe_N_times_one_event_one_cntlr)
     TEST(test_subscribe_two_events_one_observer)
     TEST(test_subscribe_N_events_same_type_M_observer_with_all)
     TEST(test_subscribe_N_events_two_observer)
     TEST(test_find_all_subscribers_one_event)
+
+    TEST(test_subscribe_size_N_events_two_observer)
 END_SUITE
