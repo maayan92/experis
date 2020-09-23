@@ -6,6 +6,7 @@
 #include "eventsExecutor.hpp"
 #include "observersNotifierMT.hpp"
 #include "subscriptionHandler.hpp"
+#include "subscribersFinder.hpp"
 #include "controllerTest.hpp"
 #include "waitableQueue.hpp"
 using namespace std;
@@ -66,10 +67,11 @@ BEGIN_TEST(test_events_executor_one_event_N_observers_M_threads)
     events.Enque(CreateEvent(typeLoc[0]));
 
     ObserversNotifierMT notifier;
-    EventsExecutor executor(events, &notifier);
+    SubscribersFinder finder(subs);
+    EventsExecutor executor(events, &notifier, &finder);
     Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 2)));
 
-    executor.SendAllEvents(subs);
+    executor.SendAllEvents();
     shutDown.Join();
 
     ASSERT_THAT(CheckResult<SIZE>(typeLoc[0], controllers));
@@ -98,10 +100,11 @@ BEGIN_TEST(test_events_executor_M_event_M_types_N_observers_K_threads)
     }
     
     ObserversNotifierMT notifier;
-    EventsExecutor executor(events, &notifier);
+    SubscribersFinder finder(subs);
+    EventsExecutor executor(events, &notifier, &finder);
     Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 5)));
 
-    executor.SendAllEvents(subs);
+    executor.SendAllEvents();
     shutDown.Join();
 
     ASSERT_THAT(CheckResult<SIZE>(typeLoc[4], controllers));
@@ -135,9 +138,11 @@ BEGIN_TEST(test_events_executor_M_events_with_all_N_observers_K_threads)
     }
     
     ObserversNotifierMT notifier;
-    EventsExecutor executor(events, &notifier);
+    SubscribersFinder finder(subs);
+    EventsExecutor executor(events, &notifier, &finder);
     Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 5)));
-    executor.SendAllEvents(subs);
+
+    executor.SendAllEvents();
     shutDown.Join();
 
     ASSERT_THAT(CheckResult<SIZE * 2>(typeLoc[4], controllers));
@@ -165,10 +170,11 @@ BEGIN_TEST(test_events_executor_M_event_enque_thread_N_observers_K_threads)
     Thread<EventEnque> eventEnque(shared_ptr<EventEnque>(new EventEnque(events, typeLoc)));
     
     ObserversNotifierMT notifier;
-    EventsExecutor executor(events, &notifier);
+    SubscribersFinder finder(subs);
+    EventsExecutor executor(events, &notifier, &finder);
     Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 5)));
 
-    executor.SendAllEvents(subs);
+    executor.SendAllEvents();
     eventEnque.Join();
     shutDown.Join();
 

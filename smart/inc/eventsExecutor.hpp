@@ -2,6 +2,7 @@
 #define EVENTS_EXECUTOR_HPP
 
 #include "iObserversNotifier.hpp"
+#include "iSubscribersFinder.hpp"
 #include "subscriptions.hpp"
 #include "waitableQueue.hpp"
 #include "threadPool.hpp"
@@ -11,16 +12,17 @@ namespace smart_house {
 
 class EventsExecutor {
 public:
-    EventsExecutor(advcpp::WaitableQueue<Event>& a_eventQueue, IObserversNotifier* a_notifier);
+    EventsExecutor(advcpp::WaitableQueue<Event>& a_eventQueue, IObserversNotifier* a_notifier, ISubscribersFinder* a_finder);
     //~EventsExecutor() = default;
 
-    void SendAllEvents(Subscriptions& a_subscriptions);
+    void SendAllEvents();
     void ShutDown();
 
 private:
     experis::AtomicFlag m_shutDown;
     advcpp::WaitableQueue<Event>& m_eventQueue;
     IObserversNotifier* m_notifier;
+    ISubscribersFinder* m_finder;
 };
 
 } // smart_house

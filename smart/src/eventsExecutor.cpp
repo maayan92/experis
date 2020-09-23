@@ -1,20 +1,19 @@
 #include "eventsExecutor.hpp"
-#include "subscribersFinder.hpp"
 using namespace std;
+using namespace advcpp;
 
 namespace smart_house {
 
-EventsExecutor::EventsExecutor(advcpp::WaitableQueue<Event>& a_eventQueue, IObserversNotifier* a_notifier)
+EventsExecutor::EventsExecutor(WaitableQueue<Event>& a_eventQueue, IObserversNotifier* a_notifier, ISubscribersFinder* a_finder)
 : m_shutDown(false)
 , m_eventQueue(a_eventQueue)
 , m_notifier(a_notifier)
+, m_finder(a_finder)
 {
 }
 
-void EventsExecutor::SendAllEvents(Subscriptions& a_subscriptions)
+void EventsExecutor::SendAllEvents()
 {
-    SubscribersFinder finder(a_subscriptions);
-
     for(;;) {
         Event event;
         m_eventQueue.Deque(event);
@@ -23,7 +22,7 @@ void EventsExecutor::SendAllEvents(Subscriptions& a_subscriptions)
         }
 
         set<IObserver*> observers;
-        finder.FindControllers(event.m_typeAndLocation, observers);
+        m_finder->FindControllers(event.m_typeAndLocation, observers);
         m_notifier->NotifyAll(event, observers);
         
         if(m_shutDown.GetValue()) {
