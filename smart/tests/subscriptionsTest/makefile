@@ -13,12 +13,18 @@ LDLIBS := -lpthread
 TARGET := subscriptionsTest 
 
 SRC_DIR = ../../src
+SRC_DIR_ADVCPP = ../../../src
 
 MODULES = iObserver iPayload iSubscription controllerTest eventTypeLocation location subscriptionHandler subscriptions \
 			iSubscribersFinder subscribersFinder
+
+MODULES_ADVCPP = mutex threadPool atomicFlag conditionVariable tasks waitersConditionVar
+
 PATH_MODULE = $(MODULES:%=$(SRC_DIR)/%)
+PATH_MODULE_ADVCPP = $(MODULES_ADVCPP:%=$(SRC_DIR_ADVCPP)/%)
 
 OBJS = $(PATH_MODULE:%=%.o)
+OBJS += $(PATH_MODULE_ADVCPP:%=%.o)
 
 $(TARGET): $(OBJS)
 
@@ -49,9 +55,10 @@ hell: $(TARGET)
 	./$(TARGET)
 
 clean: 
-	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS)
+	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP)
 
 DEPENDS = $(PATH_MODULE:%=%.d)
--include $(DEPENDS)
+DEPENDS_ADVCPP = $(PATH_MODULE_ADVCPP:%=%.d)
+-include $(DEPENDS) $(DEPENDS_ADVCPP)
 
 .PHONY: all clean check recheck

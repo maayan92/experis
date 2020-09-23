@@ -6,6 +6,7 @@
 #include "eventTypeLoc.hpp"
 #include "iObserver.hpp"
 #include "uncopyable.hpp"
+#include "mutex.hpp"
 
 namespace smart_house {
 
@@ -22,6 +23,7 @@ public:
     size_t Size() const;
 
 private:
+    mutable experis::Mutex m_mtx;
     Map m_subscribers;
 };
 

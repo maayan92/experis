@@ -12,4 +12,9 @@ void SubscriptionHandler::Subscribe(const EventTypeLoc& a_eventTypeLocation, IOb
     m_subscriptions.Upsert(a_eventTypeLocation, a_observer);
 }
 
+void SubscriptionHandler::UnSubscribe(const EventTypeLoc& a_eventTypeLocation, IObserver* a_observer)
+{
+    m_subscriptions.Remove(a_eventTypeLocation, a_observer);
+}
+
 } // smart_house

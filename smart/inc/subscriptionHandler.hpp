@@ -12,7 +12,7 @@ public:
     //virtual ~SubscriptionHandler() = default;
 
     virtual void Subscribe(const EventTypeLoc& a_eventTypeLocation, IObserver* a_observer);
-    //virtual void UnSubscribe(const EventTypeLoc& a_eventTypeLocation, const IObserver* a_controller);
+    virtual void UnSubscribe(const EventTypeLoc& a_eventTypeLocation, IObserver* a_observer);
 
 private:
     Subscriptions& m_subscriptions;
