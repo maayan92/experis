@@ -1,7 +1,8 @@
 #include "subscriptions.hpp"
 #include <cassert>
 #include <stdexcept>
-	
+using namespace std;
+
 namespace smart_house {
 
 void Subscriptions::Upsert(const EventTypeLoc& a_key, IObserver* a_value)
@@ -10,7 +11,7 @@ void Subscriptions::Upsert(const EventTypeLoc& a_key, IObserver* a_value)
     m_subscribers[a_key].insert(a_value);
 }
 
-void Subscriptions::Find(const EventTypeLoc& a_key, std::set<IObserver*>& a_result) const
+void Subscriptions::Find(const EventTypeLoc& a_key, set<IObserver*>& a_result) const
 {
     Map::const_iterator itr = m_subscribers.find(a_key);
     if(itr == m_subscribers.end()) {
@@ -18,6 +19,14 @@ void Subscriptions::Find(const EventTypeLoc& a_key, std::set<IObserver*>& a_resu
     }
 
     a_result = itr->second;
+}
+
+void Subscriptions::Remove(const EventTypeLoc& a_key, IObserver* a_value)
+{
+    Map::iterator itr = m_subscribers.find(a_key);
+    if(itr != m_subscribers.end()) {
+        itr->second.erase(a_value);
+    }
 }
 
 size_t Subscriptions::Size() const

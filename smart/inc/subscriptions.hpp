@@ -17,6 +17,7 @@ public:
 
     void Upsert(const EventTypeLoc& a_key, IObserver* a_value);
     void Find(const EventTypeLoc& a_key, std::set<IObserver*>& a_result) const;
+    void Remove(const EventTypeLoc& a_key, IObserver* a_value);
 
     size_t Size() const;
 
