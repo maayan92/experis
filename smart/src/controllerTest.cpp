@@ -19,7 +19,7 @@ ControllerTest::ControllerTest(ISubscription* a_subscription, const vector<Event
 void ControllerTest::Notify(const Event& a_newEvent)
 {
     m_eventTypeLocation = a_newEvent.m_typeAndLocation;
-    //sleep(0.001);
+    usleep(10000);
 }
 
 EventTypeLoc ControllerTest::GetEventTypeLocation() const

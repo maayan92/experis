@@ -14,11 +14,9 @@ void Subscriptions::Upsert(const EventTypeLoc& a_key, IObserver* a_value)
 void Subscriptions::Find(const EventTypeLoc& a_key, set<IObserver*>& a_result) const
 {
     Map::const_iterator itr = m_subscribers.find(a_key);
-    if(itr == m_subscribers.end()) {
-        throw std::runtime_error("failed to find the observers of this event type and location!");
+    if(itr != m_subscribers.end()) {
+        a_result = itr->second;
     }
-
-    a_result = itr->second;
 }
 
 void Subscriptions::Remove(const EventTypeLoc& a_key, IObserver* a_value)

@@ -1,5 +1,5 @@
 #ifndef SUBSCRIBERS_FINDER_HPP
-#define  SUBSCRIBERS_FINDER_HPP
+#define SUBSCRIBERS_FINDER_HPP
 
 #include "iSubscribersFinder.hpp"
 #include "subscriptions.hpp"

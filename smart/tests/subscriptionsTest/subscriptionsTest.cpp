@@ -63,11 +63,8 @@ BEGIN_TEST(test_subscribe_two_events_one_observer)
     ASSERT_THAT(equal<1>(observers, controllers));
 
     observers.clear();
-    try {
-        subscriptions.Find(typeLocNoise, observers);
-    } catch(const exception& exc) {
-        ASSERT_EQUAL(0, observers.size());
-    }
+    subscriptions.Find(typeLocNoise, observers);
+    ASSERT_EQUAL(0, observers.size());
 END_TEST
 
 BEGIN_TEST(test_subscribe_N_events_same_type_M_observer_with_all)

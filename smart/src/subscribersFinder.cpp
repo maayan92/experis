@@ -13,12 +13,8 @@ void SubscribersFinder::findByTypeLocation(const EventType& a_type, const Locati
 {
     set<IObserver*> allObservers;
     
-    try {
-        m_subscriptions.Find(EventTypeLoc(a_type, a_location), allObservers);
-        a_observers.insert(allObservers.begin(), allObservers.end());
-    
-    } catch(const exception& exc) {
-    }
+    m_subscriptions.Find(EventTypeLoc(a_type, a_location), allObservers);
+    a_observers.insert(allObservers.begin(), allObservers.end());
 }
 
 void SubscribersFinder::FindControllers(const EventTypeLoc& a_typeLocation, set<IObserver*>& a_observers)
