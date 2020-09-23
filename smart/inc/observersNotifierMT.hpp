@@ -8,7 +8,7 @@
 
 namespace smart_house {
 
-class ObserversNotifierMT : public IObserversNotifier, private experis::Uncopyable {
+class ObserversNotifierMT : public IObserversNotifier {
 public:
     explicit ObserversNotifierMT(size_t a_numOfThreads = MAX_NUM_OF_THREADS);
     //~ObserversNotifierMT() = default;

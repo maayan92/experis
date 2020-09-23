@@ -10,7 +10,7 @@
 
 namespace smart_house {
 
-class EventsExecutor {
+class EventsExecutor : private experis::Uncopyable {
 public:
     EventsExecutor(advcpp::WaitableQueue<Event>& a_eventQueue, IObserversNotifier* a_notifier, ISubscribersFinder* a_finder);
     //~EventsExecutor() = default;

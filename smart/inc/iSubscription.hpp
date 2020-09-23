@@ -1,12 +1,13 @@
 #ifndef ISUBSCRIPTION_HPP
 #define ISUBSCRIPTION_HPP
 
+#include "uncopyable.hpp"
 #include "eventTypeLoc.hpp"
 #include "iObserver.hpp"
 
 namespace smart_house {
 
-class ISubscription {
+class ISubscription : private experis::Uncopyable{
 public:
     virtual ~ISubscription();
 

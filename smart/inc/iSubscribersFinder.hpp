@@ -2,12 +2,13 @@
 #define ISUBSCRIBERS_FINDER_HPP
 
 #include <set>
+#include "uncopyable.hpp"
 #include "eventTypeLoc.hpp"
 #include "iObserver.hpp"
 
 namespace smart_house {
 
-class ISubscribersFinder {
+class ISubscribersFinder : private experis::Uncopyable{
 public:
     virtual ~ISubscribersFinder();
 

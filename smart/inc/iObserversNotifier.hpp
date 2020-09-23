@@ -3,10 +3,11 @@
 
 #include <set>
 #include "iObserver.hpp"
+#include "uncopyable.hpp"
 
 namespace smart_house {
 
-class IObserversNotifier {
+class IObserversNotifier : private experis::Uncopyable{
 public:
     virtual ~IObserversNotifier();
 

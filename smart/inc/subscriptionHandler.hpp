@@ -6,7 +6,7 @@
 
 namespace smart_house {
 
-class SubscriptionHandler : public ISubscription, private experis::Uncopyable {
+class SubscriptionHandler : public ISubscription {
 public:
     explicit SubscriptionHandler(Subscriptions& a_subscriptions);
     //virtual ~SubscriptionHandler() = default;
