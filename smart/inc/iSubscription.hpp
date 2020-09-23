@@ -12,6 +12,9 @@ public:
 
     virtual void Subscribe(const EventTypeLoc& a_eventTypeLocation, IObserver* a_observer) = 0;
     //virtual void UnSubscribe(const EventTypeLoc& a_eventTypeLocation, const IObserver* a_controller) = 0;
+
+protected:
+    ISubscription();
 };
 
 } // smart_house

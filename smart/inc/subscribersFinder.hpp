@@ -6,7 +6,7 @@
 
 namespace smart_house {
 
-class SubscribersFinder : public ISubscribersFinder {
+class SubscribersFinder : public ISubscribersFinder, private experis::Uncopyable {
 public:
     explicit SubscribersFinder(Subscriptions& a_subscriptions);
     //~SubscribersFinder() = default;

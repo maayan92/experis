@@ -2,7 +2,6 @@
 #define IOBSERVERS_NOTIFIER_HPP
 
 #include <set>
-#include "eventTypeLoc.hpp"
 #include "iObserver.hpp"
 
 namespace smart_house {
