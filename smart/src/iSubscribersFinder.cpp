@@ -2,6 +2,9 @@
 
 namespace smart_house {
 
+ISubscribersFinder::ISubscribersFinder()
+{}
+
 ISubscribersFinder::~ISubscribersFinder()
 {}
 

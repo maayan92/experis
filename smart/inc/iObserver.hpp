@@ -10,6 +10,9 @@ public:
     virtual ~IObserver();
     
     virtual void Notify(const Event& a_newEvent) = 0;
+
+protected:
+    IObserver();
 };
 
 } // smart_house

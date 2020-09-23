@@ -2,6 +2,9 @@
 
 namespace smart_house {
 
+IObserversNotifier::IObserversNotifier()
+{}
+
 IObserversNotifier::~IObserversNotifier()
 {}
 

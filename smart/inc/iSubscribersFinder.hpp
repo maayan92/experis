@@ -12,6 +12,9 @@ public:
     virtual ~ISubscribersFinder();
 
     virtual void FindControllers(const EventTypeLoc& a_typeLocation, std::set<IObserver*>& a_observers) = 0;
+
+protected:
+    ISubscribersFinder();
 };
 
 } // smart_house

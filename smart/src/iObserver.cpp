@@ -2,6 +2,9 @@
 
 namespace smart_house {
 
+IObserver::IObserver()
+{}
+
 IObserver::~IObserver()
 {}
 

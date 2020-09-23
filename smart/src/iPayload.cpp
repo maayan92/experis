@@ -2,6 +2,9 @@
 
 namespace smart_house {
 
+IPayload::IPayload()
+{}
+
 IPayload::~IPayload()
 {}
 
