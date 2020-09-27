@@ -20,12 +20,12 @@ static string GetValue(string& a_buffer, size_t& a_position)
     return result;
 }
 
-static bool CheckNotifyResultHvac(ifstream& a_logFile, const Event& a_event)
+static bool CheckNotifyResultHvac(ifstream& a_logFile, const Event& a_event, size_t a_numOfEvents)
 {
     string buffer;
     size_t pos = 0;
 
-    while(getline(a_logFile, buffer)) {
+    while(getline(a_logFile, buffer) && a_numOfEvents > 0) {
         if(GetValue(buffer, pos) != a_event.m_typeAndLocation.m_type) {
             return false;
         }
@@ -48,6 +48,7 @@ static bool CheckNotifyResultHvac(ifstream& a_logFile, const Event& a_event)
         if(GetValue(buffer, pos) != data->m_shutdown) {
             return false;
         }
+        --a_numOfEvents;
     }
     return true;
 }
@@ -75,7 +76,7 @@ BEGIN_TEST(test_shared_library_so_one_event_one_observer)
 
     ifstream logFile("hvac_log.txt");
 
-    ASSERT_THAT(CheckNotifyResultHvac(logFile, event));
+    ASSERT_THAT(CheckNotifyResultHvac(logFile, event, 1));
 END_TEST
 
 BEGIN_TEST(test_shared_library_so_one_observer_all_floor_event)
@@ -99,10 +100,40 @@ BEGIN_TEST(test_shared_library_so_one_observer_all_floor_event)
 
     ifstream logFile("hvac_log.txt");
 
-    ASSERT_THAT(CheckNotifyResultHvac(logFile, event));
+    ASSERT_THAT(CheckNotifyResultHvac(logFile, event, 1));
+END_TEST
+
+BEGIN_TEST(test_shared_library_so_multi_events_one_observer)
+    Subscriptions subs;
+    SubscriptionHandler subHandler(subs);
+    SharedLibrarySo observers("./libControllerHVAC.so");
+
+    typedef IObserver* (*ObserverFactory)(ISubscription*, vector<EventTypeLoc>&);
+    ObserverFactory factory = observers.SymbolAddr<ObserverFactory>("CreateObserver");
+
+    vector<EventTypeLoc> typeLoc;
+    typeLoc.push_back(EventTypeLoc("All", Location("1", "room_1_a")));
+    typeLoc.push_back(EventTypeLoc("TestHVAC", Location("2", "room_1_b")));
+    typeLoc.push_back(EventTypeLoc("HVAC", Location("3", "All")));
+    IObserver* o = factory(&subHandler, typeLoc);
+
+    time_t t;
+    time(&t);
+    HvacPayload data("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY");
+
+    Event event = { localtime(&t), &data, EventTypeLoc("TestHVAC", Location("2", "room_1_a")) };
+    Event event2 = { localtime(&t), &data, EventTypeLoc("HVAC", Location("1", "room_1_a")) };
+    o->Notify(event);
+    o->Notify(event2);
+
+    ifstream logFile("hvac_log.txt");
+
+    ASSERT_THAT(CheckNotifyResultHvac(logFile, event, 1));
+    ASSERT_THAT(CheckNotifyResultHvac(logFile, event2, 1));
 END_TEST
 
 BEGIN_SUITE(test_shared_library)
     TEST(test_shared_library_so_one_event_one_observer)
     TEST(test_shared_library_so_one_observer_all_floor_event)
+    TEST(test_shared_library_so_multi_events_one_observer)
 END_SUITE
