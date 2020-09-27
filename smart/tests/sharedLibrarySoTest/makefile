@@ -3,7 +3,7 @@ CXX := g++
 
 CPPFLAGS := -I. -I../../../inc/advcpp -I../../../inc/ -I../../../tests/inc/ -I../../inc/  -I../inc/ -I../../observers/
 CPPFLAGS += -MMD -MP
-CFLAGS += -pedantic -pedantic-errors -ansi -Werror -Wall -Wextra
+CFLAGS += -pedantic -ansi -Werror -Wall -Wextra
 CFLAGS += -g
 
 CXXFLAGS = $(CFLAGS) -std=c++03
@@ -17,9 +17,9 @@ SRC_DIR = ../../src
 SRC_DIR_ADVCPP = ../../../src
 SRC_DIR_SO = ../../observers
 
-MODULES = iObserver iPayload iSubscription eventTypeLocation eventsExecutor sharedLibrarySo
-MODULES += location subscriptionHandler subscriptions iSubscribersFinder iObserversNotifier
-MODULES += subscribersFinder observersNotifierMT
+MODULES = iObserver iPayload iSubscription eventTypeLocation \
+			location subscriptionHandler subscriptions iSubscribersFinder iObserversNotifier \
+			subscribersFinder observersNotifierMT eventsExecutor sharedLibrarySo
 
 MODULES_ADVCPP = threadPool tasks mutex waitersConditionVar additionalFunctionality atomicFlag conditionVariable readersWriters
 
@@ -29,13 +29,12 @@ PATH_MODULE_ADVCPP = $(MODULES_ADVCPP:%=$(SRC_DIR_ADVCPP)/%)
 OBJS = $(PATH_MODULE:%=%.o)
 OBJS += $(PATH_MODULE_ADVCPP:%=%.o)
 
-$(TARGET): LDLIBS += -ldl
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) -ldl
 
-ControllerHVAC.so: CXXFLAGS += -fpic
-ControllerHVAC.so: LDFLAGS += -shared
-ControllerHVAC.so: clean $(OBJS)
-#@$(CXX) $(CXXFLAGS) $(LDFLAGS) $(SRC_DIR_SO)/controllerHVAC.o $(LDLIBS) -o $(SRC_DIR_SO)/libControllerHVAC.so
+so: CXXFLAGS += -fpic
+so: LDFLAGS += -shared
+so: $(SRC_DIR_SO)/controllerHVAC.o clean $(OBJS)
+	@$(CXX) $(LDFLAGS) $(CPPFLAGS) $(SRC_DIR_SO)/controllerHVAC.o $(OBJS) $(LDLIBS) -o ./libControllerHVAC.so
 
 all: $(TARGET)
 

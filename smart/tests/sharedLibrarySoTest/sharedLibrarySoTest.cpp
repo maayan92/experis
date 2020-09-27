@@ -8,11 +8,10 @@
 using namespace std;
 using namespace smart_house;
 
-
 BEGIN_TEST(test_shared_library_so)
     Subscriptions subs;
     SubscriptionHandler subHandler(subs);
-    SharedLibrarySo observers("libControllerHVAC.so");
+    SharedLibrarySo observers("./libControllerHVAC.so");
 
     typedef IObserver* (*ObserverFactory)(ISubscription*);
     ObserverFactory factory = observers.SymbolAddr<ObserverFactory>("CreateObserver");
