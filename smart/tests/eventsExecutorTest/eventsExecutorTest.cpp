@@ -14,40 +14,6 @@ using namespace advcpp;
 using namespace experis;
 using namespace smart_house;
 
-struct ShutDownTask : public IRunnable {
-    ShutDownTask(EventsExecutor& a_executor, size_t a_time)
-    : m_executor(a_executor)
-    , m_time(a_time)
-    {}
-
-    void operator()() {
-        sleep(m_time);
-        m_executor.ShutDown();
-    }
-
-private:
-    EventsExecutor& m_executor;
-    size_t m_time;
-};
-
-struct EventEnque : public IRunnable {
-    EventEnque(WaitableQueue<Event>& a_events, vector<EventTypeLoc>& a_typeLoc)
-    : m_events(a_events)
-    , m_typeLoc(a_typeLoc)
-    {}
-
-    void operator()() {
-        sleep(1);
-        for(size_t i = 0; i < m_typeLoc.size(); ++i) {
-            m_events.Enque(CreateEvent(m_typeLoc[i]));
-        }
-    }
-
-private:
-    WaitableQueue<Event>& m_events;
-    vector<EventTypeLoc>& m_typeLoc;
-};
-
 // **** tests: **** //
 
 BEGIN_TEST(test_events_executor_one_event_N_observers_M_threads)
