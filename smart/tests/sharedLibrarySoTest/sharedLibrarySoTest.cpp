@@ -1,5 +1,7 @@
 #include "mu_test.h"
 #include <iostream>
+#include <fstream>
+#include <vector>
 
 #include "sharedLibrarySo.hpp"
 #include "subscriptionHandler.hpp"
@@ -8,15 +10,85 @@
 using namespace std;
 using namespace smart_house;
 
-BEGIN_TEST(test_shared_library_so)
+static string GetValue(string& a_buffer, size_t& a_position)
+{
+    size_t pos = a_buffer.find(":", a_position + 1) + 2;
+    size_t posLast = a_buffer.find("\t", pos);
+    a_position = posLast;
+    string result = a_buffer.substr(pos, posLast - pos);
+
+    return result;
+}
+
+static bool CheckNotifyResultHvac(ifstream& a_logFile, const Event& a_event)
+{
+    string buffer;
+    size_t pos = 0;
+
+    while(getline(a_logFile, buffer)) {
+        if(GetValue(buffer, pos) != a_event.m_typeAndLocation.m_type) {
+            return false;
+        }
+        if(GetValue(buffer, pos) != a_event.m_typeAndLocation.m_location.m_room) {
+            return false;
+        }
+        if(GetValue(buffer, pos) != a_event.m_typeAndLocation.m_location.m_floor) {
+            return false;
+        }
+
+        GetValue(buffer, pos);
+        
+        HvacPayload* data = dynamic_cast<HvacPayload*>(a_event.m_data);
+        if(GetValue(buffer, pos) != data->m_iot) {
+            return false;
+        }
+        if(GetValue(buffer, pos) != data->m_tmp) {
+            return false;
+        }
+        if(GetValue(buffer, pos) != data->m_shutdown) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// **** tests: **** //
+
+BEGIN_TEST(test_shared_library_so_one_event_one_observer)
     Subscriptions subs;
     SubscriptionHandler subHandler(subs);
     SharedLibrarySo observers("./libControllerHVAC.so");
 
-    typedef IObserver* (*ObserverFactory)(ISubscription*);
+    typedef IObserver* (*ObserverFactory)(ISubscription*, vector<EventTypeLoc>&);
     ObserverFactory factory = observers.SymbolAddr<ObserverFactory>("CreateObserver");
 
-    IObserver* o = factory(&subHandler);
+    vector<EventTypeLoc> typeLoc;
+    typeLoc.push_back(EventTypeLoc("TestHVAC", Location("1", "room_1_a")));
+    IObserver* o = factory(&subHandler, typeLoc);
+
+    time_t t;
+    time(&t);
+    HvacPayload data("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY");
+
+    Event event = { localtime(&t), &data, typeLoc[0] };
+    o->Notify(event);
+
+    ifstream logFile("hvac_log.txt");
+
+    ASSERT_THAT(CheckNotifyResultHvac(logFile, event));
+END_TEST
+
+BEGIN_TEST(test_shared_library_so_one_observer_all_floor_event)
+    Subscriptions subs;
+    SubscriptionHandler subHandler(subs);
+    SharedLibrarySo observers("./libControllerHVAC.so");
+
+    typedef IObserver* (*ObserverFactory)(ISubscription*, vector<EventTypeLoc>&);
+    ObserverFactory factory = observers.SymbolAddr<ObserverFactory>("CreateObserver");
+
+    vector<EventTypeLoc> typeLoc;
+    typeLoc.push_back(EventTypeLoc("All", Location("1", "room_1_a")));
+    IObserver* o = factory(&subHandler, typeLoc);
 
     time_t t;
     time(&t);
@@ -25,9 +97,12 @@ BEGIN_TEST(test_shared_library_so)
     Event event = { localtime(&t), &data, EventTypeLoc("TestHVAC", Location("1", "room_1_a")) };
     o->Notify(event);
 
-    ASSERT_PASS();
+    ifstream logFile("hvac_log.txt");
+
+    ASSERT_THAT(CheckNotifyResultHvac(logFile, event));
 END_TEST
 
 BEGIN_SUITE(test_shared_library)
-    TEST(test_shared_library_so)
+    TEST(test_shared_library_so_one_event_one_observer)
+    TEST(test_shared_library_so_one_observer_all_floor_event)
 END_SUITE

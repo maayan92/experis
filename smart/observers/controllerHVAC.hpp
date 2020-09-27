@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include "iSubscription.hpp"
 #include "iObserver.hpp"
 
@@ -10,16 +11,15 @@ namespace smart_house {
 
 class ControllerHVAC : public IObserver {
 public:
-    ControllerHVAC(ISubscription* a_subscription);
-    //virtual ~ControllerHVAC() = default;
+    ControllerHVAC(ISubscription* a_subscription, std::vector<EventTypeLoc>& a_typeLoc);
+    virtual ~ControllerHVAC();
 
     virtual void Notify(const Event& a_newEvent);
 
 private:
-    static const EventTypeLoc testHVAC;
-
     ISubscription* m_subscription;
     std::ofstream m_logFile;
+    std::vector<EventTypeLoc>& m_typeLoc;
 };
 
 } // smart_house
