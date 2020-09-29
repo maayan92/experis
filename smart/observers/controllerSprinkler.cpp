@@ -33,6 +33,7 @@ void ControllerSprinkler::Notify(const Event& a_newEvent)
 
     m_logFile << "\ton: " << data->m_on;
     m_logFile << "\tiot: " << data->m_iot;
+    m_logFile << '\n';
 
     m_logFile.flush();
 }

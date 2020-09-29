@@ -8,6 +8,7 @@
 #include "subscriptionHandler.hpp"
 #include "subscriptions.hpp"
 #include "HvacPayload.hpp"
+#include "sprinklerPayload.hpp"
 #include "eventsExecutor.hpp"
 #include "subscribersFinder.hpp"
 #include "observersNotifierMT.hpp"
@@ -24,6 +25,31 @@ static string GetValue(string& a_buffer, size_t& a_position)
     string result = a_buffer.substr(pos, posLast - pos);
 
     return result;
+}
+
+static bool CheckPayloadHvac(HvacPayload* a_data, string& a_buffer, size_t& a_position)
+{
+    if(GetValue(a_buffer, a_position) != a_data->m_iot) {
+        return false;
+    }
+    if(GetValue(a_buffer, a_position) != a_data->m_tmp) {
+        return false;
+    }
+    if(GetValue(a_buffer, a_position) != a_data->m_shutdown) {
+        return false;
+    }
+    return true;
+}
+
+static bool CheckPayloadSprinkler(SprinklerPayload* a_data, string& a_buffer, size_t& a_position)
+{
+    if(GetValue(a_buffer, a_position) != a_data->m_on) {
+        return false;
+    }
+    if(GetValue(a_buffer, a_position) != a_data->m_iot) {
+        return false;
+    }
+    return true;
 }
 
 static bool CheckNotifyResultHvac(ifstream& a_logFile, const Event& a_event, size_t a_numOfEvents)
@@ -44,15 +70,16 @@ static bool CheckNotifyResultHvac(ifstream& a_logFile, const Event& a_event, siz
         GetValue(buffer, pos);
         
         HvacPayload* data = dynamic_cast<HvacPayload*>(a_event.m_data);
-        if(GetValue(buffer, pos) != data->m_iot) {
-            return false;
+        if(data) {
+            CheckPayloadHvac(data, buffer, pos);
         }
-        if(GetValue(buffer, pos) != data->m_tmp) {
-            return false;
+        else {
+            SprinklerPayload* data = dynamic_cast<SprinklerPayload*>(a_event.m_data);
+            if(data) {
+                CheckPayloadSprinkler(data, buffer, pos);
+            }
         }
-        if(GetValue(buffer, pos) != data->m_shutdown) {
-            return false;
-        }
+        
         --a_numOfEvents;
     }
     return (a_numOfEvents ==0) ? true : false;
@@ -209,9 +236,73 @@ BEGIN_TEST(test_shared_library_so_multi_events_two_same_observers_multi_thread)
     ASSERT_THAT(!CheckNotifyResultHvac(logFile, allEvents[4], 1));
 END_TEST
 
+BEGIN_TEST(test_shared_library_so_multi_events_two_different_observers_multi_thread)
+    Subscriptions subs;
+    SubscriptionHandler subHandler(subs);
+    SharedLibrarySo observersHvac("./libControllerHVAC.so");
+    SharedLibrarySo observersSprinkler("./libControllerSprinkler.so");
+
+    typedef IObserver* (*ObserverFactory)(ISubscription*, vector<EventTypeLoc>&);
+    ObserverFactory factoryHvac = observersHvac.SymbolAddr<ObserverFactory>("CreateObserver");
+    ObserverFactory factorySprinkler = observersSprinkler.SymbolAddr<ObserverFactory>("CreateObserver");
+
+    vector<EventTypeLoc> typeLoc;
+    typeLoc.push_back(EventTypeLoc("All", Location("1", "room_1_a")));
+    typeLoc.push_back(EventTypeLoc("TestHVAC", Location("2", "room_1_b")));
+    typeLoc.push_back(EventTypeLoc("HVAC", Location("3", "All")));
+    IObserver* hvac = factoryHvac(&subHandler, typeLoc);
+
+    typeLoc.pop_back();
+    typeLoc.pop_back();
+
+    typeLoc.push_back(EventTypeLoc("TestSprinkler", Location("2", "room_1_b")));
+    typeLoc.push_back(EventTypeLoc("TestFire", Location("3", "All")));
+    IObserver* sprinkler = factorySprinkler(&subHandler, typeLoc);
+
+    ASSERT_NOT_EQUAL(hvac, sprinkler);
+
+    vector<Event> allEvents;
+    time_t t;
+    time(&t);
+    HvacPayload dataHavc("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY");
+    SprinklerPayload dataSprinkler("Fire_Detected|ROOM_EMPTY", "10.10.1.64");
+
+    Event e = { localtime(&t), &dataHavc, EventTypeLoc("TestHVAC", Location("2", "room_1_b")) };
+    allEvents.push_back(e);
+    Event e2 = { localtime(&t), &dataSprinkler, EventTypeLoc("TestSprinkler", Location("2", "room_1_b")) };
+    allEvents.push_back(e2);
+    Event e3 = { localtime(&t), &dataHavc, EventTypeLoc("HVAC", Location("3", "All")) };
+    allEvents.push_back(e3);
+    Event e4 = { localtime(&t), &dataSprinkler, EventTypeLoc("TestFire", Location("3", "All")) };
+    allEvents.push_back(e4);
+
+    WaitableQueue<Event> eventsQueue;
+    Thread<EnqueByEvents> eventEnque(shared_ptr<EnqueByEvents>(new EnqueByEvents(eventsQueue, allEvents)));
+    
+    ObserversNotifierMT notifier;
+    SubscribersFinder finder(subs);
+    EventsExecutor executor(eventsQueue, &notifier, &finder);
+    Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 5)));
+
+    executor.SendAllEvents();
+    eventEnque.Join();
+    shutDown.Join();
+
+    ifstream logFileHvac("hvac_log.txt");
+    ifstream logFileSprinkler("sprinkler_log.txt");
+    for(size_t i = 0; i < allEvents.size(); i += 2) {
+        ASSERT_THAT(CheckNotifyResultHvac(logFileHvac, allEvents[i], 1));
+        ASSERT_THAT(CheckNotifyResultHvac(logFileSprinkler, allEvents[i + 1], 1));
+    }
+
+    logFileHvac.close();
+    logFileSprinkler.close();
+END_TEST
+
 BEGIN_SUITE(test_shared_library)
     TEST(test_shared_library_so_one_event_one_observer)
     TEST(test_shared_library_so_one_observer_all_floor_event)
     TEST(test_shared_library_so_multi_events_one_observer)
     TEST(test_shared_library_so_multi_events_two_same_observers_multi_thread)
+    TEST(test_shared_library_so_multi_events_two_different_observers_multi_thread)
 END_SUITE
