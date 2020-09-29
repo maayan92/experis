@@ -1,7 +1,9 @@
 #include "controllerHVAC.hpp"
 #include "controllersApi.hpp"
 #include "HvacPayload.hpp"
+#include "shared_ptr.hpp"
 using namespace std;
+using namespace advcpp;
 
 namespace smart_house {
 
@@ -22,7 +24,9 @@ ControllerHVAC::~ControllerHVAC()
 
 void ControllerHVAC::Notify(const Event& a_newEvent)
 {
-    HvacPayload* data = dynamic_cast<HvacPayload*>(a_newEvent.m_data);
+    shared_ptr<HvacPayload> data;
+    shared_ptr<IPayload> dataCopy(a_newEvent.m_data);
+    dataCopy.Swap<HvacPayload>(data);
     if(!data){
         return;
     }

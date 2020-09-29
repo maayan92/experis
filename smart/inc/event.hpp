@@ -4,13 +4,14 @@
 #include <ctime>
 #include "iPayload.hpp"
 #include "eventTypeLoc.hpp"
+#include "shared_ptr.hpp"
 
 namespace smart_house {
 
 struct Event {
 
     tm* m_timestamp;
-    IPayload* m_data;
+    advcpp::shared_ptr<IPayload> m_data;
     EventTypeLoc m_typeAndLocation;
 
 };

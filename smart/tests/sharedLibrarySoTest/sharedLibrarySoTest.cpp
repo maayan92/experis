@@ -27,7 +27,7 @@ static string GetValue(string& a_buffer, size_t& a_position)
     return result;
 }
 
-static bool CheckPayloadHvac(HvacPayload* a_data, string& a_buffer, size_t& a_position)
+static bool CheckPayloadHvac(shared_ptr<HvacPayload>& a_data, string& a_buffer, size_t& a_position)
 {
     if(GetValue(a_buffer, a_position) != a_data->m_iot) {
         return false;
@@ -41,7 +41,7 @@ static bool CheckPayloadHvac(HvacPayload* a_data, string& a_buffer, size_t& a_po
     return true;
 }
 
-static bool CheckPayloadSprinkler(SprinklerPayload* a_data, string& a_buffer, size_t& a_position)
+static bool CheckPayloadSprinkler(shared_ptr<SprinklerPayload>& a_data, string& a_buffer, size_t& a_position)
 {
     if(GetValue(a_buffer, a_position) != a_data->m_on) {
         return false;
@@ -69,12 +69,17 @@ static bool CheckNotifyResultHvac(ifstream& a_logFile, const Event& a_event, siz
         }
         GetValue(buffer, pos);
         
-        HvacPayload* data = dynamic_cast<HvacPayload*>(a_event.m_data);
+        shared_ptr<HvacPayload> data;
+        shared_ptr<IPayload> dataCopy(a_event.m_data);
+        dataCopy.Swap<HvacPayload>(data);
+
         if(data) {
             CheckPayloadHvac(data, buffer, pos);
         }
         else {
-            SprinklerPayload* data = dynamic_cast<SprinklerPayload*>(a_event.m_data);
+            shared_ptr<SprinklerPayload> data;
+            dataCopy = a_event.m_data;
+            dataCopy.Swap<SprinklerPayload>(data);
             if(data) {
                 CheckPayloadSprinkler(data, buffer, pos);
             }
@@ -119,9 +124,9 @@ BEGIN_TEST(test_shared_library_so_one_event_one_observer)
 
     time_t t;
     time(&t);
-    HvacPayload data("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY");
+    shared_ptr<HvacPayload> data(new HvacPayload("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY"));
 
-    Event event = { localtime(&t), &data, typeLoc[0] };
+    Event event = { localtime(&t), data, typeLoc[0] };
     o->Notify(event);
 
     ifstream logFile("hvac_log.txt");
@@ -143,9 +148,9 @@ BEGIN_TEST(test_shared_library_so_one_observer_all_floor_event)
 
     time_t t;
     time(&t);
-    HvacPayload data("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY");
+    shared_ptr<HvacPayload> data(new HvacPayload("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY"));
 
-    Event event = { localtime(&t), &data, EventTypeLoc("TestHVAC", Location("1", "room_1_a")) };
+    Event event = { localtime(&t), data, EventTypeLoc("TestHVAC", Location("1", "room_1_a")) };
     o->Notify(event);
 
     ifstream logFile("hvac_log.txt");
@@ -169,10 +174,10 @@ BEGIN_TEST(test_shared_library_so_multi_events_one_observer)
 
     time_t t;
     time(&t);
-    HvacPayload data("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY");
+    shared_ptr<HvacPayload> data(new HvacPayload("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY"));
 
-    Event event = { localtime(&t), &data, EventTypeLoc("TestHVAC", Location("2", "room_1_a")) };
-    Event event2 = { localtime(&t), &data, EventTypeLoc("HVAC", Location("1", "room_1_a")) };
+    Event event = { localtime(&t), data, EventTypeLoc("TestHVAC", Location("2", "room_1_a")) };
+    Event event2 = { localtime(&t), data, EventTypeLoc("HVAC", Location("1", "room_1_a")) };
     o->Notify(event);
     o->Notify(event2);
 
@@ -205,15 +210,15 @@ BEGIN_TEST(test_shared_library_so_multi_events_two_same_observers_multi_thread)
     vector<Event> allEvents;
     time_t t;
     time(&t);
-    HvacPayload data("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY");
+    shared_ptr<HvacPayload> data(new HvacPayload("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY"));
 
-    Event e = { localtime(&t), &data, typeLoc[1] };
+    Event e = { localtime(&t), data, typeLoc[1] };
     allEvents.push_back(e);
-    Event e2 = { localtime(&t), &data, typeLoc[2] };
+    Event e2 = { localtime(&t), data, typeLoc[2] };
     allEvents.push_back(e2);
-    Event e3 = { localtime(&t), &data, EventTypeLoc("test", Location("1", "room_1_a")) };
+    Event e3 = { localtime(&t), data, EventTypeLoc("test", Location("1", "room_1_a")) };
     allEvents.push_back(e3);
-    Event e4 = { localtime(&t), &data, typeLoc[4] };
+    Event e4 = { localtime(&t), data, typeLoc[4] };
     allEvents.push_back(e4);
 
     WaitableQueue<Event> eventsQueue;
@@ -264,16 +269,16 @@ BEGIN_TEST(test_shared_library_so_multi_events_two_different_observers_multi_thr
     vector<Event> allEvents;
     time_t t;
     time(&t);
-    HvacPayload dataHavc("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY");
-    SprinklerPayload dataSprinkler("Fire_Detected|ROOM_EMPTY", "10.10.1.64");
+    shared_ptr<HvacPayload> dataHavc(new HvacPayload("10.10.1.64", "77", "Fire_Detected|ROOM_EMPTY"));
+    shared_ptr<SprinklerPayload> dataSprinkler(new SprinklerPayload("Fire_Detected|ROOM_EMPTY", "10.10.1.64"));
 
-    Event e = { localtime(&t), &dataHavc, EventTypeLoc("TestHVAC", Location("2", "room_1_b")) };
+    Event e = { localtime(&t), dataHavc, EventTypeLoc("TestHVAC", Location("2", "room_1_b")) };
     allEvents.push_back(e);
-    Event e2 = { localtime(&t), &dataSprinkler, EventTypeLoc("TestSprinkler", Location("2", "room_1_b")) };
+    Event e2 = { localtime(&t), dataSprinkler, EventTypeLoc("TestSprinkler", Location("2", "room_1_b")) };
     allEvents.push_back(e2);
-    Event e3 = { localtime(&t), &dataHavc, EventTypeLoc("HVAC", Location("3", "All")) };
+    Event e3 = { localtime(&t), dataHavc, EventTypeLoc("HVAC", Location("3", "All")) };
     allEvents.push_back(e3);
-    Event e4 = { localtime(&t), &dataSprinkler, EventTypeLoc("TestFire", Location("3", "All")) };
+    Event e4 = { localtime(&t), dataSprinkler, EventTypeLoc("TestFire", Location("3", "All")) };
     allEvents.push_back(e4);
 
     WaitableQueue<Event> eventsQueue;

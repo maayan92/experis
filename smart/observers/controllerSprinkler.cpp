@@ -1,7 +1,9 @@
 #include "controllerSprinkler.hpp"
 #include "controllersApi.hpp"
 #include "sprinklerPayload.hpp"
+#include "shared_ptr.hpp"
 using namespace std;
+using namespace advcpp;
 
 namespace smart_house {
 
@@ -22,7 +24,9 @@ ControllerSprinkler::~ControllerSprinkler()
 
 void ControllerSprinkler::Notify(const Event& a_newEvent)
 {
-    SprinklerPayload* data = dynamic_cast<SprinklerPayload*>(a_newEvent.m_data);
+    shared_ptr<SprinklerPayload> data;
+    shared_ptr<IPayload> dataCopy(a_newEvent.m_data);
+    dataCopy.Swap<SprinklerPayload>(data);
     if(!data){
         return;
     }

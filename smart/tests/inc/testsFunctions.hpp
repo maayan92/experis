@@ -12,8 +12,8 @@ smart_house::Event CreateEvent(const smart_house::EventTypeLoc& a_typeLoc)
 {
     time_t t;
     time(&t);
-    smart_house::PayloadSmoke ps;
-    smart_house::Event event = {localtime(&t), &ps, a_typeLoc};
+    advcpp::shared_ptr<smart_house::PayloadSmoke> ps(new smart_house::PayloadSmoke());
+    smart_house::Event event = {localtime(&t), ps, a_typeLoc};
     return event;
 }
 
