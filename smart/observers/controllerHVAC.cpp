@@ -7,7 +7,7 @@ namespace smart_house {
 
 ControllerHVAC::ControllerHVAC(ISubscription* a_subscription, vector<EventTypeLoc>& a_typeLoc)
 : m_subscription(a_subscription)
-, m_logFile("hvac_log.txt", std::ofstream::out|std::ofstream::trunc)
+, m_logFile("hvac_log.txt")
 , m_typeLoc(a_typeLoc)
 {
     for(size_t i = 0; i < a_typeLoc.size(); ++i) {
