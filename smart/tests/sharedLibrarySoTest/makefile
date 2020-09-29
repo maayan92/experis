@@ -34,12 +34,12 @@ $(TARGET): $(OBJS) -ldl
 hvac.so: CXXFLAGS += -fpic
 hvac.so: LDFLAGS += -shared
 hvac.so: $(SRC_DIR_SO)/controllerHVAC.o $(OBJS)
-	@$(CXX) $(LDFLAGS) $(CPPFLAGS) $(SRC_DIR_SO)/controllerHVAC.o $(OBJS) $(LDLIBS) -o ./libControllerHVAC.so
+	@$(CXX) $(LDFLAGS) $(CPPFLAGS) $(SRC_DIR_SO)/controllerHVAC.o $(OBJS) $(LDLIBS) -o ./controllerSO/libControllerHVAC.so
 
 sprinkler.so: CXXFLAGS += -fpic
 sprinkler.so: LDFLAGS += -shared
 sprinkler.so: $(SRC_DIR_SO)/controllerSprinkler.o $(OBJS)
-	@$(CXX) $(LDFLAGS) $(CPPFLAGS) $(SRC_DIR_SO)/controllerSprinkler.o $(OBJS) $(LDLIBS) -o ./libControllerSprinkler.so
+	@$(CXX) $(LDFLAGS) $(CPPFLAGS) $(SRC_DIR_SO)/controllerSprinkler.o $(OBJS) $(LDLIBS) -o ./controllerSO/libControllerSprinkler.so
 
 all: sprinkler.so hvac.so $(TARGET)
 
