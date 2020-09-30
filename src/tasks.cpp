@@ -24,6 +24,7 @@ void Tasks::operator()()
         } catch(const EndOfWork& exc) {
             break;
         }
+        //TODO: fix the thread pool it must not crash the app
         catch(...) {
             throw;
         }

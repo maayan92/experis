@@ -5,6 +5,7 @@ using namespace experis;
 
 namespace smart_house {
 
+//TODO: too many event copies
 struct NotifyObserver : public IRunnable {
     NotifyObserver(Event a_event, IObserver* a_observer, Atomic<size_t>& a_count, WaitersConditionVar& a_cv)
     : m_event(a_event)
@@ -14,8 +15,10 @@ struct NotifyObserver : public IRunnable {
     {}
 
     void operator()() {
+        //TODO: exception safety
         m_observer->Notify(m_event);
-        if((--m_count) == 0) {
+        
+        if(--m_count == 0) {
             m_cv.NotifyOne();
         }
     }
