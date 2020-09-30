@@ -5,18 +5,16 @@ using namespace experis;
 
 namespace smart_house {
 
-//TODO: too many event copies
-struct NotifyObserver : public IRunnable {
-    NotifyObserver(Event a_event, IObserver* a_observer, Atomic<size_t>& a_count, WaitersConditionVar& a_cv)
+struct Notifier {
+    Notifier(const Event& a_event, Atomic<size_t>& a_count, WaitersConditionVar& a_cv)
     : m_event(a_event)
-    , m_observer(a_observer)
     , m_count(a_count)
     , m_cv(a_cv)
     {}
 
-    void operator()() {
+    void Notify(IObserver* a_observer) {
         //TODO: exception safety
-        m_observer->Notify(m_event);
+        a_observer->Notify(m_event);
         
         if(--m_count == 0) {
             m_cv.NotifyOne();
@@ -25,9 +23,23 @@ struct NotifyObserver : public IRunnable {
 
 private:
     Event m_event;
-    IObserver* m_observer;
     Atomic<size_t>& m_count;
     WaitersConditionVar& m_cv;
+};
+
+struct NotifyObserver : public IRunnable {
+    NotifyObserver(IObserver* a_observer, Notifier& a_notifier)
+    : m_observer(a_observer)
+    , m_notifier(a_notifier)
+    {}
+
+    void operator()() {
+        m_notifier.Notify(m_observer);
+    }
+
+private:
+    IObserver* m_observer;
+    Notifier& m_notifier;
 };
 
 struct CheckIfEndToNotify {
@@ -54,10 +66,12 @@ void ObserversNotifierMT::NotifyAll(const Event& a_event, set<IObserver*>& a_obs
 {
     Atomic<size_t> count(a_observers.size());
 
+    Notifier notifier(a_event, count, m_cvDoneNotify);
+
     set<IObserver*>::iterator itr = a_observers.begin();
     set<IObserver*>::iterator end = a_observers.end();
     for(; itr != end; ++itr) {
-        shared_ptr<NotifyObserver> notifyTask(new NotifyObserver(a_event, *itr, count, m_cvDoneNotify));
+        shared_ptr<NotifyObserver> notifyTask(new NotifyObserver(*itr, notifier));
         m_threads.Submit(notifyTask);
     }
     
