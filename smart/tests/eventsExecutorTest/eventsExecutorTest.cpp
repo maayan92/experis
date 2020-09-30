@@ -34,7 +34,7 @@ BEGIN_TEST(test_events_executor_one_event_N_observers_M_threads)
 
     ObserversNotifierMT notifier;
     SubscribersFinder finder(subs);
-    EventsExecutor executor(events, &notifier, &finder);
+    EventsExecutor executor(events, notifier, finder);
     Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 2)));
 
     executor.SendAllEvents();
@@ -67,7 +67,7 @@ BEGIN_TEST(test_events_executor_M_event_M_types_N_observers_K_threads)
     
     ObserversNotifierMT notifier;
     SubscribersFinder finder(subs);
-    EventsExecutor executor(events, &notifier, &finder);
+    EventsExecutor executor(events, notifier, finder);
     Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 5)));
 
     executor.SendAllEvents();
@@ -105,7 +105,7 @@ BEGIN_TEST(test_events_executor_M_events_with_all_N_observers_K_threads)
     
     ObserversNotifierMT notifier;
     SubscribersFinder finder(subs);
-    EventsExecutor executor(events, &notifier, &finder);
+    EventsExecutor executor(events, notifier, finder);
     Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 5)));
 
     executor.SendAllEvents();
@@ -137,7 +137,7 @@ BEGIN_TEST(test_events_executor_M_event_enque_thread_N_observers_K_threads)
     
     ObserversNotifierMT notifier;
     SubscribersFinder finder(subs);
-    EventsExecutor executor(events, &notifier, &finder);
+    EventsExecutor executor(events, notifier, finder);
     Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 5)));
 
     executor.SendAllEvents();
