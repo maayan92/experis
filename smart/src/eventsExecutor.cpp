@@ -18,7 +18,7 @@ void EventsExecutor::SendAllEvents()
     for(;;) {
         Event event;
         m_eventQueue.Deque(event);
-        if(!event.isValid()) {
+        if(event.isNotValid()) {
             return;
         }
         
