@@ -31,6 +31,18 @@ void EventsExecutor::SendAllEvents()
     }
 }
 
+void EventsExecutor::SendEvents(size_t a_numOfEvents)
+{
+    set<IObserver*> observers;
+    for(size_t i = 0; i < a_numOfEvents; ++i) {
+        Event event;
+        m_eventQueue.Deque(event);
+        
+        m_finder.FindControllers(event.m_typeAndLocation, observers);
+        m_notifier.NotifyAll(event, observers);
+    }
+}
+
 void EventsExecutor::ShutDown()
 {
     if(m_shutDown.CheckAndSet()) {

@@ -108,6 +108,18 @@ private:
     vector<Event>& m_events;
 };
 
+struct TestExecutor : public EventsExecutor {
+    TestExecutor(WaitableQueue<Event>& a_eventQueue, IObserversNotifier& a_notifier, ISubscribersFinder& a_finder)
+    : EventsExecutor(a_eventQueue, a_notifier, a_finder)
+    {}
+
+    void SendEvents(size_t a_numOfEvents)
+    {
+        EventsExecutor::SendEvents(a_numOfEvents);
+    }
+
+};
+
 // **** tests: **** //
 
 BEGIN_TEST(test_shared_library_so_one_event_one_observer)
@@ -226,13 +238,10 @@ BEGIN_TEST(test_shared_library_so_multi_events_two_same_observers_multi_thread)
     
     ObserversNotifierMT notifier;
     SubscribersFinder finder(subs);
-    EventsExecutor executor(eventsQueue, notifier, finder); 
-    Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 5)));
+    TestExecutor executor(eventsQueue, notifier, finder); 
 
-    //executor.SendEvents(5); 
-    executor.SendAllEvents();
+    executor.SendEvents(allEvents.size());
     eventEnquer.Join();
-    shutDown.Join();
 
     ifstream logFile("hvac_log.txt");
     for(size_t i = 0; i < allEvents.size() - 1; ++i) {
@@ -287,12 +296,10 @@ BEGIN_TEST(test_shared_library_so_multi_events_two_different_observers_multi_thr
     
     ObserversNotifierMT notifier;
     SubscribersFinder finder(subs);
-    EventsExecutor executor(eventsQueue, notifier, finder);
-    Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 5)));
+    TestExecutor executor(eventsQueue, notifier, finder);
 
-    executor.SendAllEvents();
+    executor.SendEvents(allEvents.size());
     eventEnque.Join();
-    shutDown.Join();
 
     ifstream logFileHvac("hvac_log.txt");
     ifstream logFileSprinkler("sprinkler_log.txt");
