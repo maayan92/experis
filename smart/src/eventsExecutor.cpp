@@ -13,11 +13,11 @@ EventsExecutor::EventsExecutor(WaitableQueue<Event>& a_eventQueue, IObserversNot
 }
 
 void EventsExecutor::SendAllEvents()
-{
+{    
     for(;;) {
         Event event;
         m_eventQueue.Deque(event);
-        if(event.m_typeAndLocation == EventTypeLoc()) {
+        if(!event.isValid()) {
             return;
         }
 

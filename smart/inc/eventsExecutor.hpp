@@ -18,6 +18,10 @@ public:
     void SendAllEvents();
     void ShutDown();
 
+protected:
+    void SendEvents(size_t n);
+    void SendEventsUntil(Event const& e);
+    
 private:
     experis::AtomicFlag m_shutDown;
     advcpp::WaitableQueue<Event>& m_eventQueue;

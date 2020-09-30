@@ -222,15 +222,16 @@ BEGIN_TEST(test_shared_library_so_multi_events_two_same_observers_multi_thread)
     allEvents.push_back(e4);
 
     WaitableQueue<Event> eventsQueue;
-    Thread<EnqueByEvents> eventEnque(shared_ptr<EnqueByEvents>(new EnqueByEvents(eventsQueue, allEvents)));
+    Thread<EnqueByEvents> eventEnquer(shared_ptr<EnqueByEvents>(new EnqueByEvents(eventsQueue, allEvents)));
     
     ObserversNotifierMT notifier;
     SubscribersFinder finder(subs);
-    EventsExecutor executor(eventsQueue, notifier, &finder);
+    EventsExecutor executor(eventsQueue, notifier, &finder); 
     Thread<ShutDownTask> shutDown(shared_ptr<ShutDownTask>(new ShutDownTask(executor, 5)));
 
+    //executor.SendEvents(5); 
     executor.SendAllEvents();
-    eventEnque.Join();
+    eventEnquer.Join();
     shutDown.Join();
 
     ifstream logFile("hvac_log.txt");
