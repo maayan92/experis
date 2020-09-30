@@ -4,7 +4,7 @@ using namespace advcpp;
 
 namespace smart_house {
 
-EventsExecutor::EventsExecutor(WaitableQueue<Event>& a_eventQueue, IObserversNotifier* a_notifier, ISubscribersFinder* a_finder)
+EventsExecutor::EventsExecutor(WaitableQueue<Event>& a_eventQueue, IObserversNotifier& a_notifier, ISubscribersFinder* a_finder)
 : m_shutDown(false)
 , m_eventQueue(a_eventQueue)
 , m_notifier(a_notifier)
@@ -23,7 +23,7 @@ void EventsExecutor::SendAllEvents()
 
         set<IObserver*> observers;
         m_finder->FindControllers(event.m_typeAndLocation, observers);
-        m_notifier->NotifyAll(event, observers);
+        m_notifier.NotifyAll(event, observers);
         
         if(m_shutDown.GetValue()) {
             return;

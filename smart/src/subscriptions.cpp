@@ -9,9 +9,9 @@ namespace smart_house {
 
 void Subscriptions::Upsert(const EventTypeLoc& a_key, IObserver* a_value)
 {
-    MutexLocker locker(m_mtx);
-    
     assert(0 != a_value);
+    
+    MutexLocker locker(m_mtx);    
     m_subscribers[a_key].insert(a_value);
 }
 
