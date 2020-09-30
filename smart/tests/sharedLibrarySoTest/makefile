@@ -19,7 +19,7 @@ SRC_DIR_SO = ../../observers
 
 MODULES = iObserver iPayload iSubscription eventTypeLocation \
 			location subscriptionHandler subscriptions iSubscribersFinder iObserversNotifier \
-			subscribersFinder observersNotifierMT eventsExecutor sharedLibrarySo
+			subscribersFinder observersNotifierMT eventsExecutor sharedLibrarySo event
 
 MODULES_ADVCPP = threadPool tasks mutex waitersConditionVar additionalFunctionality atomicFlag conditionVariable readersWriters
 

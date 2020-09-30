@@ -9,12 +9,15 @@
 namespace smart_house {
 
 struct Event {
-    //TODO: optimize this
-    bool isNotValid() const { return m_typeAndLocation == EventTypeLoc();}
+    
+    bool IsNotValid() const;
+    
     tm* m_timestamp;
     advcpp::shared_ptr<IPayload> m_data;
     EventTypeLoc m_typeAndLocation;
 
+private:
+    static const EventTypeLoc emptyTypeLoc;
 };
 
 } // smart_house
