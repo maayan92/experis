@@ -31,19 +31,22 @@ OBJS += $(PATH_MODULE_ADVCPP:%=%.o)
 
 $(TARGET): $(OBJS) -ldl
 
+dirs:
+	mkdir  -p controllerSO
+
 hvac.so: CXXFLAGS += -fpic
 hvac.so: LDFLAGS += -shared
-hvac.so: $(SRC_DIR_SO)/controllerHVAC.o $(OBJS)
+hvac.so: $(SRC_DIR_SO)/controllerHVAC.o $(OBJS) dirs
 	@$(CXX) $(LDFLAGS) $(CPPFLAGS) $(SRC_DIR_SO)/controllerHVAC.o $(OBJS) $(LDLIBS) -o ./controllerSO/libControllerHVAC.so
 
 sprinkler.so: CXXFLAGS += -fpic
 sprinkler.so: LDFLAGS += -shared
-sprinkler.so: $(SRC_DIR_SO)/controllerSprinkler.o $(OBJS)
+sprinkler.so: $(SRC_DIR_SO)/controllerSprinkler.o $(OBJS) dirs
 	@$(CXX) $(LDFLAGS) $(CPPFLAGS) $(SRC_DIR_SO)/controllerSprinkler.o $(OBJS) $(LDLIBS) -o ./controllerSO/libControllerSprinkler.so
 
 all: sprinkler.so hvac.so $(TARGET)
 
-check: $(TARGET)
+check: all
 	@clear
 	./$(TARGET)
 	
@@ -68,7 +71,7 @@ hell: $(TARGET)
 	./$(TARGET)
 
 clean: 
-	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP)
+	@$(RM) -R $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) ./controllerSO
 
 DEPENDS = $(PATH_MODULE:%=%.d)
 DEPENDS_ADVCPP = $(PATH_MODULE_ADVCPP:%=%.d)
