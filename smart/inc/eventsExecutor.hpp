@@ -12,7 +12,7 @@ namespace smart_house {
 
 class EventsExecutor : private experis::Uncopyable {
 public:
-    EventsExecutor(advcpp::WaitableQueue<Event>& a_eventQueue, IObserversNotifier& a_notifier, ISubscribersFinder* a_finder);
+    EventsExecutor(advcpp::WaitableQueue<Event>& a_eventQueue, IObserversNotifier& a_notifier, ISubscribersFinder& a_finder);
     //~EventsExecutor() = default;
 
     void SendAllEvents();
@@ -26,7 +26,7 @@ private:
     experis::AtomicFlag m_shutDown;
     advcpp::WaitableQueue<Event>& m_eventQueue;
     IObserversNotifier& m_notifier;
-    ISubscribersFinder* m_finder;
+    ISubscribersFinder& m_finder;
 };
 
 } // smart_house
