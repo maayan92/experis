@@ -20,7 +20,7 @@ public:
 
 protected:
     void SendEvents(size_t a_numOfEvents);
-    void SendEventsUntil(Event const& e);
+    void SendEventsUntil(Event const& a_endEvent);
 
 private:
     experis::AtomicFlag m_shutDown;

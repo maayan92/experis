@@ -31,6 +31,15 @@ void EventsExecutor::SendAllEvents()
     }
 }
 
+void EventsExecutor::ShutDown()
+{
+    if(m_shutDown.CheckAndSet()) {
+        m_eventQueue.ShutDown();
+    }
+}
+
+// protected functions:
+
 void EventsExecutor::SendEvents(size_t a_numOfEvents)
 {
     set<IObserver*> observers;
@@ -43,10 +52,18 @@ void EventsExecutor::SendEvents(size_t a_numOfEvents)
     }
 }
 
-void EventsExecutor::ShutDown()
+void EventsExecutor::SendEventsUntil(Event const& a_endEvent)
 {
-    if(m_shutDown.CheckAndSet()) {
-        m_eventQueue.ShutDown();
+    set<IObserver*> observers;
+    for(;;) {
+        Event event;
+        m_eventQueue.Deque(event);
+        if(event == a_endEvent) {
+            return;
+        }
+        
+        m_finder.FindControllers(event.m_typeAndLocation, observers);
+        m_notifier.NotifyAll(event, observers);
     }
 }
 

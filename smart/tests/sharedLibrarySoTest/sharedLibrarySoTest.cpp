@@ -118,6 +118,11 @@ struct TestExecutor : public EventsExecutor {
         EventsExecutor::SendEvents(a_numOfEvents);
     }
 
+    void SendUntil(Event const& a_event) 
+    {
+        EventsExecutor::SendEventsUntil(a_event);
+    }
+
 };
 
 // **** tests: **** //
@@ -290,6 +295,10 @@ BEGIN_TEST(test_shared_library_so_multi_events_two_different_observers_multi_thr
     allEvents.push_back(e3);
     Event e4 = { localtime(&t), dataSprinkler, EventTypeLoc("TestFire", Location("3", "All")) };
     allEvents.push_back(e4);
+    Event end = { localtime(&t), dataSprinkler, EventTypeLoc("end", Location("3", "All")) };
+    allEvents.push_back(end);
+    Event e6 = { localtime(&t), dataSprinkler, EventTypeLoc("All", Location("1", "room_1_a")) };
+    allEvents.push_back(e6);
 
     WaitableQueue<Event> eventsQueue;
     Thread<EnqueByEvents> eventEnque(shared_ptr<EnqueByEvents>(new EnqueByEvents(eventsQueue, allEvents)));
@@ -298,15 +307,16 @@ BEGIN_TEST(test_shared_library_so_multi_events_two_different_observers_multi_thr
     SubscribersFinder finder(subs);
     TestExecutor executor(eventsQueue, notifier, finder);
 
-    executor.SendEvents(allEvents.size());
+    executor.SendUntil(end);
     eventEnque.Join();
 
     ifstream logFileHvac("hvac_log.txt");
     ifstream logFileSprinkler("sprinkler_log.txt");
-    for(size_t i = 0; i < allEvents.size(); i += 2) {
+    for(size_t i = 0; i < allEvents.size() - 2; i += 2) {
         ASSERT_THAT(CheckNotifyResultHvac(logFileHvac, allEvents[i], 1));
         ASSERT_THAT(CheckNotifyResultHvac(logFileSprinkler, allEvents[i + 1], 1));
     }
+    ASSERT_THAT(!CheckNotifyResultHvac(logFileSprinkler, allEvents[5], 1));
 
     logFileHvac.close();
     logFileSprinkler.close();

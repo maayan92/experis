@@ -11,6 +11,7 @@ namespace smart_house {
 struct Event {
     
     bool IsNotValid() const;
+    bool operator==(Event const& a_event);
     
     tm* m_timestamp;
     advcpp::shared_ptr<IPayload> m_data;
