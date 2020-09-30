@@ -1,6 +1,8 @@
 #include "sensorAgentBucket.hpp"
 #include "mutexLocker.hpp"
 #include <algorithm>
+#include <cassert>
+#include <iostream>
 using namespace std;
 using namespace experis;
 
@@ -9,10 +11,12 @@ namespace smart_house {
 void SensorAgentBucket::AddSensor(const DeviceId& a_deviceId, ISensorAgent* a_sensor)
 {
     MutexLocker locker(m_mtx);
+    
+    assert(0 != a_sensor);
     m_agents.insert(make_pair(a_deviceId, a_sensor));
 }
 
-void SensorAgentBucket::FindSensor(const DeviceId& a_deviceId, ISensorAgent* a_sensor)
+void SensorAgentBucket::FindSensor(const DeviceId& a_deviceId, ISensorAgent*& a_sensor)
 {
     MutexLocker locker(m_mtx);
     Agents::iterator itr = m_agents.find(a_deviceId);

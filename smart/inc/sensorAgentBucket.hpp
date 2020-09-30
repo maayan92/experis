@@ -6,6 +6,7 @@
 #include "typedefs.hpp"
 #include "uncopyable.hpp"
 #include "iSensorAgent.hpp"
+#include "shared_ptr.hpp"
 
 namespace smart_house {
 
@@ -16,7 +17,7 @@ public:
     //~SensorAgentBucket() = default;
 
     void AddSensor(const experis::DeviceId& a_deviceId, ISensorAgent* a_sensor);
-    void FindSensor(const experis::DeviceId& a_deviceId, ISensorAgent* a_sensor);
+    void FindSensor(const experis::DeviceId& a_deviceId, ISensorAgent*& a_sensor);
     void RemoveSensor(const experis::DeviceId& a_deviceId);
 
     size_t Size() const;
