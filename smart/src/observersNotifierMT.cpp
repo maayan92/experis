@@ -51,7 +51,9 @@ void ObserversNotifierMT::NotifyAll(const Event& a_event, set<IObserver*>& a_obs
 {
     Atomic<size_t> count(a_observers.size());
 
-    for(set<IObserver*>::iterator itr = a_observers.begin(); itr != a_observers.end(); ++itr) {
+    set<IObserver*>::iterator itr = a_observers.begin();
+    // set<IObserver*>::iterator end = a_observers.end();
+    for(; itr != a_observers.end(); ++itr) {
         shared_ptr<NotifyObserver> notifyTask(new NotifyObserver(a_event, *itr, count, m_cvDoneNotify));
         m_threads.Submit(notifyTask);
     }
