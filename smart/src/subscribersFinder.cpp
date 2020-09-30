@@ -19,6 +19,7 @@ void SubscribersFinder::findByTypeLocation(const EventType& a_type, const Locati
 
 void SubscribersFinder::FindControllers(const EventTypeLoc& a_typeLocation, set<IObserver*>& a_observers)
 {
+    a_observers.clear();
     findByTypeLocation(a_typeLocation.m_type, a_typeLocation.m_location, a_observers);
     findByTypeLocation(a_typeLocation.m_type, Location("All", a_typeLocation.m_location.m_room), a_observers);
     findByTypeLocation(a_typeLocation.m_type, Location(a_typeLocation.m_location.m_floor, "All"), a_observers);

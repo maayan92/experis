@@ -14,14 +14,14 @@ EventsExecutor::EventsExecutor(WaitableQueue<Event>& a_eventQueue, IObserversNot
 
 void EventsExecutor::SendAllEvents()
 {    
+    set<IObserver*> observers;
     for(;;) {
         Event event;
         m_eventQueue.Deque(event);
         if(!event.isValid()) {
             return;
         }
-
-        set<IObserver*> observers;
+        
         m_finder->FindControllers(event.m_typeAndLocation, observers);
         m_notifier.NotifyAll(event, observers);
         
