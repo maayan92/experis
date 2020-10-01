@@ -3,7 +3,7 @@ CXX := g++
 
 CPPFLAGS := -I. -I../../../inc/advcpp -I../../../inc/ -I../../../tests/inc/ -I../../inc/  -I../inc/ -I../../observers/
 CPPFLAGS += -MMD -MP
-CFLAGS += -pedantic -ansi -Werror -Wall -Wextra
+CFLAGS += -Werror -Wall -Wextra
 CFLAGS += -g
 
 CXXFLAGS = $(CFLAGS) -std=c++03
@@ -19,7 +19,7 @@ SRC_DIR_SO = ../../observers
 
 MODULES = iObserver iPayload iSubscription eventTypeLocation \
 			location subscriptionHandler subscriptions iSubscribersFinder iObserversNotifier \
-			subscribersFinder observersNotifierMT eventsExecutor sharedLibrarySo event
+			subscribersFinder observersNotifierMT eventsExecutor sharedLibrarySo event notifyingTask
 
 MODULES_ADVCPP = threadPool tasks mutex waitersConditionVar additionalFunctionality atomicFlag conditionVariable readersWriters
 
