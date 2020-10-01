@@ -5,10 +5,14 @@
 
 namespace smart_house {
 
-class PayloadSmoke : public IPayload {
-public:
+struct PayloadSmoke : public IPayload {
     //PayloadSmoke() = default;
     //virtual ~PayloadSmoke() = default;
+
+    virtual void Print(std::ostream& a_os)
+    {
+        a_os << "smoke\n";
+    }
 
 };
 

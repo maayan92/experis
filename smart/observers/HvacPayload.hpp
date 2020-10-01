@@ -20,6 +20,14 @@ struct HvacPayload : public IPayload {
     , m_shutdown()    
     {}
 
+    virtual void Print(std::ostream& a_os)
+    {
+        a_os << "iot: " << m_iot;
+        a_os << "| tmp: " << m_tmp;
+        a_os << "| shut down: " << m_shutdown;
+        a_os << '\n';
+    }
+
     std::string m_iot;
     std::string m_tmp;
     std::string m_shutdown;
