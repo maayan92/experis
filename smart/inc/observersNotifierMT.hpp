@@ -10,12 +10,13 @@ namespace smart_house {
 
 class ObserversNotifierMT : public IObserversNotifier {
 public:
-    explicit ObserversNotifierMT(size_t a_numOfThreads = MAX_NUM_OF_THREADS);
+    explicit ObserversNotifierMT(size_t a_numOfThreads = DEFAULT_NUM_OF_THREADS);
     //~ObserversNotifierMT() = default;
 
     virtual void NotifyAll(const Event& a_event, std::set<IObserver*>& a_observers);
 
 private:
+    static const size_t DEFAULT_NUM_OF_THREADS = 2;
     static const size_t MAX_NUM_OF_THREADS = 8;
 
     experis::Mutex m_mtx;
