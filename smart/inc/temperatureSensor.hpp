@@ -12,7 +12,7 @@ public:
     TemperatureSensor();
     //~TemperatureSensor() = default;
 
-    virtual void CreateEvent(const char* a_data, struct Event& a_event);
+    virtual void CreateEvent(const string& a_data, struct Event& a_event);
 
 public:
     Device m_deviceDetails;
