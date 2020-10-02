@@ -21,7 +21,7 @@ void TemperatureSensor::CreateEvent(const string& a_data, struct Event& a_event)
     shared_ptr<TemperaturePayload> data(new TemperaturePayload());
 
     data->m_currentTemp = atof(string(a_data.begin(), a_data.begin() + midPos).c_str());
-    data->m_tempRising = (0 == string(a_data.begin() + midPos, a_data.end()).compare("rising"));
+    data->m_tempRising = (0 == string(a_data.begin() + midPos + 1, a_data.end()).compare("rising"));
 
     a_event.m_data = data;
     a_event.m_typeAndLocation = m_deviceDetails.m_typeLocation;
