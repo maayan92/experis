@@ -1,4 +1,5 @@
 #include "notifyingTask.hpp"
+#include <sstream>
 using namespace std;
 using namespace advcpp;
 using namespace experis;
@@ -33,21 +34,17 @@ Notifier::Notifier(const Event& a_event, Atomic<size_t>& a_count, WaitersConditi
 : m_event(a_event)
 , m_count(a_count)
 , m_cv(a_cv)
-, m_errorsLog(GetFileName().c_str())
+, m_logFile(GetFileName().c_str())
 {}
-
-Notifier::~Notifier()
-{
-    m_errorsLog.close();
-}
 
 void Notifier::Notify(IObserver* a_observer) {
     try {
         a_observer->Notify(m_event);
     } catch(const exception& exc) {
         MutexLocker locker(m_mtx);
-        
-        WriteToFile(exc.what());
+        stringstream msg;
+        CompressNotifyFailToMsg(exc.what(), msg);
+        LOGINFO(m_logFile, msg.str());
     }
     
     if(--m_count == 0) {
@@ -55,21 +52,17 @@ void Notifier::Notify(IObserver* a_observer) {
     }
 }
 
-void Notifier::WriteToFile(const char* a_what)
+void Notifier::CompressNotifyFailToMsg(const char* a_what, stringstream& a_msg)
 {
-    m_errorsLog << "exeption: " << a_what;
+    a_msg << "\nexeption thrown: " << a_what;
 
-    m_errorsLog << "\nevent: ";
-    m_errorsLog << "\ntime - " << m_event.m_timestamp->tm_hour << ":" << m_event.m_timestamp->tm_min;
-    m_errorsLog << "\ntype - " << m_event.m_typeAndLocation.m_type;
-    m_errorsLog << "\nlocation - floor - " << m_event.m_typeAndLocation.m_location.m_floor;
-    m_errorsLog << "| room - " << m_event.m_typeAndLocation.m_location.m_room;
-    m_errorsLog << "\ndata - ";
-    m_event.m_data->Print(m_errorsLog);
-
-    m_errorsLog << "\n\n";
-
-    m_errorsLog.flush();
+    a_msg << "\nevent: ";
+    a_msg << " time - " << m_event.m_timestamp->tm_hour << ":" << m_event.m_timestamp->tm_min;
+    a_msg << " | type - " << m_event.m_typeAndLocation.m_type;
+    a_msg << " | location - floor - " << m_event.m_typeAndLocation.m_location.m_floor;
+    a_msg << " , room - " << m_event.m_typeAndLocation.m_location.m_room;
+    a_msg << " | data - ";
+    m_event.m_data->Print(a_msg);
 }
 
 } // smart_house

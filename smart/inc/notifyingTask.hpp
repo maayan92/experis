@@ -6,24 +6,25 @@
 #include "iObserver.hpp"
 #include "runnable.hpp"
 #include "event.hpp"
+#include "fileLog.hpp"
 
 namespace smart_house {
 
 struct Notifier {
     Notifier(const Event& a_event, experis::Atomic<size_t>& a_count, experis::WaitersConditionVar& a_cv);
-    ~Notifier();
+    //~Notifier() = default;
 
     void Notify(IObserver* a_observer);
 
 private:
-    void WriteToFile(const char* a_what);
+    void CompressNotifyFailToMsg(const char* a_what, std::stringstream& a_msg);
 
 private:
     experis::Mutex m_mtx;
     Event m_event;
     experis::Atomic<size_t>& m_count;
     experis::WaitersConditionVar& m_cv;
-    std::ofstream m_errorsLog;
+    experis::FileLog m_logFile;
 };
 
 struct NotifyObserver : public experis::IRunnable {
