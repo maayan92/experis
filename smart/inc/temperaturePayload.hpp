@@ -11,6 +11,10 @@ struct TemperaturePayload : public IPayload {
     double m_currentTemp;
     bool m_tempRising;
 
+    virtual void Print(std::ostream& a_os) {
+        (void)a_os;
+    }
+
 };
 
 } // smart_house
