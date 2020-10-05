@@ -21,7 +21,8 @@ BEGIN_TEST(test_message_handler_one_data)
     ASSERT_EQUAL(1, sensors.Size());
 
     string result;
-    Protocol::Pack(result, SensorInfo("Temprature-1-a", "42C|rising"));
+    time_t currentTime = time(NULL);
+    Protocol::Pack(result, SensorInfo("Temprature-1-a", "42C|rising", localtime(&currentTime)));
     {
         EventCreatorMT creator(events);
         messageHandler handler(sensors, creator);
@@ -53,7 +54,8 @@ BEGIN_TEST(test_message_handler_one_data_not_register_sensor)
     ASSERT_EQUAL(1, sensors.Size());
   
     string result;
-    Protocol::Pack(result, SensorInfo("Temprature-2", "42C|rising"));
+    time_t currentTime = time(NULL);
+    Protocol::Pack(result, SensorInfo("Temprature-2", "42C|rising", localtime(&currentTime)));
     {
         EventCreatorMT creator(events);
         messageHandler handler(sensors, creator);
@@ -79,13 +81,16 @@ BEGIN_TEST(test_message_handler_multi_data_with_half_msg)
         messageHandler handler(sensors, creator);
     
         string result1;
-        Protocol::Pack(result1, SensorInfo("Temprature-1-a", "42C|rising"));
+        time_t currentTime = time(NULL);
+        Protocol::Pack(result1, SensorInfo("Temprature-1-a", "42C|rising", localtime(&currentTime)));
         
         string result2;
-        Protocol::Pack(result2, SensorInfo("Temprature-1-a", "30C|dropping"));
+        currentTime = time(NULL);
+        Protocol::Pack(result2, SensorInfo("Temprature-1-a", "30C|dropping", localtime(&currentTime)));
 
         string result3;
-        Protocol::Pack(result3, SensorInfo("Temprature-1-a", "25C|dropping"));
+        currentTime = time(NULL);
+        Protocol::Pack(result3, SensorInfo("Temprature-1-a", "25C|dropping", localtime(&currentTime)));
 
 
         string msg(result1 + result2);
@@ -111,13 +116,16 @@ BEGIN_TEST(test_message_handler_multi_data_half_msg_and_complete_msg)
         messageHandler handler(sensors, creator);
     
         string result1;
-        Protocol::Pack(result1, SensorInfo("Temprature-1-a", "42C|rising"));
+        time_t currentTime = time(NULL);
+        Protocol::Pack(result1, SensorInfo("Temprature-1-a", "42C|rising", localtime(&currentTime)));
         
         string result2;
-        Protocol::Pack(result2, SensorInfo("Temprature-1-a", "30C|dropping"));
+        currentTime = time(NULL);
+        Protocol::Pack(result2, SensorInfo("Temprature-1-a", "30C|dropping", localtime(&currentTime)));
 
         string result3;
-        Protocol::Pack(result3, SensorInfo("Temprature-1-a", "25C|dropping"));
+        currentTime = time(NULL);
+        Protocol::Pack(result3, SensorInfo("Temprature-1-a", "25C|dropping", localtime(&currentTime)));
 
 
         string msg(result1 + result2);
