@@ -3,7 +3,7 @@ using namespace std;
 
 namespace smart_house {
 
-void Protocol::Pack(std::string& a_msg, SensorInfo& a_info)
+void Protocol::Pack(std::string& a_msg, const SensorInfo& a_info)
 {
     a_msg += 1;
     a_msg += 's';
