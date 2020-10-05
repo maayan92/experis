@@ -58,11 +58,11 @@ int ServerTcp::SetConnection()
                 assert(!"undocumented error for accept!");
                 break;
         }
-
-        throw runtime_error("accept connection from client failed!");
+    }
+    else {
+        LOGINFO(m_logFile, "A connection occurred");
     }
 
-    LOGINFO(m_logFile, "A connection occurred");
     return clientSocket;
 }
 
