@@ -2,6 +2,7 @@
 #define SERVER_TCP_HPP
 
 #include <string>
+#include "fileLog.hpp"
 
 namespace experis {
 
@@ -22,6 +23,7 @@ private:
 private:
     static const size_t NUM_OF_CLIENTS = 64;
 
+    FileLog m_logFile;
     int m_socketNum;
 };
 
