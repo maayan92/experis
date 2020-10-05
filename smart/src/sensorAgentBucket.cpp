@@ -10,9 +10,9 @@ namespace smart_house {
 
 void SensorAgentBucket::AddSensor(const DeviceId& a_deviceId, ISensorAgent* a_sensor)
 {
-    MutexLocker locker(m_mtx);
-    
     assert(0 != a_sensor);
+    
+    MutexLocker locker(m_mtx);
     m_agents.insert(make_pair(a_deviceId, a_sensor));
 }
 
