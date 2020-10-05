@@ -24,6 +24,7 @@ NetworkListener::NetworkListener(const std::string& a_ipAddr, size_t a_port, IMe
 , m_server(a_ipAddr, a_port)
 , m_logFile("network_log.txt")
 , m_epollEv()
+, m_epollFd()
 {
     if(!createEpoll()) {
         throw runtime_error("failed to create epoll!");

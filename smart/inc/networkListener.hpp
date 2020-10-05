@@ -12,6 +12,7 @@ namespace experis {
 
 class NetworkListener : private experis::Uncopyable {
 public:
+    // throw exeption in case the server creation fails or the epoll creation fails.
     NetworkListener(const std::string& a_ipAddr, size_t a_port, IMessageHandler& a_msgHandler);
     ~NetworkListener();
 
