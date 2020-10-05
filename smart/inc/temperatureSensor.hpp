@@ -13,7 +13,7 @@ public:
     TemperatureSensor();
     //virtual ~TemperatureSensor() = default;
 
-    virtual void CreateEvent(const std::string& a_data, struct Event& a_event);
+    virtual void CreateEvent(const SensorInfo& a_info, struct Event& a_event);
 
 public:
     Device m_deviceDetails;

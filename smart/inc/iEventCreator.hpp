@@ -10,7 +10,7 @@ class IEventCreator {
 public:
     virtual ~IEventCreator();
 
-    virtual void CreateEvent(const std::string& a_data, ISensorAgent* a_sensor) = 0;
+    virtual void CreateEvent(const SensorInfo& a_info, ISensorAgent* a_sensor) = 0;
 
 protected:
     IEventCreator();

@@ -15,7 +15,8 @@ BEGIN_TEST(test_event_creator_one_event)
 
     {
         EventCreatorMT creator(events);
-        creator.CreateEvent(string("42C|rising"), &sensor);
+        time_t cTime = time(NULL);
+        creator.CreateEvent(SensorInfo("Temprature-1-a", "42C|rising", localtime(&cTime)), &sensor);
     }
     ASSERT_EQUAL(1, events.Size());
 
@@ -40,7 +41,8 @@ BEGIN_TEST(test_event_creator_multi_events_one_sensor)
     {
         EventCreatorMT creator(events);
         for(size_t i = 0; i < 1000; ++i) {
-            creator.CreateEvent(string("42C|rising"), &sensor);
+            time_t cTime = time(NULL);
+            creator.CreateEvent(SensorInfo("Temprature-1-a", "42C|rising", localtime(&cTime)), &sensor);
         }
     }
 
@@ -60,9 +62,10 @@ BEGIN_TEST(test_event_creator_multi_events_multi_sensor)
     {
         EventCreatorMT creator(events);
         for(size_t i = 0; i < 1000; ++i) {
-            creator.CreateEvent(string("42C|rising"), &sensorFirst);
-            creator.CreateEvent(string("42C|rising"), &sensorSecond);
-            creator.CreateEvent(string("42C|rising"), &sensorTheard);
+            time_t cTime = time(NULL);
+            creator.CreateEvent(SensorInfo("Temprature-1-a", "42C|rising", localtime(&cTime)), &sensorFirst);
+            creator.CreateEvent(SensorInfo("Temprature-2-a", "42C|rising", localtime(&cTime)), &sensorSecond);
+            creator.CreateEvent(SensorInfo("Temprature-3-a", "42C|rising", localtime(&cTime)), &sensorTheard);
         }
     }
 
