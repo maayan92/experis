@@ -6,6 +6,9 @@ namespace smart_house {
 
 static const size_t TIME_BUFFER_SIZE = 20;
 
+Protocol::~Protocol()
+{}
+
 void Protocol::Pack(std::string& a_msg, const SensorInfo& a_info)
 {
     a_msg += 1;

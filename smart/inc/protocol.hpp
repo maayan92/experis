@@ -35,6 +35,8 @@ public:
     static void Pack(std::string& a_msg, const SensorInfo& a_info);
     static void UnPack(const std::string& a_msg, SensorInfo& a_info);
 
+private:
+    ~Protocol();
 };
 
 } // smart_house
