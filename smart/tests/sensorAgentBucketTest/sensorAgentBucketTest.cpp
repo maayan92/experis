@@ -38,7 +38,7 @@ BEGIN_TEST(test_sensors_bucket_add_sensor)
     SensorAgentBucket agents;
     agents.AddSensor(deviceId, &sensor);
 
-    ISensorAgent* result = 0;
+    IObserver* result = 0;
     agents.FindSensor(deviceId, result);
     result = dynamic_cast<TemperatureSensor*>(result);
     ASSERT_THAT(result);
@@ -119,7 +119,7 @@ BEGIN_TEST(test_sensors_bucket_find_sensors_add_some_with_threads)
     t2.Join();
 
     for(size_t i = 0; i < 5; ++i) {
-        ISensorAgent* result = 0;
+        IObserver* result = 0;
         agents.FindSensor(deviceId[i], result);
         result = dynamic_cast<TemperatureSensor*>(result);
         ASSERT_THAT(result);

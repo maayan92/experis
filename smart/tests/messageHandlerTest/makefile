@@ -15,7 +15,7 @@ TARGET := messageHandlerTest
 SRC_DIR = ../../src
 SRC_DIR_ADVCPP = ../../../src
 
-MODULES = iSensorAgent iPayload eventTypeLocation location temperatureSensor sensorAgentBucket iEventCreator \
+MODULES = iObserver iPayload eventTypeLocation location temperatureSensor sensorAgentBucket iEventCreator \
 			eventCreatorMT event messageHandler messageSeparator iMessageHandler protocol
 
 MODULES_ADVCPP = mutex waitersConditionVar conditionVariable atomicFlag threadPool tasks

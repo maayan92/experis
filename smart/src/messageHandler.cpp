@@ -22,7 +22,7 @@ void messageHandler::HandleMsg(const char* a_msg)
         SensorInfo info;
         Protocol::UnPack(data, info);
 
-        ISensorAgent* sensor = 0;
+        IObserver* sensor = 0;
         m_sensorAgents.FindSensor(info.m_deviceId, sensor);
         
         if(sensor) {
