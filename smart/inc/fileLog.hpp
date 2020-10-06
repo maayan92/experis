@@ -3,6 +3,7 @@
 
 #include <string>
 #include <fstream>
+#include "mutex.hpp"
 
 #define LOGINFO(a_fileLog, a_msg) a_fileLog.WriteToLog(__FILE__, __FUNCTION__, __LINE__, a_msg)
 
@@ -16,6 +17,7 @@ public:
     void WriteToLog(const char* a_module, const char* a_function, int a_lineNum, const std::string& a_msg);
 
 private:
+    experis::Mutex m_mtx;
     std::ofstream m_logFile;
 };
 

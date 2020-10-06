@@ -1,9 +1,11 @@
 #include "fileLog.hpp"
+#include "mutexLocker.hpp"
 
 namespace experis {
 
 FileLog::FileLog(const std::string& a_fileName)
-: m_logFile(a_fileName.c_str())
+: m_mtx()
+, m_logFile(a_fileName.c_str())
 {}
 
 FileLog::~FileLog()
@@ -13,7 +15,9 @@ FileLog::~FileLog()
 
 void FileLog::WriteToLog(const char* a_module, const char* a_function, int a_lineNum, const std::string& a_msg)
 {
-	char buffer[20];
+	MutexLocker locker(m_mtx);
+    
+    char buffer[20];
 	time_t cuurentTime = time(NULL);
  	strftime(buffer, sizeof(buffer), "%H:%M:%S %d-%m-%Y", localtime(&cuurentTime));
  	
