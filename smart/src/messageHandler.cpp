@@ -26,7 +26,7 @@ void messageHandler::HandleMsg(const char* a_msg)
         m_sensorAgents.FindSensor(info.m_deviceId, sensor);
         
         if(sensor) {
-            m_creator.CreateEvent(info.m_data, sensor);
+            m_creator.CreateEvent(info, sensor);
         }
     }
 }

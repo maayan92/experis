@@ -13,6 +13,7 @@ public:
     //virtual ~ControllerTest() = default;
     
     virtual void Notify(const Event& a_newEvent);
+    virtual void CreateEvent(const SensorInfo& a_info, struct Event& a_event);
     EventTypeLoc GetEventTypeLocation() const;
 
 private:
