@@ -5,19 +5,19 @@
 #include "mutex.hpp"
 #include "typedefs.hpp"
 #include "uncopyable.hpp"
-#include "iSensorAgent.hpp"
+#include "iObserver.hpp"
 #include "shared_ptr.hpp"
 
 namespace smart_house {
 
 class SensorAgentBucket : private experis::Uncopyable {
-    typedef std::map<experis::DeviceId, ISensorAgent*> Agents;
+    typedef std::map<experis::DeviceId, IObserver*> Agents;
 public:
     //SensorAgentBucket() = default;
     //~SensorAgentBucket() = default;
 
-    void AddSensor(const experis::DeviceId& a_deviceId, ISensorAgent* a_sensor);
-    void FindSensor(const experis::DeviceId& a_deviceId, ISensorAgent*& a_sensor);
+    void AddSensor(const experis::DeviceId& a_deviceId, IObserver* a_sensor);
+    void FindSensor(const experis::DeviceId& a_deviceId, IObserver*& a_sensor);
     void RemoveSensor(const experis::DeviceId& a_deviceId);
 
     size_t Size() const;

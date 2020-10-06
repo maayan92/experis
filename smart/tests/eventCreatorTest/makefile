@@ -15,7 +15,7 @@ TARGET := eventCreatorTest
 SRC_DIR = ../../src
 SRC_DIR_ADVCPP = ../../../src
 
-MODULES = iSensorAgent iPayload eventTypeLocation location temperatureSensor \
+MODULES = iObserver iPayload eventTypeLocation location temperatureSensor \
 			sensorAgentBucket iEventCreator eventCreatorMT event
 
 MODULES_ADVCPP = mutex waitersConditionVar conditionVariable atomicFlag threadPool tasks

@@ -8,7 +8,7 @@ using namespace experis;
 namespace smart_house {
 
 struct SetEvent : public IRunnable {
-    SetEvent(const SensorInfo& a_info, ISensorAgent* a_sensor, WaitableQueue<Event>& a_events)
+    SetEvent(const SensorInfo& a_info, IObserver* a_sensor, WaitableQueue<Event>& a_events)
     : m_info(a_info)
     , m_sensor(a_sensor)
     , m_events(a_events)
@@ -22,7 +22,7 @@ struct SetEvent : public IRunnable {
 
 private:
     SensorInfo m_info;
-    ISensorAgent* m_sensor;
+    IObserver* m_sensor;
     WaitableQueue<Event>& m_events;
 };
 
@@ -32,7 +32,7 @@ EventCreatorMT::EventCreatorMT(advcpp::WaitableQueue<Event>& a_events, size_t a_
 {
 }
 
-void EventCreatorMT::CreateEvent(const SensorInfo& a_info, ISensorAgent* a_sensor)
+void EventCreatorMT::CreateEvent(const SensorInfo& a_info, IObserver* a_sensor)
 {
     shared_ptr<SetEvent> setEvent(new SetEvent(a_info, a_sensor, m_events));
     m_threads.Submit(setEvent);

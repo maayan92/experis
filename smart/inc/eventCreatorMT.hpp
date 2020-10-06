@@ -13,7 +13,7 @@ public:
     explicit EventCreatorMT(advcpp::WaitableQueue<Event>& a_events, size_t a_numOfThreads = DEFAULT_NUM_OF_THREADS);
     //~EventCreatorMT() = default;
 
-    virtual void CreateEvent(const SensorInfo& a_info, ISensorAgent* a_sensor);
+    virtual void CreateEvent(const SensorInfo& a_info, IObserver* a_sensor);
 
 private:
     static const size_t DEFAULT_NUM_OF_THREADS = 2;

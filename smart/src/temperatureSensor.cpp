@@ -29,4 +29,9 @@ void TemperatureSensor::CreateEvent(const SensorInfo& a_info, struct Event& a_ev
     a_event.m_timestamp = a_info.m_time;
 }
 
+void TemperatureSensor::Notify(const Event& a_newEvent)
+{
+    (void)a_newEvent;
+}
+
 } // smart_house
