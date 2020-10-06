@@ -17,9 +17,6 @@ struct Notifier {
     void Notify(IObserver* a_observer);
 
 private:
-    void CompressNotifyFailToMsg(const char* a_what, std::stringstream& a_msg);
-
-private:
     experis::Mutex m_mtx;
     Event m_event;
     experis::Atomic<size_t>& m_count;
