@@ -71,7 +71,8 @@ private:
 
 BEGIN_TEST(test_subscribe_N_times_one_event_one_cntlr)
     Subscriptions subscriptions;
-    SubscriptionHandler sub(subscriptions);
+    SensorAgentBucket sensors;
+    SubscriptionHandler sub(subscriptions, sensors);
 
     vector<EventTypeLoc> typeLoc;
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
@@ -96,7 +97,8 @@ BEGIN_TEST(test_subscribe_two_events_one_observer)
     EventTypeLoc typeLocNoise("NOISE_LEVEL", Location("1", "room_2_a"));
 
     Subscriptions subscriptions;
-    SubscriptionHandler sub(subscriptions);
+    SensorAgentBucket sensors;
+    SubscriptionHandler sub(subscriptions, sensors);
     ControllerTest controllers[1] = { ControllerTest(&sub, typeLoc) };
     ASSERT_EQUAL(1, subscriptions.Size());
 
@@ -114,7 +116,8 @@ BEGIN_TEST(test_subscribe_N_events_same_type_M_observer_with_all)
     vector<EventTypeLoc> typeLoc(1, EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
 
     Subscriptions subscriptions;
-    SubscriptionHandler sub(subscriptions);
+    SensorAgentBucket sensors;
+    SubscriptionHandler sub(subscriptions, sensors);
     ControllerTest controllers[] = { ControllerTest(&sub, typeLoc) };
 
     vector<EventTypeLoc> typeLocAllFloors(1, EventTypeLoc("SMOKE_DETECTED", Location("All", "room_1_a")));
@@ -138,7 +141,8 @@ BEGIN_TEST(test_subscribe_N_events_two_observer)
     typeLoc.push_back(EventTypeLoc("ENTRANCE_REQUEST", Location("2", "room_1_a")));
 
     Subscriptions subscriptions;
-    SubscriptionHandler sub(subscriptions);
+    SensorAgentBucket sensors;
+    SubscriptionHandler sub(subscriptions, sensors);
 
     ControllerTest controllers[2] = { ControllerTest(&sub, typeLoc), ControllerTest(&sub, typeLoc) };
 
@@ -155,7 +159,8 @@ END_TEST
 
 BEGIN_TEST(test_find_all_subscribers_one_event)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     vector<EventTypeLoc> typeLocSmoke;
     typeLocSmoke.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
     ControllerTest controllers[] = { ControllerTest(&subHandler, typeLocSmoke)};
@@ -174,7 +179,8 @@ BEGIN_TEST(test_subscribe_size_N_events_two_observer)
     typeLoc.push_back(EventTypeLoc("ENTRANCE_REQUEST", Location("2", "room_1_a")));
 
     Subscriptions subscriptions;
-    SubscriptionHandler sub(subscriptions);
+    SensorAgentBucket sensors;
+    SubscriptionHandler sub(subscriptions, sensors);
 
     ControllerTest controllers[2] = { ControllerTest(&sub, typeLoc), ControllerTest(&sub, typeLoc) };
 
@@ -185,7 +191,8 @@ BEGIN_TEST(test_subscribe_multi_threads_N_events_two_observer)
     vector<EventTypeLoc> typeLoc;
 
     Subscriptions subscriptions;
-    SubscriptionHandler subHandler(subscriptions);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subscriptions, sensors);
     ControllerTest controllers[] = { ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc) };
 
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));

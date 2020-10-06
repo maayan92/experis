@@ -16,7 +16,7 @@ SRC_DIR = ../../src
 SRC_DIR_ADVCPP = ../../../src
 
 MODULES = iObserver iPayload iSubscription controllerTest eventTypeLocation location subscriptionHandler subscriptions \
-			iSubscribersFinder subscribersFinder
+			iSubscribersFinder subscribersFinder sensorAgentBucket
 
 MODULES_ADVCPP = mutex threadPool atomicFlag conditionVariable tasks waitersConditionVar
 
