@@ -4,6 +4,7 @@
 #include "iEventCreator.hpp"
 #include "waitableQueue.hpp"
 #include "threadPool.hpp"
+#include "fileLog.hpp"
 #include "event.hpp"
 
 namespace smart_house {
@@ -21,6 +22,8 @@ private:
 
     advcpp::WaitableQueue<Event>& m_events;
     advcpp::ThreadPool m_threads;
+    experis::FileLog m_eventsLog;
+    experis::FileLog m_createEventFailLog;
 };
 
 } // smart_house

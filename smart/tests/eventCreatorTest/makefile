@@ -16,7 +16,7 @@ SRC_DIR = ../../src
 SRC_DIR_ADVCPP = ../../../src
 
 MODULES = iObserver iPayload eventTypeLocation location temperatureSensor \
-			sensorAgentBucket iEventCreator eventCreatorMT event
+			sensorAgentBucket iEventCreator eventCreatorMT event fileLog
 
 MODULES_ADVCPP = mutex waitersConditionVar conditionVariable atomicFlag threadPool tasks
 
@@ -55,7 +55,7 @@ hell: $(TARGET)
 	./$(TARGET)
 
 clean: 
-	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP)
+	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) *.d *_log.txt
 
 DEPENDS = $(PATH_MODULE:%=%.d)
 DEPENDS_ADVCPP = $(PATH_MODULE_ADVCPP:%=%.d)
