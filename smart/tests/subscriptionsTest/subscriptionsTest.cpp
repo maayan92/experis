@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 
+#include "temperatureSensor.hpp"
 #include "subscriptionHandler.hpp"
 #include "subscribersFinder.hpp"
 #include "controllerTest.hpp"
@@ -210,6 +211,47 @@ BEGIN_TEST(test_subscribe_multi_threads_N_events_two_observer)
     ASSERT_THAT(subscriptions.Size() <= 8);
 END_TEST
 
+BEGIN_TEST(test_subscribe_one_sensor)
+    vector<EventTypeLoc> typeLoc;
+
+    Subscriptions subscriptions;
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subscriptions, sensors);
+
+    Device device = { "Temprature-1-a", EventTypeLoc("ambient_temp", Location("1", "room_1_a")), string(), "units: F; lower: -5; upper:55; period: 12" };
+    TemperatureSensor sensorTemp(device);
+
+    subHandler.SubscribeSensor("Temprature-1-a", &sensorTemp);
+    ASSERT_EQUAL(1, sensors.Size());
+
+    IObserver* result;
+    sensors.FindSensor("Temprature-1-a", result);
+    ASSERT_EQUAL(result, &sensorTemp);
+END_TEST
+
+BEGIN_TEST(test_subscribe_one_sensor_N_times_subscribe)
+    vector<EventTypeLoc> typeLoc;
+
+    Subscriptions subscriptions;
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subscriptions, sensors);
+
+    Device device = { "Temprature-1-a", EventTypeLoc("ambient_temp", Location("1", "room_1_a")), string(), "units: F; lower: -5; upper:55; period: 12" };
+    TemperatureSensor sensorTemp(device);
+
+    subHandler.SubscribeSensor("Temprature-1-a", &sensorTemp);
+    subHandler.SubscribeSensor("Temprature-1-a", &sensorTemp);
+    subHandler.SubscribeSensor("Temprature-1-a", &sensorTemp);
+    subHandler.SubscribeSensor("Temprature-1-a", &sensorTemp);
+    subHandler.SubscribeSensor("Temprature-1-a", &sensorTemp);
+    subHandler.SubscribeSensor("Temprature-1-a", &sensorTemp);
+    ASSERT_EQUAL(1, sensors.Size());
+
+    IObserver* result;
+    sensors.FindSensor("Temprature-1-a", result);
+    ASSERT_EQUAL(result, &sensorTemp);
+END_TEST
+
 BEGIN_SUITE(test_subscriptions)
     TEST(test_subscribe_N_times_one_event_one_cntlr)
     TEST(test_subscribe_two_events_one_observer)
@@ -220,4 +262,7 @@ BEGIN_SUITE(test_subscriptions)
     TEST(test_subscribe_size_N_events_two_observer)
 
     TEST(test_subscribe_multi_threads_N_events_two_observer)
+
+    TEST(test_subscribe_one_sensor)
+    TEST(test_subscribe_one_sensor_N_times_subscribe)
 END_SUITE
