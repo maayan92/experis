@@ -15,8 +15,8 @@ public:
     virtual void Subscribe(const EventTypeLoc& a_eventTypeLocation, IObserver* a_observer);
     virtual void UnSubscribe(const EventTypeLoc& a_eventTypeLocation, IObserver* a_observer);
 
-    virtual void Subscribe(const experis::DeviceId& a_deviceId, IObserver* a_observer);
-    virtual void UnSubscribe(const experis::DeviceId& a_deviceId);
+    virtual void SubscribeSensor(const experis::DeviceId& a_deviceId, IObserver* a_observer);
+    virtual void UnSubscribeSensor(const experis::DeviceId& a_deviceId);
 
 private:
     Subscriptions& m_subscriptions;

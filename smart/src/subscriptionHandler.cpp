@@ -18,12 +18,12 @@ void SubscriptionHandler::UnSubscribe(const EventTypeLoc& a_eventTypeLocation, I
     m_subscriptions.Remove(a_eventTypeLocation, a_observer);
 }
 
-void SubscriptionHandler::Subscribe(const experis::DeviceId& a_deviceId, IObserver* a_observer)
+void SubscriptionHandler::SubscribeSensor(const experis::DeviceId& a_deviceId, IObserver* a_observer)
 {
     m_sensors.AddSensor(a_deviceId, a_observer);
 }
 
-void SubscriptionHandler::UnSubscribe(const experis::DeviceId& a_deviceId)
+void SubscriptionHandler::UnSubscribeSensor(const experis::DeviceId& a_deviceId)
 {
     m_sensors.RemoveSensor(a_deviceId);
 }
