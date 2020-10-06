@@ -21,9 +21,9 @@ private:
     static const size_t MAX_NUM_OF_THREADS = 8;
 
     advcpp::WaitableQueue<Event>& m_events;
-    advcpp::ThreadPool m_threads;
     experis::FileLog m_eventsLog;
     experis::FileLog m_createEventFailLog;
+    advcpp::ThreadPool m_threads;
 };
 
 } // smart_house
