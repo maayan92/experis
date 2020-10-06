@@ -1,6 +1,7 @@
 #ifndef EVENT_HPP
 #define EVENT_HPP
 
+#include <ostream>
 #include <ctime>
 #include "iPayload.hpp"
 #include "eventTypeLoc.hpp"
@@ -20,6 +21,8 @@ struct Event {
 private:
     static const EventTypeLoc emptyTypeLoc;
 };
+
+std::ostream& operator<<(std::ostream& a_os, Event& a_event);
 
 } // smart_house
 
