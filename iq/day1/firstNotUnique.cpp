@@ -40,7 +40,7 @@ static void FindRange(int* a_arr, size_t a_size, int& a_max, int& a_min)
     a_min = min;
 }
 
-static void CountArrValues(int *a_arr, size_t a_size, vector<int> a_count, int a_min)
+static void CountArrValues(int *a_arr, size_t a_size, vector<int>& a_count, int a_min)
 {
     for(size_t i = 0; i < a_size; ++i) {
         ++a_count[a_arr[i] - a_min];
@@ -59,8 +59,8 @@ bool FindElementOOneN(int* a_arr, size_t a_size, int& a_result)
     CountArrValues(a_arr, a_size, count, min);
 
     for(size_t i = 0; i < a_size - 1; ++i) {
-        if(count[i] > 1) {
-            a_result = i + min;
+        if(count[a_arr[i] - min] > 1) {
+            a_result = a_arr[i];
             return true;
         }
     }
