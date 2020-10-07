@@ -6,13 +6,13 @@ CPPFLAGS += -MMD -MP
 CFLAGS += -Werror -Wall -Wextra -pedantic -ansi
 CFLAGS += -g
 
-CXXFLAGS = $(CFLAGS) -std=c++03
+CXXFLAGS = $(CFLAGS) -std=c++03 -std=gnu++11
 
 LDLIBS := -lpthread
 
 TARGET := day2Test 
 
-MODULES = findSpecificElement
+MODULES = findSpecificElement firstDuplicateT
 
 OBJS = $(MODULES:%=%.o)
 
