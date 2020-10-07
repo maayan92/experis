@@ -4,7 +4,7 @@ using namespace std;
 
 namespace iq {
 
-bool FindElementODoubleN(int* a_arr, size_t a_size, int& a_result)
+bool FindElementODoubleN(const int* a_arr, size_t a_size, int& a_result)
 {
     if(!a_arr) {
         return false;
@@ -22,7 +22,7 @@ bool FindElementODoubleN(int* a_arr, size_t a_size, int& a_result)
     return false;
 }
 
-static void FindRange(int* a_arr, size_t a_size, int& a_max, int& a_min)
+static void FindRange(const int* a_arr, size_t a_size, int& a_max, int& a_min)
 {
     int max = a_arr[0];
     int min = a_arr[0];
@@ -40,14 +40,14 @@ static void FindRange(int* a_arr, size_t a_size, int& a_max, int& a_min)
     a_min = min;
 }
 
-static void CountArrValues(int *a_arr, size_t a_size, vector<int>& a_count, int a_min)
+static void CountArrValues(const int *a_arr, size_t a_size, vector<int>& a_count, int a_min)
 {
     for(size_t i = 0; i < a_size; ++i) {
         ++a_count[a_arr[i] - a_min];
     }
 }
 
-bool FindElementOOneN(int* a_arr, size_t a_size, int& a_result)
+bool FindElementOOneN(const int* a_arr, size_t a_size, int& a_result)
 {
     if(!a_arr) {
         return false;

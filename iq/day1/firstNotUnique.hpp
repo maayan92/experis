@@ -6,10 +6,10 @@
 namespace iq {
 
 // find the element in O(n^2)
-bool FindElementODoubleN(int* a_arr, size_t a_size, int& a_result);
+bool FindElementODoubleN(const int* a_arr, size_t a_size, int& a_result);
 
 // find the element in O(n)
-bool FindElementOOneN(int* a_arr, size_t a_size, int& a_result);
+bool FindElementOOneN(const int* a_arr, size_t a_size, int& a_result);
 
 } // iq
 
