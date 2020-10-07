@@ -3,7 +3,7 @@ CXX := g++
 
 CPPFLAGS := -I. -I../../tests/inc/
 CPPFLAGS += -MMD -MP
-CFLAGS += -Werror -Wall -Wextra
+CFLAGS += -Werror -Wall -Wextra -pedantic -ansi
 CFLAGS += -g
 
 CXXFLAGS = $(CFLAGS) -std=c++03
