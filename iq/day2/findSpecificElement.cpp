@@ -4,6 +4,10 @@ namespace iq {
 
 bool DoesContainElement(int* a_numbers, size_t a_size, int a_numToFind)
 {
+    if(!a_numbers || 0 == a_size) {
+        return false;
+    }   
+
     if(a_numbers[a_size - 1] == a_numToFind) {
         return true;
     }
