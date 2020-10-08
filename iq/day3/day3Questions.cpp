@@ -5,6 +5,8 @@ using namespace std;
 
 namespace iq {
 
+// first question:
+
 bool NaiveSmallestPositiveNotPresent(const int* a_numbers, size_t a_size, int& a_result)
 {
     if(!a_numbers || !a_size) {
@@ -71,5 +73,69 @@ bool SmallestPositiveNotPresent(const int* a_numbers, size_t a_size, int& a_resu
     a_result = FindResult(isExist);
     return true;
 }
+
+// second question:
+
+typedef list<unsigned char>::iterator Itr;
+
+static void SetValue(int& a_carry, Itr& a_itr, unsigned char a_value)
+{
+    if(a_value > '9') {
+        *a_itr = a_value - 10;
+        a_carry = 1; 
+    }
+    else {
+        *a_itr = a_value;
+        a_carry = 0;
+    }
+    ++a_itr;
+}
+
+static void SetTheRest(list<unsigned char>& a_number, int a_carry, Itr& a_itr)
+{
+    auto end = a_number.end();
+
+    while(0 != a_carry && a_itr != end) {
+        auto add = *a_itr + a_carry;
+        SetValue(a_carry, a_itr, add);
+    }
+
+    if(1 == a_carry) {
+        a_number.push_back('1');
+    }
+}
+
+static void AddLists(list<unsigned char>& a_firstNum, const list<unsigned char>& a_secondNum)
+{
+    auto carry = 0;
+
+    auto itrFirst = a_firstNum.begin();
+    auto itrSecond = a_secondNum.begin();
+
+    auto endSecond = a_secondNum.end();
+    while(itrSecond != endSecond) {
+        auto add = *itrFirst + *itrSecond++ + carry - '0';
+        SetValue(carry, itrFirst, add);
+    }
+
+    SetTheRest(a_firstNum, carry, itrFirst);
+}
+
+list<unsigned char> AddListNumbers(const list<unsigned char>& a_firstNum, const list<unsigned char>& a_secondNum)
+{
+    list<unsigned char> result;
+
+    if(a_firstNum.size() > a_secondNum.size()) {
+        result = a_firstNum;
+        AddLists(result, a_secondNum);
+    }
+    else {
+        result = a_secondNum;
+        AddLists(result, a_firstNum);
+    }
+
+    return result;
+}
+
 
 } // iq
