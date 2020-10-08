@@ -42,7 +42,7 @@ BEGIN_TEST(test_add_two_list_numbers)
     //number = 78592
     list<unsigned char> second{'2', '9', '5', '8', '7'};
 
-    list<unsigned char> result = AddListNumbers(first, second);
+    list<unsigned char> result = first + second;
 
     //number = 90937
     list<unsigned char> wantedResult{'7', '3', '9', '0', '9'};
@@ -55,7 +55,7 @@ BEGIN_TEST(test_add_two_list_numbers_different_size)
     //number = 578592
     list<unsigned char> second{'2', '9', '5', '8', '7', '5'};
 
-    list<unsigned char> result = AddListNumbers(first, second);
+    list<unsigned char> result = first + second;
 
     //number = 90937
     list<unsigned char> wantedResult{'7', '3', '9', '0', '9', '5'};
@@ -68,7 +68,7 @@ BEGIN_TEST(test_add_two_list_numbers_result_with_bigger_size)
     //number = 78592
     list<unsigned char> second{'2', '9', '5', '8', '7'};
 
-    list<unsigned char> result = AddListNumbers(first, second);
+    list<unsigned char> result = first + second;
 
     //number = 137337
     list<unsigned char> wantedResult{'7', '3', '3', '7', '3', '1'};
@@ -81,7 +81,7 @@ BEGIN_TEST(test_add_two_list_numbers_different_size_and_result_bigger)
     //number = 99978592
     list<unsigned char> second{'2', '9', '5', '8', '7', '9', '9', '9'};
 
-    list<unsigned char> result = AddListNumbers(first, second);
+    list<unsigned char> result = first + second;
 
     //number = 100037337
     list<unsigned char> wantedResult{'7', '3', '3', '7', '3', '0', '0', '0', '1'};

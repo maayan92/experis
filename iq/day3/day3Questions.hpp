@@ -13,7 +13,7 @@ bool NaiveSmallestPositiveNotPresent(const int* a_numbers, size_t a_size, int& a
 bool SmallestPositiveNotPresent(const int* a_numbers, size_t a_size, int& a_result);
 
 // second question:
-std::list<unsigned char> AddListNumbers(const std::list<unsigned char>& a_firstNum, const std::list<unsigned char>& a_secondNum);
+std::list<unsigned char> operator+(const std::list<unsigned char>& a_firstNum, const std::list<unsigned char>& a_secondNum);
 
 } // iq
 

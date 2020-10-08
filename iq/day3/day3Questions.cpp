@@ -121,7 +121,7 @@ static void AddLists(list<unsigned char>& a_firstNum, const list<unsigned char>&
     SetTheRest(a_firstNum, carry, itrFirst);
 }
 
-list<unsigned char> AddListNumbers(const list<unsigned char>& a_firstNum, const list<unsigned char>& a_secondNum)
+list<unsigned char> operator+(const list<unsigned char>& a_firstNum, const list<unsigned char>& a_secondNum)
 {
     list<unsigned char> result;
 
