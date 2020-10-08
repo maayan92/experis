@@ -3,13 +3,7 @@ using namespace std;
 using namespace tr1;
 
 namespace iq {
-/*
-template<typename Container>
-bool Dummy<Container>::IsEqual(const typename Container::value_type& a_left, const typename Container::value_type& a_right)
-{
-    return a_left == a_right;
-}
-*/
+
 template<typename Container, typename HashFunc, typename Equal>
 bool FindDuplicateElement(const Container& a_container, typename Container::value_type& a_result)
 {
