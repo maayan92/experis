@@ -17,6 +17,8 @@ std::list<unsigned char> AddListNumbers(const std::list<unsigned char>& a_firstN
 
 std::list<unsigned char> AddListNumbersTailLSD(std::list<unsigned char>& a_firstNum, std::list<unsigned char>& a_secondNum);
 
+std::list<unsigned char> AddListNumbersReverse(const std::list<unsigned char>& a_firstNum, const std::list<unsigned char>& a_secondNum);
+
 } // iq
 
 #endif

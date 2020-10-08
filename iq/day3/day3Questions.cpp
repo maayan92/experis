@@ -151,4 +151,65 @@ std::list<unsigned char> AddListNumbersTailLSD(std::list<unsigned char>& a_first
     return result;
 }
 
+typedef list<unsigned char>::reverse_iterator RItr;
+
+static void SetValueReverse(int& a_carry, RItr& a_itr, unsigned char a_value)
+{
+    if(a_value > '9') {
+        *a_itr = a_value - 10;
+        a_carry = 1; 
+    }
+    else {
+        *a_itr = a_value;
+        a_carry = 0;
+    }
+    ++a_itr;
+}
+
+static void SetTheRestReverse(list<unsigned char>& a_number, int a_carry, RItr& a_itr)
+{
+    auto end = a_number.rend();
+
+    while(0 != a_carry && a_itr != end) {
+        auto add = *a_itr + a_carry;
+        SetValueReverse(a_carry, a_itr, add);
+    }
+
+    if(1 == a_carry) {
+        a_number.push_front('1');
+    }
+}
+
+static void AddListsReverse(list<unsigned char>& a_firstNum, const list<unsigned char>& a_secondNum)
+{
+    auto carry = 0;
+
+    auto itrFirst = a_firstNum.rbegin();
+    auto itrSecond = a_secondNum.rbegin();
+
+    auto endSecond = a_secondNum.rend();
+    while(itrSecond != endSecond) {
+        auto add = *itrFirst + *itrSecond++ + carry - '0';
+        SetValueReverse(carry, itrFirst, add);
+    }
+
+    SetTheRestReverse(a_firstNum, carry, itrFirst);
+}
+
+list<unsigned char> AddListNumbersReverse(const list<unsigned char>& a_firstNum, const list<unsigned char>& a_secondNum)
+{
+    list<unsigned char> result;
+
+    if(a_firstNum.size() > a_secondNum.size()) {
+        result = a_firstNum;
+        AddListsReverse(result, a_secondNum);
+    }
+    else {
+        result = a_secondNum;
+        AddListsReverse(result, a_firstNum);
+    }
+
+    return result;
+}
+
 } // iq
