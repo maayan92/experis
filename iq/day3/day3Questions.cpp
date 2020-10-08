@@ -2,8 +2,12 @@
 
 namespace iq {
 
-int NaiveSmallestPositiveNotPresent(const int* a_numbers, size_t a_size)
+bool NaiveSmallestPositiveNotPresent(const int* a_numbers, size_t a_size, int& a_result)
 {
+    if(!a_numbers || !a_size) {
+        return false;
+    }
+    
     int smallest = 0;
     bool newSmallFound = true;
 
@@ -18,7 +22,8 @@ int NaiveSmallestPositiveNotPresent(const int* a_numbers, size_t a_size)
         }
     }
 
-    return smallest;
+    a_result = smallest;
+    return true;;
 }
 
 } // iq

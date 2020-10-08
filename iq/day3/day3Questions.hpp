@@ -5,7 +5,7 @@
 
 namespace iq {
 
-int NaiveSmallestPositiveNotPresent(const int* a_numbers, size_t a_size);
+bool NaiveSmallestPositiveNotPresent(const int* a_numbers, size_t a_size, int& a_result);
 
 } // iq
 
