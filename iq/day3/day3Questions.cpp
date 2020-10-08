@@ -121,7 +121,7 @@ static void AddLists(list<unsigned char>& a_firstNum, const list<unsigned char>&
     SetTheRest(a_firstNum, carry, itrFirst);
 }
 
-list<unsigned char> operator+(const list<unsigned char>& a_firstNum, const list<unsigned char>& a_secondNum)
+list<unsigned char> AddListNumbers(const list<unsigned char>& a_firstNum, const list<unsigned char>& a_secondNum)
 {
     list<unsigned char> result;
 
@@ -137,5 +137,18 @@ list<unsigned char> operator+(const list<unsigned char>& a_firstNum, const list<
     return result;
 }
 
+std::list<unsigned char> AddListNumbersTailLSD(std::list<unsigned char>& a_firstNum, std::list<unsigned char>& a_secondNum)
+{
+    a_firstNum.reverse();
+    a_secondNum.reverse();
+
+    std::list<unsigned char> result = AddListNumbers(a_firstNum, a_secondNum);
+
+    a_firstNum.reverse();
+    a_secondNum.reverse();
+
+    result.reverse();
+    return result;
+}
 
 } // iq

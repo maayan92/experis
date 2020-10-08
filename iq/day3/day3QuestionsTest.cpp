@@ -42,7 +42,7 @@ BEGIN_TEST(test_add_two_list_numbers)
     //number = 78592
     list<unsigned char> second{'2', '9', '5', '8', '7'};
 
-    list<unsigned char> result = first + second;
+    list<unsigned char> result = AddListNumbers(first, second);
 
     //number = 90937
     list<unsigned char> wantedResult{'7', '3', '9', '0', '9'};
@@ -55,7 +55,7 @@ BEGIN_TEST(test_add_two_list_numbers_different_size)
     //number = 578592
     list<unsigned char> second{'2', '9', '5', '8', '7', '5'};
 
-    list<unsigned char> result = first + second;
+    list<unsigned char> result = AddListNumbers(first, second);
 
     //number = 90937
     list<unsigned char> wantedResult{'7', '3', '9', '0', '9', '5'};
@@ -68,7 +68,7 @@ BEGIN_TEST(test_add_two_list_numbers_result_with_bigger_size)
     //number = 78592
     list<unsigned char> second{'2', '9', '5', '8', '7'};
 
-    list<unsigned char> result = first + second;
+    list<unsigned char> result = AddListNumbers(first, second);
 
     //number = 137337
     list<unsigned char> wantedResult{'7', '3', '3', '7', '3', '1'};
@@ -81,10 +81,62 @@ BEGIN_TEST(test_add_two_list_numbers_different_size_and_result_bigger)
     //number = 99978592
     list<unsigned char> second{'2', '9', '5', '8', '7', '9', '9', '9'};
 
-    list<unsigned char> result = first + second;
+    list<unsigned char> result = AddListNumbers(first, second);
 
     //number = 100037337
     list<unsigned char> wantedResult{'7', '3', '3', '7', '3', '0', '0', '0', '1'};
+    ASSERT_THAT(result == wantedResult);
+END_TEST
+
+BEGIN_TEST(test_add_two_list_numbers_reverse)
+    //number = 12345
+    list<unsigned char> first{'1', '2', '3', '4', '5'};
+    //number = 78592
+    list<unsigned char> second{'7', '8', '5', '9', '2'};
+
+    list<unsigned char> result = AddListNumbersTailLSD(first, second);
+
+    //number = 90937
+    list<unsigned char> wantedResult{'9', '0', '9', '3', '7'};
+    ASSERT_THAT(result == wantedResult);
+END_TEST
+
+BEGIN_TEST(test_add_two_list_numbers_different_size_reverse)
+    //number = 12345
+    list<unsigned char> first{'1', '2', '3', '4', '5'};
+    //number = 578592
+    list<unsigned char> second{'5', '7', '8', '5', '9', '2'};
+
+    list<unsigned char> result = AddListNumbersTailLSD(first, second);
+
+    //number = 90937
+    list<unsigned char> wantedResult{'5', '9', '0', '9', '3', '7'};
+    ASSERT_THAT(result == wantedResult);
+END_TEST
+
+BEGIN_TEST(test_add_two_list_numbers_result_with_bigger_size_reverse)
+    //number = 58745
+    list<unsigned char> first{'5', '8', '7', '4', '5'};
+    //number = 78592
+    list<unsigned char> second{'7', '8', '5', '9', '2'};
+
+    list<unsigned char> result = AddListNumbersTailLSD(first, second);
+
+    //number = 137337
+    list<unsigned char> wantedResult{'1', '3', '7', '3', '3', '7'};
+    ASSERT_THAT(result == wantedResult);
+END_TEST
+
+BEGIN_TEST(test_add_two_list_numbers_different_size_and_result_bigger_reverse)
+    //number = 58745
+    list<unsigned char> first{'5', '8', '7', '4', '5'};
+    //number = 99978592
+    list<unsigned char> second{'9', '9', '9', '7', '8', '5', '9', '2'};
+
+    list<unsigned char> result = AddListNumbersTailLSD(first, second);
+
+    //number = 100037337
+    list<unsigned char> wantedResult{'1', '0', '0', '0', '3', '7', '3', '3', '7'};
     ASSERT_THAT(result == wantedResult);
 END_TEST
 
@@ -99,4 +151,9 @@ BEGIN_SUITE(test_day_3)
     TEST(test_add_two_list_numbers_different_size)
     TEST(test_add_two_list_numbers_result_with_bigger_size)
     TEST(test_add_two_list_numbers_different_size_and_result_bigger)
+
+    TEST(test_add_two_list_numbers_reverse)
+    TEST(test_add_two_list_numbers_different_size_reverse)
+    TEST(test_add_two_list_numbers_result_with_bigger_size_reverse)
+    TEST(test_add_two_list_numbers_different_size_and_result_bigger_reverse)
 END_SUITE
