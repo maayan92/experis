@@ -76,6 +76,8 @@ bool SmallestPositiveNotPresent(const int* a_numbers, size_t a_size, int& a_resu
 
 // second question:
 
+// least significant digit at the head
+
 typedef list<unsigned char>::iterator Itr;
 
 static void SetValue(int& a_carry, Itr& a_itr, unsigned char a_value)
@@ -137,6 +139,8 @@ list<unsigned char> AddListNumbers(const list<unsigned char>& a_firstNum, const 
     return result;
 }
 
+// least significant digit at the tail, using reverse
+
 std::list<unsigned char> AddListNumbersTailLSD(std::list<unsigned char>& a_firstNum, std::list<unsigned char>& a_secondNum)
 {
     a_firstNum.reverse();
@@ -150,6 +154,8 @@ std::list<unsigned char> AddListNumbersTailLSD(std::list<unsigned char>& a_first
     result.reverse();
     return result;
 }
+
+// least significant digit at the tail
 
 typedef list<unsigned char>::reverse_iterator RItr;
 
