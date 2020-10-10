@@ -1,7 +1,7 @@
 CC := $(CXX)
 CXX := g++
 
-CPPFLAGS := -I. -I../../../tests/inc/
+CPPFLAGS := -I. -I../../../tests/inc/ -I../../../inc/advcpp/  -I../../../inc/
 CPPFLAGS += -MMD -MP
 CFLAGS += -Werror -Wall -Wextra -pedantic -ansi
 CFLAGS += -g
@@ -12,9 +12,15 @@ LDLIBS := -lpthread
 
 TARGET := bitOperationsTest
 
+SRC_DIR_ADVCPP = ../../../src
+
 MODULES = bitOperations
+MODULES_ADVCPP = atomicFlag
+
+PATH_MODULE_ADVCPP = $(MODULES_ADVCPP:%=$(SRC_DIR_ADVCPP)/%)
 
 OBJS = $(MODULES:%=%.o)
+OBJS += $(PATH_MODULE_ADVCPP:%=%.o)
 
 $(TARGET): $(OBJS)
 

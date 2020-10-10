@@ -85,4 +85,48 @@ bool Majority(int a_number)
     return (countOn > maxBits/2);
 }
 
+bool MajorityUsingLut(int a_number)
+{
+    LutCount& lut = advcpp::Singleton<LutCount>::Instance();
+    
+    size_t countOn = 0;
+    size_t maxBytes = sizeof(a_number);
+    for(size_t i = 0; i < maxBytes; ++i) {
+        countOn += lut.GetNumberOfOnBits((a_number & 0xff));
+
+        a_number >>= BIT;
+    }
+
+    return (countOn > maxBytes*BIT/2);
+}
+
+LutCount::LutCount()
+: m_lut(CHAR_BITS)
+{
+    buildLut();
+}
+
+static size_t CountBits(unsigned char a_number)
+{
+    size_t count = 0;
+
+    for(size_t i = 0; i < sizeof(a_number)*BIT; ++i) {
+        count += (a_number >> i) & 1;
+    }
+
+    return count;
+}
+
+void LutCount::buildLut()
+{
+    for(size_t i = 0; i < CHAR_BITS; ++i) {
+        m_lut[i] = CountBits(i);
+    }
+}
+
+size_t LutCount::GetNumberOfOnBits(unsigned char a_number)
+{
+    return m_lut[a_number];
+}
+
 } // iq
