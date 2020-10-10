@@ -7,6 +7,8 @@ void ReverseBits(int& a_number);
 
 void SwapAdjacentBits(long& a_number);
 
+bool Majority(int a_number);
+
 } // iq
 
 #endif

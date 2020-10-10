@@ -52,7 +52,7 @@ void SwapAdjacentBits(long& a_number)
         return;
     }
 
-    size_t numOfBits = NumberOfBitToReverse(a_number);
+    size_t numOfBits = NumberOfBitToReverse(a_number); ///// problem
 
     for(size_t i = 0; i < numOfBits; i+=2) {
         long bitRight = (1 << i) & a_number;
@@ -72,6 +72,19 @@ void SwapAdjacentBits(long& a_number)
             a_number &= ~(1 << i);
         }
     }
+}
+
+static const size_t BIT = 8;
+
+bool Majority(int a_number)
+{
+    size_t countOn = 0;
+    size_t maxBits = sizeof(a_number)*BIT;
+    for(size_t i = 0; i < maxBits; ++i) {
+        countOn += ((a_number >> i) & 1);
+    }
+
+    return (countOn > maxBits/2);
 }
 
 } // iq
