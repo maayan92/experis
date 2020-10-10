@@ -5,6 +5,8 @@ namespace iq {
 
 void ReverseBits(int& a_number);
 
+void SwapAdjacentBits(long& a_number);
+
 } // iq
 
 #endif

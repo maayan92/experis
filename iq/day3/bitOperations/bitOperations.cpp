@@ -14,6 +14,8 @@ static size_t NumberOfBitToReverse(int a_number)
     }
 
     --numOfBits;
+
+    return numOfBits;
 }
 
 void ReverseBits(int& a_number)
@@ -37,6 +39,34 @@ void ReverseBits(int& a_number)
 
         if(bitLeft) {
             a_number |= (bitLeft >> (j - i));
+        }
+        else {
+            a_number &= ~(1 << i);
+        }
+    }
+}
+
+void SwapAdjacentBits(long& a_number)
+{
+    if(!a_number) {
+        return;
+    }
+
+    size_t numOfBits = NumberOfBitToReverse(a_number);
+
+    for(size_t i = 0; i < numOfBits; i+=2) {
+        long bitRight = (1 << i) & a_number;
+        long bitLeft = (1 << (i + 1)) & a_number;
+
+        if(bitRight) {
+            a_number |= (bitRight << 1);
+        }
+        else {
+            a_number &= ~(1 << (i + 1));
+        }
+
+        if(bitLeft) {
+            a_number |= (bitLeft >> 1);
         }
         else {
             a_number &= ~(1 << i);
