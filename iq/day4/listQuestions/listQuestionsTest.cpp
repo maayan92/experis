@@ -51,7 +51,7 @@ BEGIN_TEST(test_list_has_loop_false)
     Node<int> node1(4, &node2);
     Node<int> head(1, &node1);
 
-    ASSERT_THAT(HasLoop(&head));
+    ASSERT_THAT(!HasLoop(&head));
 END_TEST
 
 BEGIN_SUITE(test_list_questions)

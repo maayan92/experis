@@ -31,7 +31,11 @@ static bool HasLoopR(Node<int> *a_fastPtr, Node<int> *a_slowPtr)
 
 bool HasLoop(Node<int>* a_head)
 {
-    return HasLoopR(a_head, a_head);
+    if(!a_head || !a_head->m_next) {
+        return false;
+    }
+
+    return HasLoopR(a_head->m_next->m_next, a_head->m_next);
 }
 
 } // iq
