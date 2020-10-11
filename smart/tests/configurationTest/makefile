@@ -14,7 +14,7 @@ TARGET := configurationTest
 
 SRC_DIR = ../../src
 
-MODULES = configuration parser eventTypeLocation location iParser
+MODULES = configuration parser eventTypeLocation location iParser iConfiguration
 
 PATH_MODULE = $(MODULES:%=$(SRC_DIR)/%)
 

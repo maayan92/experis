@@ -4,16 +4,17 @@
 #include <fstream>
 #include <vector>
 #include "iParser.hpp"
+#include "iConfiguration.hpp"
 
 namespace smart_house {
 
-class Configuration {
+class Configuration : public IConfiguration {
 public:
     Configuration(IParser& a_parser);
     //~Configuration();
 
-    void ReadFile(std::ifstream& a_file);
-    std::vector<Device> GetDevices() const;
+    virtual void ReadFile(std::ifstream& a_file);
+    virtual void GetDevices(std::vector<Device>& a_devices) const;
 
 private:
     std::vector<Device> m_devices;

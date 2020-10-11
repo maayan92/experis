@@ -28,9 +28,9 @@ void Configuration::ReadFile(ifstream& a_file)
     }
 }
 
-vector<Device> Configuration::GetDevices() const
+void Configuration::GetDevices(std::vector<Device>& a_devices) const
 {
-    return m_devices;
+    a_devices = m_devices;
 }
 
 } // smart_house

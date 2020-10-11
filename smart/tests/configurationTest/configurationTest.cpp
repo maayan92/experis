@@ -55,7 +55,8 @@ BEGIN_TEST(test_configuration_from_file)
     devices.push_back(device5);
     devices.push_back(device6);
 
-    vector<Device> result = config.GetDevices();
+    vector<Device> result;
+    config.GetDevices(result);
 
     ASSERT_THAT(devices[0] == result[0]);
     ASSERT_THAT(devices[1] == result[1]);
