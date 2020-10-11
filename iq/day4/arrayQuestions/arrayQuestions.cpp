@@ -1,4 +1,5 @@
 #include "arrayQuestions.hpp"
+#include<bits/stdc++.h> 
 
 namespace iq {
 
@@ -39,6 +40,32 @@ void SetImportantValuesSorted(int* a_someImportant, int a_firstSize, int* a_allI
     while(secondInx >= 0) {
         a_someImportant[i--] = a_allImportant[secondInx--];
     }
+}
+
+// Q3:
+
+void SetMyShadow(int* a_numbers, size_t a_size)
+{
+    if(!a_numbers || !a_size) {
+        return;
+    }
+
+    int lastVal = a_numbers[a_size - 1];
+    a_numbers[a_size - 1] = INT_MAX;
+
+    for (size_t i = 0; i < a_size - 1; i++) {
+        size_t j = i + 1;
+        for(; a_numbers[i] >= a_numbers[j]; ++j)
+            ;
+
+        if(j < (a_size - 1)) {
+            a_numbers[i] = a_numbers[j];
+        }
+        else if(a_numbers[i] < lastVal) {
+            a_numbers[i] = lastVal;
+        }
+    }
+    a_numbers[a_size - 1] = lastVal;
 }
 
 } // iq

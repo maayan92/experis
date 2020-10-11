@@ -9,6 +9,8 @@ void SetImportantValues(int* a_someImportant, size_t a_firstSize, int* a_allImpo
 
 void SetImportantValuesSorted(int* a_someImportant, int a_firstSize, int* a_allImportant, int a_secondSize);
 
+void SetMyShadow(int* a_numbers, size_t a_size);
+
 } // iq
 
 #endif

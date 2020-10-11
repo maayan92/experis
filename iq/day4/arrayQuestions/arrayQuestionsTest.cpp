@@ -51,9 +51,23 @@ BEGIN_TEST(test_array_questions_set_important_values_sorted_second_small_values)
     ASSERT_EQUAL(wantedResult[0], first[0]);
 END_TEST
 
+BEGIN_TEST(test_array_questions_set_my_shadow)
+    int numbers[] = {2, 3, 7, 1, 5, 6, 9, 2, 5, 3, 1};
+
+    int wantedResult[] = {3, 7, 9, 5, 6, 9, 9, 5, 5, 3, 1};
+    
+    SetMyShadow(numbers, sizeof(numbers)/sizeof(numbers[0]));
+
+    for(size_t i = 0; i < 11; ++i) {
+        ASSERT_EQUAL(wantedResult[i], numbers[i]);
+    }
+END_TEST
+
 BEGIN_SUITE(test_array_questions)
     TEST(test_array_questions_set_important_values)
 
     TEST(test_array_questions_set_important_values_sorted)
     TEST(test_array_questions_set_important_values_sorted_second_small_values)
+
+    TEST(test_array_questions_set_my_shadow)
 END_SUITE
