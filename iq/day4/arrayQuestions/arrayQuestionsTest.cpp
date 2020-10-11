@@ -10,13 +10,10 @@ BEGIN_TEST(test_array_questions_set_important_values)
     SetImportantValues(first, sizeof(first)/sizeof(first[0]), second, sizeof(second)/sizeof(second[0]));
 
     int wantedResult[] = {-10, -2, 5, 11, 3, 9, 20};
-    ASSERT_EQUAL(wantedResult[0], first[0]);
-    ASSERT_EQUAL(wantedResult[1], first[1]);
-    ASSERT_EQUAL(wantedResult[2], first[2]);
-    ASSERT_EQUAL(wantedResult[3], first[3]);
-    ASSERT_EQUAL(wantedResult[4], first[4]);
-    ASSERT_EQUAL(wantedResult[5], first[5]);
-    ASSERT_EQUAL(wantedResult[6], first[6]);
+
+    for(size_t i = 0; i < 7; ++i) {
+        ASSERT_EQUAL(wantedResult[i], first[i]);
+    }
 END_TEST
 
 BEGIN_TEST(test_array_questions_set_important_values_sorted)
@@ -26,13 +23,10 @@ BEGIN_TEST(test_array_questions_set_important_values_sorted)
     SetImportantValuesSorted(first, sizeof(first)/sizeof(first[0]), second, sizeof(second)/sizeof(second[0]));
 
     int wantedResult[] = {-10, -2, 3, 5, 9, 11, 20};
-    ASSERT_EQUAL(wantedResult[0], first[0]);
-    ASSERT_EQUAL(wantedResult[1], first[1]);
-    ASSERT_EQUAL(wantedResult[2], first[2]);
-    ASSERT_EQUAL(wantedResult[3], first[3]);
-    ASSERT_EQUAL(wantedResult[4], first[4]);
-    ASSERT_EQUAL(wantedResult[5], first[5]);
-    ASSERT_EQUAL(wantedResult[6], first[6]);
+
+    for(size_t i = 0; i < 7; ++i) {
+        ASSERT_EQUAL(wantedResult[i], first[i]);
+    }
 END_TEST
 
 BEGIN_TEST(test_array_questions_set_important_values_sorted_second_small_values)
@@ -42,13 +36,10 @@ BEGIN_TEST(test_array_questions_set_important_values_sorted_second_small_values)
     SetImportantValuesSorted(first, sizeof(first)/sizeof(first[0]), second, sizeof(second)/sizeof(second[0]));
 
     int wantedResult[] = {-5, -1, 2, 3, 5, 11, 12};
-    ASSERT_EQUAL(wantedResult[6], first[6]);
-    ASSERT_EQUAL(wantedResult[5], first[5]);
-    ASSERT_EQUAL(wantedResult[4], first[4]);
-    ASSERT_EQUAL(wantedResult[3], first[3]);
-    ASSERT_EQUAL(wantedResult[2], first[2]);
-    ASSERT_EQUAL(wantedResult[1], first[1]);
-    ASSERT_EQUAL(wantedResult[0], first[0]);
+
+    for(size_t i = 0; i < 7; ++i) {
+        ASSERT_EQUAL(wantedResult[i], first[i]);
+    }
 END_TEST
 
 BEGIN_TEST(test_array_questions_set_my_shadow)
