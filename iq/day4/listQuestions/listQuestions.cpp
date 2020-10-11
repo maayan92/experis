@@ -56,4 +56,36 @@ Node<int>* FindLoopPoint(const Node<int>* a_head)
     return FindLoopPointR(a_head->m_next->m_next, a_head->m_next);
 }
 
+static size_t CountNodes(const Node<int>* a_head, const Node<int>* a_middle)
+{
+    Node<int>* goOver = const_cast<Node<int>* >(a_head);
+
+    size_t count = 0;
+    while(goOver != a_middle) {
+        ++count;
+        goOver = goOver->m_next;
+    }
+
+    do {
+        ++count;
+        goOver = goOver->m_next;
+    } while(goOver != a_middle); 
+
+    return count;
+}
+
+size_t ListWithLoopLength(const Node<int>* a_head)
+{
+    if(!a_head) {
+        return 0;
+    }
+
+    if(!a_head->m_next) {
+        return 1;
+    }
+
+    Node<int>* middle = FindLoopPointR(a_head->m_next->m_next, a_head->m_next);
+    return CountNodes(a_head, middle);
+}
+
 } // iq

@@ -33,6 +33,8 @@ bool HasLoop(const Node<int>* a_head);
 
 Node<int>* FindLoopPoint(const Node<int>* a_head);
 
+size_t ListWithLoopLength(const Node<int>* a_head);
+
 } // iq
 
 #endif
