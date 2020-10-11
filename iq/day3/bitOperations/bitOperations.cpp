@@ -28,24 +28,16 @@ void ReverseBits(int& a_number)
 
     size_t numOfBits = (0 < a_number) ? NumberOfBitToReverse(a_number) : sizeof(a_number)*BIT;
 
+    int result = 0;
     for(size_t i = 0, j = numOfBits; i <= numOfBits/2; ++i, --j) {
         int bitRight = (1 << i) & a_number;
         int bitLeft = (1 << j) & a_number;
 
-        if(bitRight) {
-            a_number |= (bitRight << (j - i));
-        }
-        else {
-            a_number &= ~(1 << j);
-        }
-
-        if(bitLeft) {
-            a_number |= (bitLeft >> (j - i));
-        }
-        else {
-            a_number &= ~(1 << i);
-        }
+        result |= (bitRight << (j - i));
+        result |= (bitLeft >> (j - i));
     }
+
+    a_number = result;
 }
 
 void SwapAdjacentBits(long& a_number)
@@ -54,24 +46,16 @@ void SwapAdjacentBits(long& a_number)
         return;
     }
 
-    for(size_t i = 0; i < sizeof(a_number)*BIT; i+=2) {
+    long result = 0;
+    for(size_t i = 0; i < sizeof(a_number)*BIT - 1; i+=2) {
         long bitRight = (1 << i) & a_number;
         long bitLeft = (1 << (i + 1)) & a_number;
 
-        if(bitRight) {
-            a_number |= (bitRight << 1);
-        }
-        else {
-            a_number &= ~(1 << (i + 1));
-        }
-
-        if(bitLeft) {
-            a_number |= (bitLeft >> 1);
-        }
-        else {
-            a_number &= ~(1 << i);
-        }
+        result |= (bitRight << 1);
+        result |= (bitLeft >> 1);
     }
+
+    a_number = result;
 }
 
 bool Majority(int a_number)
