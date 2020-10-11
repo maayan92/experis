@@ -14,17 +14,17 @@ void SetImportantValues(int* a_someImportant, size_t a_firstSize, int* a_allImpo
     }
 }
 
-void SetImportantValuesSorted(int* a_someImportant, size_t a_firstSize, int* a_allImportant, size_t a_secondSize)
+void SetImportantValuesSorted(int* a_someImportant, int a_firstSize, int* a_allImportant, int a_secondSize)
 {
     if(!a_someImportant || !a_allImportant || !a_firstSize || !a_secondSize) {
         return;
     }
 
-    size_t secondInx = a_secondSize - 1;
-    size_t firstInx = a_firstSize - a_secondSize - 1;
-    size_t i = a_firstSize - 1;
+    int secondInx = a_secondSize - 1;
+    int firstInx = a_firstSize - a_secondSize - 1;
+    int i = a_firstSize - 1;
 
-    while(secondInx >= 0) {
+    while(i != firstInx && i != secondInx) {
         if(a_allImportant[secondInx] > a_someImportant[firstInx]) {
             a_someImportant[i] = a_allImportant[secondInx];
             --secondInx;
@@ -34,6 +34,10 @@ void SetImportantValuesSorted(int* a_someImportant, size_t a_firstSize, int* a_a
             --firstInx;
         }
         --i;
+    }
+
+    while(secondInx >= 0) {
+        a_someImportant[i--] = a_allImportant[secondInx--];
     }
 }
 
