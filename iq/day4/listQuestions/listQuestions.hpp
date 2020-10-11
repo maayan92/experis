@@ -6,6 +6,11 @@ namespace iq {
 template<typename T>
 struct Node {
 
+    Node(const T& a_data, Node<T>* a_next)
+    : m_data(a_data)
+    , m_next(a_next)
+    {}
+    
     Node(const T& a_data)
     : m_data(a_data)
     , m_next(0)
@@ -21,6 +26,8 @@ struct Node {
 };
 
 Node<int>* Flip(Node<int> *a_head);
+
+bool HasLoop(Node<int>* a_head);
 
 } // iq
 

@@ -20,4 +20,18 @@ Node<int>* Flip(Node<int> *a_head)
     return temp;
 }
 
+static bool HasLoopR(Node<int> *a_fastPtr, Node<int> *a_slowPtr)
+{
+    if((!a_fastPtr || !a_fastPtr->m_next || !a_slowPtr)) {
+        return false;
+    }
+
+    return (a_fastPtr == a_slowPtr) || HasLoopR(a_fastPtr->m_next->m_next, a_slowPtr->m_next);
+}
+
+bool HasLoop(Node<int>* a_head)
+{
+    return HasLoopR(a_head, a_head);
+}
+
 } // iq
