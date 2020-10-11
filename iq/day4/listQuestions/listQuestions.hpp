@@ -29,6 +29,8 @@ Node<int>* Flip(Node<int> *a_head);
 
 bool HasLoop(Node<int>* a_head);
 
+Node<int>* FindLoopPoint(Node<int>* a_head);
+
 } // iq
 
 #endif

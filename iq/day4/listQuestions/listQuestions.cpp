@@ -38,4 +38,22 @@ bool HasLoop(Node<int>* a_head)
     return HasLoopR(a_head->m_next->m_next, a_head->m_next);
 }
 
+Node<int>* FindLoopPointR(Node<int>* a_fastPtr, Node<int>* a_slowPtr)
+{
+    if(a_fastPtr->m_next == a_slowPtr->m_next && a_fastPtr != a_slowPtr) {
+        return a_fastPtr->m_next;
+    }
+
+    return FindLoopPointR(a_fastPtr->m_next->m_next, a_slowPtr->m_next);
+}
+
+Node<int>* FindLoopPoint(Node<int>* a_head)
+{
+    if(!a_head || !a_head->m_next) {
+        return 0;
+    }
+
+    return FindLoopPointR(a_head->m_next->m_next, a_head->m_next);
+}
+
 } // iq
