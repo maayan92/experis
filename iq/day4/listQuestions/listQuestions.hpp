@@ -1,6 +1,8 @@
 #ifndef TREE_QUESTIONS_HPP
 #define TREE_QUESTIONS_HPP
 
+#include <iosfwd>
+
 namespace iq {
 
 template<typename T>
@@ -27,9 +29,9 @@ struct Node {
 
 Node<int>* Flip(Node<int> *a_head);
 
-bool HasLoop(Node<int>* a_head);
+bool HasLoop(const Node<int>* a_head);
 
-Node<int>* FindLoopPoint(Node<int>* a_head);
+Node<int>* FindLoopPoint(const Node<int>* a_head);
 
 } // iq
 
