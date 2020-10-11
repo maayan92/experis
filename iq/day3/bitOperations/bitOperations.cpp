@@ -48,8 +48,8 @@ void SwapAdjacentBits(long& a_number)
 
     long result = 0;
     for(size_t i = 0; i < sizeof(a_number)*BIT - 1; i+=2) {
-        long bitRight = (1 << i) & a_number;
-        long bitLeft = (1 << (i + 1)) & a_number;
+        long bitRight = (1L << i) & a_number;
+        long bitLeft = (1L << (i + 1)) & a_number;
 
         result |= (bitRight << 1);
         result |= (bitLeft >> 1);

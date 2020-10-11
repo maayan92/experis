@@ -18,10 +18,10 @@ BEGIN_TEST(test_bit_operations_reverse_bits_big_number)
 END_TEST
 
 BEGIN_TEST(test_bit_operations_swap_adjacent_bits)
-    long num = 201;
+    long num = -1913;
     
     SwapAdjacentBits(num);
-    ASSERT_EQUAL(198, num);
+    ASSERT_EQUAL(-2997, num);
 END_TEST
 
 BEGIN_TEST(test_bit_operations_swap_adjacent_bits_big_number)
