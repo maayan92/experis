@@ -18,6 +18,23 @@ BEGIN_TEST(test_add_two_numbers_big_numbers)
     unsigned int  result = AddTwoNumbers(first, second);
     ASSERT_EQUAL(first + second, result);
 END_TEST
+/*
+BEGIN_TEST(test_multiply_two_numbers)
+    unsigned int first = 3;
+    unsigned int second = 5;
+
+    unsigned int result = MultiplyTwoNumbers(first, second);
+    ASSERT_EQUAL(15, result);
+END_TEST
+
+BEGIN_TEST(test_multiply_two_numbers_big_numbers)
+    unsigned int first = 7586;
+    unsigned int second = 145;
+
+    unsigned int result = MultiplyTwoNumbers(first, second);
+    ASSERT_EQUAL(first * second, result);
+END_TEST
+*/
 
 BEGIN_TEST(test_number_of_identical_pairs)
     int bits[] = {1, 1, 0, 1, 0, 0};
@@ -33,10 +50,28 @@ BEGIN_TEST(test_number_of_identical_pairs_adjacent_pair)
     ASSERT_EQUAL(4, result);
 END_TEST
 
+BEGIN_TEST(test_counter_small_characters)
+    size_t result = Counter("abryacaydabra", "bax");
+
+    ASSERT_EQUAL(7, result);
+END_TEST
+
+BEGIN_TEST(test_counter_small_and_big_characters)
+    size_t result = Counter("aGbryCacGaydGabraA", "baGx");
+
+    ASSERT_EQUAL(10, result);
+END_TEST
+
 BEGIN_SUITE(test_day_5)
     TEST(test_add_two_numbers)
     TEST(test_add_two_numbers_big_numbers)
 
+    //TEST(test_multiply_two_numbers)
+    //TEST(test_multiply_two_numbers_big_numbers)
+
     TEST(test_number_of_identical_pairs)
     TEST(test_number_of_identical_pairs_adjacent_pair)
+
+    TEST(test_counter_small_characters)
+    TEST(test_counter_small_and_big_characters)
 END_SUITE

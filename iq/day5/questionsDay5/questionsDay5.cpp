@@ -1,4 +1,6 @@
 #include "questionsDay5.hpp"
+#include <cstring>
+#include <vector>
 
 namespace iq {
 
@@ -53,6 +55,32 @@ size_t NumberOfIdenticalPairs(const int* a_bits, size_t a_size)
     }
 
     return numOfPair;
+}
+
+// Q7:
+
+size_t Counter(const char* a_first, const char* a_second)
+{
+    if(!a_first || !a_second) {
+        return 0;
+    }
+
+    size_t firstSize = strlen(a_first);
+    size_t secondSize = strlen(a_second);
+    size_t countResult = 0;
+
+    std::vector<size_t> counter(58, 0);
+
+    for(size_t i = 0; i < firstSize; ++i) {
+        ++counter[a_first[i] - 'A'];
+    }
+
+    for(size_t i = 0; i < secondSize; ++i) {
+        countResult += counter[a_second[i] - 'A'];
+        counter[a_second[i] - 'A'] = 0;
+    }
+
+    return countResult;
 }
 
 } // iq
