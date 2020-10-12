@@ -1,5 +1,4 @@
 #include "questionsDay5.hpp"
-#include <iosfwd>
 
 namespace iq {
 
@@ -37,6 +36,23 @@ unsigned int AddTwoNumbers(unsigned int a_firstNum, unsigned int a_secondNum)
     result |= carry << i;
 
     return result;
+}
+
+// Q5:
+
+size_t NumberOfIdenticalPairs(const int* a_bits, size_t a_size)
+{
+    if(!a_bits || !a_size) {
+        return 0;
+    }
+
+    size_t numOfPair = 0;
+
+    for(size_t i = 0; i < a_size - 1; ++i) {
+        numOfPair += !(a_bits[i] ^ a_bits[i + 1]);
+    }
+
+    return numOfPair;
 }
 
 } // iq
