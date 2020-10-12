@@ -1,0 +1,58 @@
+Q1:
+
+unsigned int AddTwoNumbers(unsigned int a_firstNum, unsigned int a_secondNum)
+{
+    if(!a_firstNum) {
+        return a_secondNum;
+    }
+    if(!a_secondNum) {
+        return a_firstNum;
+    }
+
+    unsigned int carry = 0;
+    unsigned int result = 0;
+    unsigned int bigger = (a_firstNum > a_secondNum) ? a_firstNum : a_secondNum;
+    unsigned int checkNum = 1;
+
+    size_t i = 0;
+    for(; bigger >= checkNum; ++i, checkNum*=2 ) {
+        unsigned int firstBit = (1 << i) & a_firstNum;
+        unsigned int secondBit = (1 << i) & a_secondNum;
+
+        result |= (firstBit ^ secondBit) ^ (carry << i);
+        carry = (firstBit & secondBit) | carry;
+    }
+
+    result |= carry << i;
+
+    return result;
+}
+
+Q2:
+
+unsigned int MultiplyTwoNumbers(unsigned int a_firstNum, unsigned int a_secondNum)
+{
+    if(!a_firstNum || !a_secondNum) {
+        return 0;
+    }
+
+    unsigned int carry = 0;
+    unsigned int checkNumFirst = 1;
+    unsigned int checkNumSecond = 1;
+    unsigned int result = 0;
+
+    for(size_t i = 0; a_firstNum >= checkNumFirst; ++i , checkNumFirst*=2 ) {
+        unsigned int bit = 1 & (a_firstNum >> i);
+
+        for(size_t j = 0; a_secondNum >= checkNumSecond; ++j, checkNumSecond*=2 ) {
+            unsigned int mul = bit & (a_secondNum >> j);
+
+            carry = ((result >> (i + j)) & mul) | (carry << (i + j));
+            result |= (result ^ (mul << (i + j))) ^ carry;
+        }
+
+        result |= (carry << (i + j));
+    }
+
+    return result;
+}
