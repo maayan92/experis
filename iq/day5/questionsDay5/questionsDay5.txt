@@ -56,3 +56,47 @@ unsigned int MultiplyTwoNumbers(unsigned int a_firstNum, unsigned int a_secondNu
 
     return result;
 }
+
+Q5:
+
+size_t NumberOfIdenticalPairs(const int* a_bits, size_t a_size)
+{
+    if(!a_bits || !a_size) {
+        return 0;
+    }
+
+    size_t numOfPair = 0;
+
+    for(size_t i = 0; i < a_size - 1; ++i) {
+        numOfPair += ~(a_bits[i] ^ a_bit[i + 1]);
+    }
+
+    return numOfPair;
+}
+
+
+Q7:
+
+size_t Counter(char* a_first, char* a_second)
+{
+    if(!a_firstNum || !a_secondNum) {
+        return 0;
+    }
+
+    size_t firstSize = strlen(a_first);
+    size_t secondSize = strlen(a_second);
+    size_t countResult;
+
+    vector<size_t> counter(58, 0);
+
+    for(size_t i = 0; i < firstSize; ++i) {
+        ++counter[a_first[i] - 'A'];
+    }
+
+    for(size_t i = 0; i < secondSize; ++i) {
+        countResult += counter[a_second[i] - 'A'];
+        counter[a_second[i] - 'A'] = 0;
+    }
+
+    return countResult;
+}
