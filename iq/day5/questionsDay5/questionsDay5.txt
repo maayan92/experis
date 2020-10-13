@@ -128,3 +128,10 @@ int Max(int a_firstNum, int a_secondNum)
 
     return max;
 }
+
+Q4:
+
+void PowerOfTwo(unsigned int a_number)
+{
+    return !(a_number & (a_number - 1));
+}
