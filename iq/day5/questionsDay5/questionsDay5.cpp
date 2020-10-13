@@ -18,21 +18,14 @@ unsigned int AddTwoNumbers(unsigned int a_firstNum, unsigned int a_secondNum)
     unsigned int carry = 0;
     unsigned int result = 0;
     unsigned int bigger = (a_firstNum > a_secondNum) ? a_firstNum : a_secondNum;
-    unsigned int checkNum = 1;
 
     size_t i = 0;
-    for(; bigger >= checkNum; ++i, checkNum*=2 ) {
+    for(; bigger >> i ; ++i ) {
         unsigned int firstBit = (1 << i) & a_firstNum;
         unsigned int secondBit = (1 << i) & a_secondNum;
 
         result |= (firstBit ^ secondBit) ^ (carry << i);
-
-        if(firstBit & secondBit) {
-            carry = 1;
-        }
-        else {
-            carry &= ((firstBit >> i) | (secondBit >> i));
-        }
+        carry = ((firstBit & secondBit) >> i) | ((firstBit >> i) & carry) | ((secondBit >> i) & carry);
     }
 
     result |= carry << i;
