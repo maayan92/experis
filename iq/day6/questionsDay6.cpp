@@ -1,4 +1,5 @@
 #include "questionsDay6.hpp"
+#include <climits>
 
 namespace iq {
 
@@ -24,6 +25,22 @@ void Abs(int& a_number)
 {
     --a_number;
     a_number = ~a_number;
+}
+
+// Q3 (5.a):
+
+size_t NumberOfIdenticalPairs(unsigned long a_number)
+{
+    if(!a_number) {
+        return 0;
+    }
+
+    size_t count = 0;
+    for(size_t i = 0; i < sizeof(a_number)*CHAR_BIT - 1; ++i) {
+        count += !((a_number >> i) ^ (a_number >> (i + 1)));
+    }
+
+    return count;
 }
 
 } // iq
