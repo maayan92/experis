@@ -78,6 +78,36 @@ BEGIN_TEST(test_index_to_flip_no_indx_to_flip)
     ASSERT_EQUAL(0, IndexToFlip(bits, sizeof(bits)/sizeof(bits[0])));
 END_TEST
 
+BEGIN_TEST(test_from_and_to_of_char)
+    char letters[] = "aaabbbbbbccccccdd";
+
+    size_t from;
+    size_t to;
+    FromToChar(letters, sizeof(letters)/sizeof(letters[0]), 'c', from, to);
+    ASSERT_EQUAL(9, from);
+    ASSERT_EQUAL(15, to);
+END_TEST
+
+BEGIN_TEST(test_from_and_to_of_char_all)
+    char letters[] = "cccccccccccc";
+
+    size_t from;
+    size_t to;
+    FromToChar(letters, sizeof(letters)/sizeof(letters[0]), 'c', from, to);
+    ASSERT_EQUAL(0, from);
+    ASSERT_EQUAL(12, to);
+END_TEST
+
+BEGIN_TEST(test_from_and_to_of_char_nothing)
+    char letters[] = "aaabbbbbbdd";
+
+    size_t from;
+    size_t to;
+    FromToChar(letters, sizeof(letters)/sizeof(letters[0]), 'c', from, to);
+    ASSERT_EQUAL(0, from);
+    ASSERT_EQUAL(0, to);
+END_TEST
+
 BEGIN_SUITE(test_day_6)
     TEST(test_swap_by_arithmetic_op)
     TEST(test_swap_by_bits)
@@ -93,4 +123,8 @@ BEGIN_SUITE(test_day_6)
     TEST(test_index_to_flip_middle)
     TEST(test_index_to_flip_begin)
     TEST(test_index_to_flip_no_indx_to_flip)
+
+    TEST(test_from_and_to_of_char)
+    TEST(test_from_and_to_of_char_all)
+    TEST(test_from_and_to_of_char_nothing)
 END_SUITE

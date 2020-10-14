@@ -23,6 +23,10 @@ size_t NumberOfIdenticalPairs(unsigned long a_number);
 
 size_t IndexToFlip(const int* a_bits, size_t a_size);
 
+// Q6:
+
+void FromToChar(const char* a_letters, size_t a_size, char a_find, size_t& a_from, size_t& a_to);
+
 } // iq
 
 #endif

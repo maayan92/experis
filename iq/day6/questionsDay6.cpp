@@ -70,4 +70,45 @@ size_t IndexToFlip(const int* a_bits, size_t a_size)
     return indx;
 }
 
+// Q6:
+
+static size_t FromToCharR(const char* a_letters, char a_find, size_t a_from, size_t a_to)
+{
+    size_t pos = (a_from + a_to) / 2;
+    if(a_find == a_letters[pos]) {
+        return pos;
+    }
+
+    if(a_from == (a_to - 1)) {
+        return 0;
+    }
+
+    if(a_find > a_letters[pos]) {
+        return FromToCharR(a_letters, a_find, pos, a_to);
+    }
+
+    return FromToCharR(a_letters, a_find, a_from, pos);
+}
+
+void FromToChar(const char* a_letters, size_t a_size, char a_find, size_t& a_from, size_t& a_to)
+{
+    if(!a_letters || a_find == '\0') {
+        return;
+    }
+
+    size_t pos = FromToCharR(a_letters, a_find, 0, a_size);
+    a_to = pos;
+    while('\0' != a_letters[a_to] && a_find == a_letters[a_to]) {
+        ++a_to;
+    }
+    a_from = pos;
+    while(a_from > 0 && a_find == a_letters[a_from - 1]) {
+        --a_from;
+    }
+
+    if(a_from == 0 && a_find == a_letters[a_from - 1]) {
+        --a_from;
+    }
+}
+
 } // iq
