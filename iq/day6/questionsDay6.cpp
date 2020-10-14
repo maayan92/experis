@@ -23,8 +23,9 @@ void SwapBits(int& a_first, int& a_second)
 
 void Abs(int& a_number)
 {
-    --a_number;
-    a_number = ~a_number;
+    const int mask = a_number >> (sizeof(a_number)*CHAR_BIT - 1);
+    
+    a_number = (a_number + mask) ^ mask;
 }
 
 // Q3 (5.a):
