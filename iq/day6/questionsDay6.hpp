@@ -21,7 +21,7 @@ size_t NumberOfIdenticalPairs(unsigned long a_number);
 
 // Q4 (5.b):
 
-int IndexToFlip(const int* a_bits, int a_size);
+size_t IndexToFlip(const int* a_bits, size_t a_size);
 
 } // iq
 

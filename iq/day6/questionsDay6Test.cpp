@@ -75,7 +75,7 @@ END_TEST
 BEGIN_TEST(test_index_to_flip_no_indx_to_flip)
     int bits[] = {0, 0, 1, 1, 1, 0, 0, 0};
 
-    ASSERT_EQUAL(-1, IndexToFlip(bits, sizeof(bits)/sizeof(bits[0])));
+    ASSERT_EQUAL(0, IndexToFlip(bits, sizeof(bits)/sizeof(bits[0])));
 END_TEST
 
 BEGIN_SUITE(test_day_6)
