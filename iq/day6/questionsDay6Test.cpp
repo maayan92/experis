@@ -28,6 +28,13 @@ BEGIN_TEST(test_abs)
     ASSERT_EQUAL(5, num);
 END_TEST
 
+BEGIN_TEST(test_abs_positive)
+    int num = 5;
+
+    Abs(num);
+    ASSERT_EQUAL(5, num);
+END_TEST
+
 BEGIN_TEST(test_abs_big_num)
     int num = -356456456;
 
@@ -76,6 +83,7 @@ BEGIN_SUITE(test_day_6)
     TEST(test_swap_by_bits)
 
     TEST(test_abs)
+    TEST(test_abs_positive)
     TEST(test_abs_big_num)
 
     TEST(test_number_of_identical_pairs)
