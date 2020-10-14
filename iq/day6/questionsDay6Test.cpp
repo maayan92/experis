@@ -108,6 +108,32 @@ BEGIN_TEST(test_from_and_to_of_char_nothing)
     ASSERT_EQUAL(0, to);
 END_TEST
 
+BEGIN_TEST(test_product)
+    int numbers[] = {1, 2, 3, 4, 5};
+    size_t size = sizeof(numbers)/sizeof(numbers[0]);
+
+    int result[5];
+    Product(numbers, size, result);
+
+    int wantedResult[] = {120, 60, 40, 30, 24};
+    for(size_t i = 0; i < size; ++i) {
+        ASSERT_EQUAL(wantedResult[i], result[i]);
+    }
+END_TEST
+
+BEGIN_TEST(test_product_one_values)
+    int numbers[] = {1};
+    size_t size = sizeof(numbers)/sizeof(numbers[0]);
+
+    int result[1];
+    Product(numbers, size, result);
+
+    int wantedResult[] = {1};
+    for(size_t i = 0; i < size; ++i) {
+        ASSERT_EQUAL(wantedResult[i], result[i]);
+    }
+END_TEST
+
 BEGIN_SUITE(test_day_6)
     TEST(test_swap_by_arithmetic_op)
     TEST(test_swap_by_bits)
@@ -127,4 +153,7 @@ BEGIN_SUITE(test_day_6)
     TEST(test_from_and_to_of_char)
     TEST(test_from_and_to_of_char_all)
     TEST(test_from_and_to_of_char_nothing)
+
+    TEST(test_product)
+    TEST(test_product_one_values)
 END_SUITE

@@ -111,4 +111,53 @@ void FromToChar(const char* a_letters, size_t a_size, char a_find, size_t& a_fro
     }
 }
 
+// Q8:
+
+static void CalcHalfs(const int *a_origin, size_t a_from, size_t a_to, int& a_calcHalf)
+{
+    while(a_from < a_to) {
+        a_calcHalf *= a_origin[a_from++];    
+    }
+}
+
+static void SetHalfs(int *a_result, size_t a_from, size_t a_to, int& a_setHalf)
+{
+    while(a_from < a_to) {
+        a_result[a_from++] *= a_setHalf;
+    }
+}
+
+static void ProductR(const int *a_origin, size_t a_from, size_t a_to, int *a_result)
+{
+    if(a_from == (a_to - 1)) {
+        return;
+    }
+
+    int firstHalf = 1;
+    int secondHalf = 1;
+    size_t pos = (a_from + a_to) / 2;
+
+    CalcHalfs(a_origin, a_from, pos, firstHalf);
+    CalcHalfs(a_origin, pos, a_to, secondHalf);
+
+    SetHalfs(a_result, a_from, pos, secondHalf);
+    SetHalfs(a_result, pos, a_to, firstHalf);
+
+    ProductR(a_origin, a_from, pos, a_result);
+    ProductR(a_origin, pos, a_to, a_result);
+}
+
+void Product(const int *a_origin, size_t a_size, int *a_result)
+{
+    if(!a_origin || !a_size) {
+        return;
+    }
+
+    for(size_t i = 0; i < a_size; ++i) {
+        a_result[i] = 1;
+    }
+
+    ProductR(a_origin, 0, a_size, a_result);
+}
+
 } // iq

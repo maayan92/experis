@@ -27,6 +27,10 @@ size_t IndexToFlip(const int* a_bits, size_t a_size);
 
 void FromToChar(const char* a_letters, size_t a_size, char a_find, size_t& a_from, size_t& a_to);
 
+// Q8:
+
+void Product(const int *a_origin, size_t a_size, int *a_result);
+
 } // iq
 
 #endif
