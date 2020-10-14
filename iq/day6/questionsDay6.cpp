@@ -43,4 +43,30 @@ size_t NumberOfIdenticalPairs(unsigned long a_number)
     return count;
 }
 
+// Q4 (5.b):
+
+int IndexToFlip(const int* a_bits, int a_size)
+{
+    if(!a_bits || !a_size) {
+        return -1;
+    }
+
+    int indx = -1;
+    if(a_bits[0] ^ a_bits[1]) {
+        indx = 0;
+    }
+
+    for(int i = 1; i < a_size - 1; ++i) {
+        if((a_bits[i - 1] ^ a_bits[i]) & (a_bits[i] ^ a_bits[i + 1])) {
+            return i;
+        }
+    }
+
+    if(a_bits[a_size - 2] ^ a_bits[a_size - 1]) {
+        indx = a_size - 1;
+    }
+
+    return indx;
+}
+
 } // iq

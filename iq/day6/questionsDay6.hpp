@@ -19,6 +19,10 @@ void Abs(int& a_number);
 
 size_t NumberOfIdenticalPairs(unsigned long a_number);
 
+// Q4 (5.b):
+
+int IndexToFlip(const int* a_bits, int a_size);
+
 } // iq
 
 #endif
