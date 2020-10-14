@@ -129,6 +129,12 @@ int Max(int a_firstNum, int a_secondNum)
     return max;
 }
 
+int MaxImprove(int a_firstNum, int a_secondNum)
+{
+    int sub = a_firstNum - a_secondNum;
+    return a_firstNum - (sub & (sub >> (sizeof(int)*CHAR_BIT - 1));
+}
+
 Q4:
 
 void PowerOfTwo(unsigned int a_number)
