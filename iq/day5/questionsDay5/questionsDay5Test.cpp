@@ -36,6 +36,30 @@ BEGIN_TEST(test_multiply_two_numbers_big_numbers)
 END_TEST
 */
 
+BEGIN_TEST(test_max_number)
+    int first = 3;
+    int second = 5;
+
+    int result = Max(first, second);
+    ASSERT_EQUAL(second, result);
+END_TEST
+
+BEGIN_TEST(test_max_number_one_negative_number)
+    int first = 3;
+    int second = -5;
+
+    int result = Max(first, second);
+    ASSERT_EQUAL(first, result);
+END_TEST
+
+BEGIN_TEST(test_max_number_both_negative_numbers)
+    int first = 3;
+    int second = -5;
+
+    int result = Max(first, second);
+    ASSERT_EQUAL(first, result);
+END_TEST
+
 BEGIN_TEST(test_number_of_identical_pairs)
     int bits[] = {1, 1, 0, 1, 0, 0};
 
@@ -68,6 +92,10 @@ BEGIN_SUITE(test_day_5)
 
     //TEST(test_multiply_two_numbers)
     //TEST(test_multiply_two_numbers_big_numbers)
+
+    TEST(test_max_number)
+    TEST(test_max_number_one_negative_number)
+    TEST(test_max_number_both_negative_numbers)
 
     TEST(test_number_of_identical_pairs)
     TEST(test_number_of_identical_pairs_adjacent_pair)

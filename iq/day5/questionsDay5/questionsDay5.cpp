@@ -1,6 +1,7 @@
 #include "questionsDay5.hpp"
 #include <cstring>
 #include <vector>
+#include <climits>
 
 namespace iq {
 
@@ -31,6 +32,34 @@ unsigned int AddTwoNumbers(unsigned int a_firstNum, unsigned int a_secondNum)
     result |= carry << i;
 
     return result;
+}
+
+// Q3:
+
+int Max(int a_firstNum, int a_secondNum)
+{
+    int size = sizeof(int)*CHAR_BIT - 1;
+    int firstBit = (1 << size) & a_firstNum;
+    int secondBit = (1 << size) & a_secondNum;
+
+    if(firstBit && !secondBit) {
+        return a_secondNum;
+    }
+    if(!firstBit && secondBit) {
+        return a_firstNum;
+    }
+
+    int max = a_firstNum;
+    for(int i = size - 1; i >= 0; ++i) {
+        firstBit = (1 << i) & a_firstNum;
+        secondBit = (1 << i) & a_secondNum;
+        
+        if(firstBit ^ secondBit) {
+            return (firstBit & !secondBit) ? a_firstNum : a_secondNum;
+        }
+    }
+
+    return max;
 }
 
 // Q5:
