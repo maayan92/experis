@@ -149,7 +149,7 @@ static void ProductR(const int *a_origin, size_t a_from, size_t a_to, int *a_res
 
 void Product(const int *a_origin, size_t a_size, int *a_result)
 {
-    if(!a_origin || !a_size) {
+    if(!a_origin || !a_size || !a_result) {
         return;
     }
 
