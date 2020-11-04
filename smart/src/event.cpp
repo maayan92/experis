@@ -18,7 +18,7 @@ bool Event::operator==(Event const& a_event)
             (m_typeAndLocation == a_event.m_typeAndLocation);
 }
 
-ostream& operator<<(ostream& a_os, Event& a_event)
+ostream& operator<<(ostream& a_os, const Event& a_event)
 {
     char buffer[TIME_BUFFER_SIZE];
  	strftime(buffer, sizeof(buffer), "%H:%M:%S %d-%m-%Y", a_event.m_timestamp);

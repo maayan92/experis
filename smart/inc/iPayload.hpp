@@ -10,7 +10,7 @@ class IPayload {
 public:
     virtual ~IPayload() = 0;
 
-    virtual void Print(std::ostream& a_os) = 0;
+    virtual void Print(std::ostream& a_os) const = 0;
 
 protected:
     IPayload();

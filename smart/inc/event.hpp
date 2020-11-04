@@ -22,7 +22,7 @@ private:
     static const EventTypeLoc emptyTypeLoc;
 };
 
-std::ostream& operator<<(std::ostream& a_os, Event& a_event);
+std::ostream& operator<<(std::ostream& a_os, const Event& a_event);
 
 } // smart_house
 
