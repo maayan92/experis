@@ -1,5 +1,6 @@
 #include "practicDay.hpp"
 #include <vector>
+#include <map>
 #include <stdlib.h>
 using namespace std;
 
@@ -56,39 +57,19 @@ bool HasPairSumNaive(const int * a_numbers, size_t a_size, int a_num)
     return false;
 }
 
-static void FindMinMax(const int* a_numbers, size_t a_size, int& a_min, int& a_max)
-{
-    a_max = a_numbers[0];
-    a_min = a_numbers[0];
-
-    for(size_t i = 1; i < a_size; ++i) {
-        if(a_numbers[i] > a_max) {
-            a_max = a_numbers[i];
-        }
-        else if(a_numbers[i] < a_min) {
-            a_min = a_numbers[i];
-        }
-    }
-}
-
 bool HasPairSum(const int* a_numbers, size_t a_size, int a_num)
 {
     if(!a_numbers || !a_size || a_size < 2) {
         return false;
     }
 
-    int min;
-    int max;
-    FindMinMax(a_numbers, a_size, min, max);
-
-    int diff = ((max < 0) ? min - max : max - min) + 1;
-    vector<bool> rest(diff, false);
+    map<int, bool> rest;
 
     for(size_t i = 0; i < a_size; ++i) {
-        if(rest[(a_num - a_numbers[i]) - min]) {
+        if(rest[(a_num - a_numbers[i])]) {
             return true;
         }
-        rest[a_numbers[i] - min] = true;
+        rest[a_numbers[i]] = true;
     }
 
     return false;
