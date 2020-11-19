@@ -340,6 +340,57 @@ BEGIN_TEST(test_is_palindrome_use_recursion_false)
     ASSERT_THAT(!IsPalindromeUseRec(&head));
 END_TEST
 
+//Q7:
+
+BEGIN_TEST(test_intersection)
+    Node node2F(9);
+    Node node1F(5, &node2F);
+    Node headF(1, &node1F);
+
+    Node node3S(9, &node1F);
+    Node node2S(6, &node3S);
+    Node node1S(3, &node2S);
+    Node headS(2, &node1S);
+
+    Node* result = Intersection(&headF, &headS);
+    ASSERT_THAT(result);
+    ASSERT_EQUAL(result->m_data, node1F.m_data);
+    ASSERT_EQUAL(result, &node1F);
+END_TEST
+
+BEGIN_TEST(test_intersection_no_intersect)
+    Node node2F(9);
+    Node node1F(5, &node2F);
+    Node headF(1, &node1F);
+
+    Node node3S(9);
+    Node node2S(6, &node3S);
+    Node node1S(3, &node2S);
+    Node headS(2, &node1S);
+
+    Node* result = Intersection(&headF, &headS);
+    ASSERT_THAT(!result);
+END_TEST
+
+BEGIN_TEST(test_intersection_first_null)
+    Node node3S(9);
+    Node node2S(6, &node3S);
+    Node node1S(3, &node2S);
+    Node headS(2, &node1S);
+
+    Node* result = Intersection(0, &headS);
+    ASSERT_THAT(!result);
+END_TEST
+
+BEGIN_TEST(test_intersection_second_null)
+    Node node2F(9);
+    Node node1F(5, &node2F);
+    Node headF(1, &node1F);
+
+    Node* result = Intersection(&headF, 0);
+    ASSERT_THAT(!result);
+END_TEST
+
 BEGIN_SUITE(test_list)
     TEST(test_remove_duplicates)
     TEST(test_remove_duplicates_no_duplicates)
@@ -366,4 +417,9 @@ BEGIN_SUITE(test_list)
     TEST(test_is_palindrome_use_recursion_even_true)
     TEST(test_is_palindrome_use_recursion_odd_true)
     TEST(test_is_palindrome_use_recursion_false)
+
+    TEST(test_intersection)
+    TEST(test_intersection_no_intersect)
+    TEST(test_intersection_first_null)
+    TEST(test_intersection_second_null)
 END_SUITE

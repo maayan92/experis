@@ -311,4 +311,48 @@ bool IsPalindromeUseRec(Node* a_head)
     return IsPalindromeRec(a_head, slow, count);
 }
 
+// Q7:
+
+static size_t GetLength(Node* a_head)
+{
+    size_t count = 0;
+    while(a_head) {
+        ++count;
+        a_head = a_head->m_next;
+    }
+
+    return count;
+}
+
+static Node* FindTheIntersection(Node* a_first, Node* a_second, size_t a_diff)
+{
+    while(a_diff) {
+        a_first = a_first->m_next;
+        --a_diff;
+    }
+
+    while(a_first) {
+        if(a_first == a_second) {
+            return a_first;
+        }
+        a_first = a_first->m_next;
+        a_second = a_second->m_next;
+    }
+
+    return 0;
+}
+
+Node* Intersection(Node* a_first, Node* a_second)
+{
+    if(!a_first || !a_second) {
+        return 0;
+    }
+
+    size_t firstSize = GetLength(a_first);
+    size_t secondSize = GetLength(a_second);
+
+    return (firstSize > secondSize) ? FindTheIntersection(a_first, a_second, (firstSize - secondSize))
+                                            : FindTheIntersection(a_second, a_first, (secondSize - firstSize));
+}
+
 } // iq

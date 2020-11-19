@@ -36,6 +36,8 @@ bool IsPalindrome(Node* a_head);
 
 bool IsPalindromeUseRec(Node* a_head);
 
+Node* Intersection(Node* a_first, Node* a_second);
+
 } // iq
 
 #endif
