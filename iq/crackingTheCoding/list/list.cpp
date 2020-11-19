@@ -355,4 +355,36 @@ Node* Intersection(Node* a_first, Node* a_second)
                                             : FindTheIntersection(a_second, a_first, (secondSize - firstSize));
 }
 
+// Q8:
+
+Node* FindFirstNodeInLoop(Node* a_circularList)
+{
+    if(!a_circularList) {
+        return 0;
+    }
+
+    Node* slow = a_circularList;
+    Node* fast = a_circularList;
+
+    while(fast && fast->m_next) {
+        slow = slow->m_next;
+        fast = fast->m_next->m_next;
+        if(slow == fast) {
+            break;
+        }
+    }
+
+    if(!fast || !fast->m_next) {
+        return 0;
+    }
+
+    slow = a_circularList;
+    while(slow != fast) {
+        slow = slow->m_next;
+        fast = fast->m_next;
+    }
+
+    return slow;
+}
+
 } // iq

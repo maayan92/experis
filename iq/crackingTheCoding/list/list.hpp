@@ -38,6 +38,8 @@ bool IsPalindromeUseRec(Node* a_head);
 
 Node* Intersection(Node* a_first, Node* a_second);
 
+Node* FindFirstNodeInLoop(Node* a_circularList);
+
 } // iq
 
 #endif

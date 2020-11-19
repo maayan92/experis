@@ -391,6 +391,23 @@ BEGIN_TEST(test_intersection_second_null)
     ASSERT_THAT(!result);
 END_TEST
 
+//Q8:
+
+BEGIN_TEST(test_find_first_node_in_loop)
+    Node node5(2);
+    Node node4(9, &node5);
+    Node node3(1, &node4);
+    Node node2(6, &node3);
+    Node node1(3, &node2);
+    Node head(8, &node1);
+    node5.m_next = &node2;
+
+    Node* result = FindFirstNodeInLoop(&head);
+    ASSERT_THAT(result);
+    ASSERT_EQUAL(result->m_data, node2.m_data);
+    ASSERT_EQUAL(result, &node2);
+END_TEST
+
 BEGIN_SUITE(test_list)
     TEST(test_remove_duplicates)
     TEST(test_remove_duplicates_no_duplicates)
@@ -422,4 +439,6 @@ BEGIN_SUITE(test_list)
     TEST(test_intersection_no_intersect)
     TEST(test_intersection_first_null)
     TEST(test_intersection_second_null)
+
+    TEST(test_find_first_node_in_loop)
 END_SUITE
