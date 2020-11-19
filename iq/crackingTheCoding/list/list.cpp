@@ -272,4 +272,43 @@ bool IsPalindrome(Node* a_head)
     return CheckValues(a_head, values);
 }
 
+static bool IsPalindromeRec(Node* a_node, Node*& a_middle, size_t a_size)
+{
+    if(a_node == a_middle) {
+        if(0 != (a_size % 2)) {
+            a_middle = a_middle->m_next;
+        }
+        return true;
+    }
+
+    bool result = IsPalindromeRec(a_node->m_next, a_middle, a_size);
+    result &= (a_node->m_data == a_middle->m_data);
+
+    a_middle = a_middle->m_next;
+    return result;
+}
+
+bool IsPalindromeUseRec(Node* a_head)
+{
+    if(!a_head) {
+        return false;
+    }
+
+    Node* slow = a_head;
+    Node* fast = a_head;
+    size_t count = 2;
+
+    while(fast && fast->m_next) {
+        fast = fast->m_next->m_next;
+        slow = slow->m_next;
+        count += 2;
+    }
+
+    if(fast) {
+        ++count;
+    }
+
+    return IsPalindromeRec(a_head, slow, count);
+}
+
 } // iq

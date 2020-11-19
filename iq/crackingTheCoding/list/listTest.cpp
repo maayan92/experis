@@ -274,6 +274,8 @@ BEGIN_TEST(test_sum_lists_recursion_bigger_result)
     FreeList(result);
 END_TEST
 
+//Q6:
+
 BEGIN_TEST(test_is_palindrome_even_true)
     Node node5(2);
     Node node4(3, &node5);
@@ -306,6 +308,38 @@ BEGIN_TEST(test_is_palindrome_false)
     ASSERT_THAT(!IsPalindrome(&head));
 END_TEST
 
+BEGIN_TEST(test_is_palindrome_use_recursion_even_true)
+    Node node5(2);
+    Node node4(3, &node5);
+    Node node3(6, &node4);
+    Node node2(6, &node3);
+    Node node1(3, &node2);
+    Node head(2, &node1);
+
+    ASSERT_THAT(IsPalindromeUseRec(&head));
+END_TEST
+
+BEGIN_TEST(test_is_palindrome_use_recursion_odd_true)
+    Node node4(2);
+    Node node3(3, &node4);
+    Node node2(6, &node3);
+    Node node1(3, &node2);
+    Node head(2, &node1);
+
+    ASSERT_THAT(IsPalindromeUseRec(&head));
+END_TEST
+
+BEGIN_TEST(test_is_palindrome_use_recursion_false)
+    Node node5(2);
+    Node node4(3, &node5);
+    Node node3(7, &node4);
+    Node node2(6, &node3);
+    Node node1(3, &node2);
+    Node head(2, &node1);
+
+    ASSERT_THAT(!IsPalindromeUseRec(&head));
+END_TEST
+
 BEGIN_SUITE(test_list)
     TEST(test_remove_duplicates)
     TEST(test_remove_duplicates_no_duplicates)
@@ -329,4 +363,7 @@ BEGIN_SUITE(test_list)
     TEST(test_is_palindrome_even_true)
     TEST(test_is_palindrome_odd_true)
     TEST(test_is_palindrome_false)
+    TEST(test_is_palindrome_use_recursion_even_true)
+    TEST(test_is_palindrome_use_recursion_odd_true)
+    TEST(test_is_palindrome_use_recursion_false)
 END_SUITE

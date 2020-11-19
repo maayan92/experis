@@ -34,6 +34,8 @@ Node* SumListsRecursion(Node* a_first, Node* a_second);
 
 bool IsPalindrome(Node* a_head);
 
+bool IsPalindromeUseRec(Node* a_head);
+
 } // iq
 
 #endif
