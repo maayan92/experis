@@ -1,4 +1,6 @@
 #include "list.hpp"
+#include <stack>
+using namespace std;
 
 namespace iq {
 
@@ -237,6 +239,37 @@ Node* SumListsRecursion(Node* a_first, Node* a_second)
     }
 
     return SumListsRecursion(a_first, a_second, 0);
+}
+
+// Q6:
+
+static bool CheckValues(Node* a_head, stack<int>& a_values)
+{
+    while(a_head) {
+        if(a_head->m_data != a_values.top()) {
+            return false;
+        }
+        a_values.pop();
+        a_head = a_head->m_next;
+    }
+
+    return true;
+}
+
+bool IsPalindrome(Node* a_head)
+{
+    if(!a_head) {
+        return false;
+    }
+
+    stack<int> values;
+    Node* node = a_head;
+    while(node) {
+        values.push(node->m_data);
+        node = node->m_next;
+    }
+
+    return CheckValues(a_head, values);
 }
 
 } // iq
