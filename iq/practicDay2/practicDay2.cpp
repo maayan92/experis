@@ -256,7 +256,9 @@ static size_t LongestBranchLengthRec(const Tree* a_head, set<int>& a_values)
         }
     }
 
-    a_values.erase(a_head->m_data); // O(log(n))
+    if(1 == add) {
+        a_values.erase(a_head->m_data); // O(log(n))
+    }
     return max + add;
 }
 
