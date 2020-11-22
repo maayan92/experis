@@ -4,6 +4,9 @@
 #include <set>
 using namespace std;
 
+
+#include <iostream>
+
 namespace iq {
 
 // Q1:
@@ -241,11 +244,12 @@ bool CountOnePairs(unsigned long a_number, size_t& a_count)
 
 // Q5:
 
-static size_t LongestBranchLengthRec(const Tree* a_head, set<int>& a_values)
+static size_t LongestBranchLengthRec(const Tree* a_head, set<int>& a_values);
+
+static size_t LongestBranchFromChilds(const Tree* a_head, set<int>& a_values)
 {
     size_t max = 0;
-    size_t add = a_values.insert(a_head->m_data).second ? 1 : 0; // O(log(n))
-
+    
     auto itr = a_head->m_children.begin();
     auto end = a_head->m_children.end();
 
@@ -256,10 +260,20 @@ static size_t LongestBranchLengthRec(const Tree* a_head, set<int>& a_values)
         }
     }
 
-    if(1 == add) {
+    return max;
+}
+
+static size_t LongestBranchLengthRec(const Tree* a_head, set<int>& a_values)
+{
+    if (a_values.insert(a_head->m_data).second) {  // O(log(n))
+
+        size_t max = LongestBranchFromChilds(a_head, a_values);
+        
         a_values.erase(a_head->m_data); // O(log(n))
+        return max + 1;
     }
-    return max + add;
+
+    return LongestBranchFromChilds(a_head, a_values);
 }
 
 bool LongestBranchLength(const Tree* a_head, size_t& a_length)
