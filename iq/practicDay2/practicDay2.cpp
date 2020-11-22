@@ -165,8 +165,10 @@ bool SortArray012(size_t* a_012, size_t a_size)
 
 static void SetValues(size_t a_count, size_t& a_lastCount, size_t& a_tmpBest, size_t& a_bestPos)
 {
-    a_bestPos = a_tmpBest;
-    a_lastCount = a_count;
+    if(a_count > a_lastCount) {
+        a_bestPos = a_tmpBest;
+        a_lastCount = a_count;
+    }
 }
 
 static size_t CountOnes(const size_t* a_012, size_t a_size, size_t& a_indx)
@@ -201,15 +203,11 @@ bool BestFlipPosForOneSeq(const size_t* a_012, size_t a_size, size_t& a_bestPos)
         tmpBest = indx++;
         countP2 = CountOnes(a_012, a_size, indx);
 
-        if((countP1 + countP2) > lastCount) {
-            SetValues(countP1 + countP2, lastCount, tmpBest, a_bestPos);
-        }
+        SetValues(countP1 + countP2, lastCount, tmpBest, a_bestPos);
         countP1 = countP2;
     }
 
-    if((countP1 + countP2) > lastCount) {
-        SetValues(countP1 + countP2, lastCount, tmpBest, a_bestPos);
-    }
+    SetValues(countP1 + countP2, lastCount, tmpBest, a_bestPos);
 
     return true;
 }
