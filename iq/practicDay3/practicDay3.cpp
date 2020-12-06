@@ -1,9 +1,155 @@
 #include "practicDay3.hpp"
 #include <climits>
 #include <map>
+#include <unordered_set>
 using namespace std;
 
 namespace iq {
+
+// class Q1:
+
+bool HasSumPairAsNum(const int* a_numbers, size_t a_size, int a_num)
+{
+    if(!a_numbers || !a_size) {
+        return false;
+    }
+
+    map<int, bool> values;
+    auto end = values.end();
+
+    for(size_t i = 0; i < a_size; ++i) {
+        if(values.find(a_num - a_numbers[i]) != end) {
+            return true;
+        }
+        values[a_numbers[i]] = true;
+    }
+
+    return false;
+}
+
+bool HasSumPairAsNumAtDistance(const int* a_numbers, size_t a_size, int a_num, size_t a_distance)
+{
+    if(!a_numbers || !a_size) {
+        return false;
+    }
+
+    map<int, int> values;
+    auto end = values.end();
+
+    for(size_t i = 0; i < a_size; ++i) {
+        auto itr = values.find(a_num - a_numbers[i]);
+        if(itr != end && (i - itr->second) <= a_distance) {
+            return true;
+        }
+        values[a_numbers[i]] = i;
+    }
+
+    return false;
+}
+
+// class Q2:
+
+bool HasDuplicate(const int* a_numbers, size_t a_size)
+{
+    if(!a_numbers || !a_size) {
+        return false;
+    }
+
+    unordered_set<int> values;
+
+    for(size_t i = 0; i < a_size; ++i) {
+        if(!values.insert(a_numbers[i]).second) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// Q1:
+
+static size_t CountOnes(const size_t* a_bits, size_t a_size, size_t& a_indx)
+{
+    size_t count = 0;
+    while(a_indx < a_size && 1 == a_bits[a_indx]) {
+        ++count;
+        ++a_indx;
+    }
+
+    return count;
+}
+
+static void CountAllOnesByPositions(size_t* a_bits, size_t a_size, vector<size_t>& a_positions)
+{
+    size_t i = 0;
+    size_t saveIndx = i;
+
+    while(i < a_size) {
+        size_t sum = CountOnes(a_bits, a_size, i);
+        
+        a_positions.push_back(i);
+        a_bits[saveIndx] = sum;
+        a_bits[i - 1] = sum;
+        saveIndx = ++i;
+    }
+
+    if(*(a_positions.rbegin()) == a_size) {
+        a_positions.pop_back();
+    }
+}
+
+static void SetNewPos(size_t& a_firstIndx, size_t a_newIndx, size_t& a_maxSum, size_t a_newSum)
+{
+    if(a_newSum > a_maxSum) {
+        a_maxSum = a_newSum;
+        a_firstIndx = a_newIndx;
+    }
+}
+
+static size_t GetFirstResultPositionsIndx(size_t* a_bits, size_t a_size, size_t a_numOfIndxs, vector<size_t>& a_positions)
+{
+    size_t i = 0;
+    size_t positionsSize = a_positions.size() - (((*(a_positions.rbegin()) + 1) == a_size) ? 1 : 0);
+    size_t sum = (a_positions[0] > 0) ? a_bits[a_positions[0] - 1] : 0;
+    size_t firstIndx = 0;
+
+    for(; i < a_numOfIndxs; ++i) {
+        sum += a_bits[a_positions[i] + 1];
+    }
+    size_t maxSum = sum;
+    
+    if(a_positions[i - a_numOfIndxs] == 0 && i < positionsSize) {
+        sum = sum + a_bits[a_positions[i] + 1];
+        SetNewPos(firstIndx, i - a_numOfIndxs + 1, maxSum, sum);
+        ++i;
+    }
+
+    for(; i < positionsSize; ++i) {
+        sum = (sum - a_bits[a_positions[i - a_numOfIndxs] - 1]) + a_bits[a_positions[i] + 1];
+        SetNewPos(firstIndx, i - a_numOfIndxs + 1, maxSum, sum);
+    }
+
+    return firstIndx;
+}
+
+bool ZeroPositionsToFlip(size_t* a_bits, size_t a_size, size_t a_numOfIndxs, vector<size_t>& a_positions)
+{
+    if(!a_bits || !a_size || a_numOfIndxs > a_size) {
+        return false;
+    }
+
+    a_positions.clear();
+    CountAllOnesByPositions(a_bits, a_size, a_positions);
+    if(a_numOfIndxs >= a_positions.size() || 0 == a_positions.size()) {
+        return true;
+    }
+
+    size_t indx = GetFirstResultPositionsIndx(a_bits, a_size, a_numOfIndxs, a_positions);
+    a_positions.erase(a_positions.begin() + (indx + a_numOfIndxs), a_positions.end());
+    a_positions.erase(a_positions.begin(), a_positions.begin() + indx);
+
+    return true;
+}
 
 // Q3:
 
@@ -265,6 +411,39 @@ bool DiagonalSums(const BTree* a_head, vector<int>& a_result)
     a_result.clear();
     DiagonalSumsRec(a_head, 0, a_result);
     return true;
+}
+
+// Q10:
+
+static int GetSumFromPosition(const int* a_numbers, size_t a_size, size_t a_indx)
+{
+    int sum = 0;
+    for(;a_indx < a_size; ++a_indx) {
+        sum += a_numbers[a_indx];
+    }
+
+    return sum;
+}
+
+bool ElementsDivideArraySum(const int* a_numbers, size_t a_size, size_t& a_indx)
+{
+    if(!a_numbers || !a_size || a_size < 3) {
+        return false;
+    }
+
+    long sumLeft = a_numbers[0];
+    long sumRight = GetSumFromPosition(a_numbers, a_size, 2);
+
+    for(size_t i = 1; i < (a_size - 1); ++i) {
+        if(sumLeft == sumRight) {
+            a_indx = i;
+            return true;
+        }
+        sumLeft += a_numbers[i];
+        sumRight -= a_numbers[i + 1];
+    }
+
+    return false;
 }
 
 } // iq

@@ -4,25 +4,88 @@
 using namespace std;
 using namespace iq;
 
-// Q3:
+// class Q1:
 
-/*
-BEGIN_TEST(test_reverse_specified_portion)
-    forward_list<int> list = { 1, 7, 8, 3, 9, 1, 2 };
-    
-    ASSERT_THAT(ReverseSpecifiedPortion(list, 2, 5));
-    
-    int wantedResult[] = { 1, 9, 3, 8, 7, 1, 2 };
-    size_t i = 0;
-    auto itr = list.begin();
-    auto end = list.end();
+BEGIN_TEST(test_has_sum_pair_as_num_true)
+    int numbers[] = { 5, 3, 9, 8, 3, 2, 4, 5 };
 
-    for(; itr != end; ++itr) {
-        ASSERT_EQUAL(*itr, wantedResult[i]);
-        ++i;
+    ASSERT_THAT(HasSumPairAsNum(numbers, sizeof(numbers)/sizeof(numbers[0]), 10));
+    ASSERT_THAT(HasSumPairAsNum(numbers, sizeof(numbers)/sizeof(numbers[0]), 11));
+END_TEST
+
+BEGIN_TEST(test_has_sum_pair_as_num_false)
+    int numbers[] = { 5, 3, 9, 8, 7, 2, 4, 5 };
+
+    ASSERT_THAT(!HasSumPairAsNum(numbers, sizeof(numbers)/sizeof(numbers[0]), 31));
+    ASSERT_THAT(!HasSumPairAsNum(numbers, sizeof(numbers)/sizeof(numbers[0]), 3));
+END_TEST
+
+BEGIN_TEST(test_has_sum_pair_as_num_at_distance_true)
+    int numbers[] = { 5, 3, 9, 8, 7, 2, 4, 5 };
+
+    ASSERT_THAT(HasSumPairAsNumAtDistance(numbers, sizeof(numbers)/sizeof(numbers[0]), 10, 3));
+    ASSERT_THAT(HasSumPairAsNumAtDistance(numbers, sizeof(numbers)/sizeof(numbers[0]), 11, 4));
+END_TEST
+
+BEGIN_TEST(test_has_sum_pair_as_num_at_distance_false)
+    int numbers[] = { 5, 3, 9, 8, 4, 11, 4, 5 };
+
+    ASSERT_THAT(!HasSumPairAsNumAtDistance(numbers, sizeof(numbers)/sizeof(numbers[0]), 10, 4));
+    ASSERT_THAT(!HasSumPairAsNumAtDistance(numbers, sizeof(numbers)/sizeof(numbers[0]), 7, 2));
+END_TEST
+
+// Q1:
+
+BEGIN_TEST(test_zero_positions_to_flip)
+    size_t bits[] = { 1, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0 };
+
+    vector<size_t> result;
+    ASSERT_THAT(ZeroPositionsToFlip(bits, sizeof(bits)/sizeof(bits[0]), 2, result));
+
+    size_t wantedResult[] = { 5, 7 };
+    size_t size = result.size();
+    for(size_t i = 0; i < size; ++i) {
+        ASSERT_EQUAL(result[i], wantedResult[i]);
     }
 END_TEST
-*/
+
+BEGIN_TEST(test_zero_positions_to_flip_first_and_last_elements_zero)
+    size_t bits[] = { 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0 };
+
+    vector<size_t> result;
+    ASSERT_THAT(ZeroPositionsToFlip(bits, sizeof(bits)/sizeof(bits[0]), 3, result));
+
+    size_t wantedResult[] = { 0, 2, 6 };
+    size_t size = result.size();
+    for(size_t i = 0; i < size; ++i) {
+        ASSERT_EQUAL(result[i], wantedResult[i]);
+    }
+END_TEST
+
+BEGIN_TEST(test_zero_positions_to_flip_all_ones)
+    size_t bits[] = { 1, 1, 1, 1, 1, 1, 1 };
+
+    vector<size_t> result;
+    ASSERT_THAT(ZeroPositionsToFlip(bits, sizeof(bits)/sizeof(bits[0]), 3, result));
+    ASSERT_THAT(result.empty());
+END_TEST
+
+BEGIN_TEST(test_zero_positions_to_flip_null_array)
+    vector<size_t> result;
+    ASSERT_THAT(!ZeroPositionsToFlip(0, 5, 3, result));
+    ASSERT_THAT(result.empty());
+END_TEST
+
+BEGIN_TEST(test_zero_positions_to_flip_zero_size)
+    size_t bits[] = { 1, 1, 1, 1, 1, 1, 1 };
+    
+    vector<size_t> result;
+    ASSERT_THAT(!ZeroPositionsToFlip(bits, 0, 3, result));
+    ASSERT_THAT(result.empty());
+END_TEST
+
+// Q3:
+
 BEGIN_TEST(test_reverse_specified_portion)
     Node node6(2);
     Node node5(1, &node6);
@@ -455,7 +518,36 @@ BEGIN_TEST(test_diagonal_sums_null_tree)
     ASSERT_THAT(result.empty());
 END_TEST
 
+// Q10:
+
+BEGIN_TEST(test_elements_divide_array_sum_true)
+    int numbers[] = { 5, 3, 9, 8, 6, 2, 4, 5 };
+
+    size_t result = 30;
+    ASSERT_THAT(ElementsDivideArraySum(numbers, sizeof(numbers)/sizeof(numbers[0]), result));
+    ASSERT_EQUAL(3, result);
+END_TEST
+
+BEGIN_TEST(test_elements_divide_array_sum_false)
+    int numbers[] = { 5, 3, 9, 8, 7, 2, 4, 5 };
+
+    size_t result = 30;
+    ASSERT_THAT(!ElementsDivideArraySum(numbers, sizeof(numbers)/sizeof(numbers[0]), result));
+    ASSERT_EQUAL(30, result);
+END_TEST
+
 BEGIN_SUITE(test_practic_day_3)
+    TEST(test_has_sum_pair_as_num_true)
+    TEST(test_has_sum_pair_as_num_false)
+    TEST(test_has_sum_pair_as_num_at_distance_true)
+    TEST(test_has_sum_pair_as_num_at_distance_false)
+
+    TEST(test_zero_positions_to_flip)
+    TEST(test_zero_positions_to_flip_first_and_last_elements_zero)
+    TEST(test_zero_positions_to_flip_all_ones)
+    TEST(test_zero_positions_to_flip_null_array)
+    TEST(test_zero_positions_to_flip_zero_size)
+    
     TEST(test_reverse_specified_portion)
     TEST(test_reverse_specified_portion_one_distance)
     TEST(test_reverse_specified_portion_to_after_end)
@@ -490,4 +582,7 @@ BEGIN_SUITE(test_practic_day_3)
 
     TEST(test_diagonal_sums)
     TEST(test_diagonal_sums_null_tree)
+
+    TEST(test_elements_divide_array_sum_true)
+    TEST(test_elements_divide_array_sum_false)
 END_SUITE

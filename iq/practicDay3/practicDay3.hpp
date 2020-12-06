@@ -9,6 +9,12 @@ namespace iq {
 
 const size_t COLUMNS = 5;
 
+bool HasSumPairAsNum(const int* a_numbers, size_t a_size, int a_num);
+
+bool HasSumPairAsNumAtDistance(const int* a_numbers, size_t a_size, int a_num, size_t a_distance);
+
+bool ZeroPositionsToFlip(size_t* a_bits, size_t a_size, size_t a_numOfIndxs, std::vector<size_t>& a_positions);
+
 bool ReverseSpecifiedPortion(Node*& a_head, size_t a_from, size_t a_to);
 
 bool KSmallestValue(const int a_mat[][COLUMNS], size_t a_rows, size_t a_k, int& a_result);
@@ -42,6 +48,8 @@ bool GetValuesInSpecificLevels(const BTree* a_head, size_t a_from, size_t a_to, 
 int DifferenceSumOddAndEven(const BTree* a_head);
 
 bool DiagonalSums(const BTree* a_head, std::vector<int>& a_result);
+
+bool ElementsDivideArraySum(const int* a_numbers, size_t a_size, size_t& a_indx);
 
 } // iq
 
