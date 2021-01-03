@@ -385,7 +385,7 @@ int DifferenceSumOddAndEven(const BTree* a_head)
 
 // Q9:
 
-void DiagonalSumsRec(const BTree* a_head, size_t a_diagonal, vector<int>& a_result)
+static void DiagonalSumsRec(const BTree* a_head, size_t a_diagonal, vector<int>& a_result)
 {
     if(!a_head) {
         return;
