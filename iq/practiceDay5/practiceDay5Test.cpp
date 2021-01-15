@@ -36,6 +36,10 @@ BEGIN_TEST(test_string_to_double_with_letters)
     ASSERT_EQUAL(3.2, result);
 END_TEST
 
+BEGIN_TEST(test_)
+
+END_TEST
+
 BEGIN_SUITE(test_practice_day_5)
     TEST(test_string_to_double)
     TEST(test_string_to_double_negative)

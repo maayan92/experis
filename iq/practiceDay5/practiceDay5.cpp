@@ -1,4 +1,5 @@
 #include "practiceDay5.hpp"
+#include <vector>
 #include <stack>
 using namespace std;
 
@@ -40,6 +41,10 @@ static bool AfterDot(const char* a_str, double& a_result, size_t a_indx)
 
 bool StringToDouble(const char* a_str, double& a_result)
 {
+    if(!a_str) {
+        return false;
+    }
+
     a_result = 0.0;
     size_t i = 0;
     double neg = 1.0;
@@ -63,6 +68,63 @@ bool StringToDouble(const char* a_str, double& a_result)
     a_result *= neg;
 
     return noError;
+}
+
+// Q2:
+
+static void SetWinners(vector<int>& a_numbers, stack<int>& a_winners)
+{
+    while(!a_winners.empty()) {
+        a_numbers.push_back(a_winners.top());
+        a_winners.pop();
+    }
+}
+
+static bool EatAll(stack<int>& a_values, int a_number)
+{
+    while(!a_values.empty()) {
+        if(abs(a_values.top()) > abs(a_number)) {
+            return false;
+        }
+        if(a_number*(-1) == a_values.top()) {
+            return true;
+        }
+        a_values.pop();
+    }
+
+    return true;
+}
+
+bool EatTheOtherDirectionValue(vector<int>& a_numbers)
+{
+    if(a_numbers.empty()) {
+        return false;
+    }
+
+    stack<int> positive;
+    stack<int> negative;
+
+    size_t size = a_numbers.size();
+    size_t i = 0;
+    while(i < size) {
+        if(a_numbers[i] < 0) {
+            if(EatAll(positive, a_numbers[i])) {
+                negative.push(a_numbers[i]);
+            }
+        }
+        else {
+            if(EatAll(negative, a_numbers[i])) {
+                positive.push(a_numbers[i]);
+            }
+        }
+        ++i;
+    }
+
+    a_numbers.clear();
+    SetWinners(a_numbers, positive);
+    SetWinners(a_numbers, negative);
+
+    return true;
 }
 
 } // iq
