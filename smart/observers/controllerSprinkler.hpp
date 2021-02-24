@@ -5,11 +5,11 @@
 #include <fstream>
 #include <vector>
 #include "iSubscription.hpp"
-#include "iObserver.hpp"
+#include "controller.hpp"
 
 namespace smart_house {
 
-class ControllerSprinkler : public IObserver {
+class ControllerSprinkler : public Controller {
 public:
     ControllerSprinkler(ISubscription* a_subscription, std::vector<EventTypeLoc>& a_typeLoc);
     virtual ~ControllerSprinkler();

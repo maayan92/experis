@@ -129,7 +129,8 @@ struct TestExecutor : public EventsExecutor {
 
 BEGIN_TEST(test_shared_library_so_one_event_one_observer)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     SharedLibrarySo observers("./controllerSO/libControllerHVAC.so");
 
     typedef IObserver* (*ObserverFactory)(ISubscription*, vector<EventTypeLoc>&);
@@ -153,7 +154,8 @@ END_TEST
 
 BEGIN_TEST(test_shared_library_so_one_observer_all_floor_event)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     SharedLibrarySo observers("./controllerSO/libControllerHVAC.so");
 
     typedef IObserver* (*ObserverFactory)(ISubscription*, vector<EventTypeLoc>&);
@@ -177,7 +179,8 @@ END_TEST
 
 BEGIN_TEST(test_shared_library_so_multi_events_one_observer)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     SharedLibrarySo observers("./controllerSO/libControllerHVAC.so");
 
     typedef IObserver* (*ObserverFactory)(ISubscription*, vector<EventTypeLoc>&);
@@ -206,7 +209,8 @@ END_TEST
 
 BEGIN_TEST(test_shared_library_so_multi_events_two_same_observers_multi_thread)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     SharedLibrarySo observers("./controllerSO/libControllerHVAC.so");
 
     typedef IObserver* (*ObserverFactory)(ISubscription*, vector<EventTypeLoc>&);
@@ -258,7 +262,8 @@ END_TEST
 
 BEGIN_TEST(test_shared_library_so_multi_events_two_different_observers_multi_thread)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     SharedLibrarySo observersHvac("./controllerSO/libControllerHVAC.so");
     SharedLibrarySo observersSprinkler("./controllerSO/libControllerSprinkler.so");
 

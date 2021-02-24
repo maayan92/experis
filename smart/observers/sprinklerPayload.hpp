@@ -18,7 +18,7 @@ struct SprinklerPayload : public IPayload {
     , m_iot()
     {}
 
-    virtual void Print(std::ostream& a_os)
+    virtual void Print(std::ostream& a_os) const
     {
         a_os << "on: " << m_on;
         a_os << "| iot: " << m_iot;

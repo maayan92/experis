@@ -17,17 +17,21 @@ SRC_DIR = ../../src
 SRC_DIR_ADVCPP = ../../../src
 SRC_DIR_SO = ../../observers
 
-MODULES = iObserver iPayload iSubscription eventTypeLocation \
+MODULES = iObserver iPayload iSubscription eventTypeLocation sensorAgentBucket fileLog \
 			location subscriptionHandler subscriptions iSubscribersFinder iObserversNotifier \
 			subscribersFinder observersNotifierMT eventsExecutor sharedLibrarySo event notifyingTask
 
 MODULES_ADVCPP = threadPool tasks mutex waitersConditionVar additionalFunctionality atomicFlag conditionVariable readersWriters
 
+MODULES_SO = controllerHVAC controllerSprinkler controller
+
 PATH_MODULE = $(MODULES:%=$(SRC_DIR)/%)
 PATH_MODULE_ADVCPP = $(MODULES_ADVCPP:%=$(SRC_DIR_ADVCPP)/%)
+PATH_MODULE_SO = $(MODULES_SO:%=$(SRC_DIR_SO)/%)
 
 OBJS = $(PATH_MODULE:%=%.o)
 OBJS += $(PATH_MODULE_ADVCPP:%=%.o)
+OBJS += $(SRC_DIR_SO)/controller.o
 
 $(TARGET): $(OBJS) -ldl
 
@@ -44,7 +48,9 @@ sprinkler.so: LDFLAGS += -shared
 sprinkler.so: $(SRC_DIR_SO)/controllerSprinkler.o $(OBJS) dirs
 	@$(CXX) $(LDFLAGS) $(CPPFLAGS) $(SRC_DIR_SO)/controllerSprinkler.o $(OBJS) $(LDLIBS) -o ./controllerSO/libControllerSprinkler.so
 
-all: sprinkler.so hvac.so $(TARGET)
+OBJS_SO = hvac.so sprinkler.so
+
+all: $(OBJS_SO) $(TARGET)
 
 check: all
 	@clear
@@ -71,10 +77,11 @@ hell: $(TARGET)
 	./$(TARGET)
 
 clean: 
-	@$(RM) -R $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) ./controllerSO *_log.txt *.d
+	@$(RM) -R $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) $(DEPENDS_SO) $(PATH_MODULE_SO:%=%.o) ./controllerSO *_log.txt *.d
 
 DEPENDS = $(PATH_MODULE:%=%.d)
 DEPENDS_ADVCPP = $(PATH_MODULE_ADVCPP:%=%.d)
+DEPENDS_SO = $(PATH_MODULE_SO:%=%.d)
 -include $(DEPENDS) $(DEPENDS_ADVCPP)
 
 .PHONY: all clean check recheck
