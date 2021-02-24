@@ -11,7 +11,7 @@ struct TemperaturePayload : public IPayload {
     double m_currentTemp;
     bool m_tempRising;
 
-    virtual void Print(std::ostream& a_os) {
+    virtual void Print(std::ostream& a_os) const {
         (void)a_os;
     }
 
