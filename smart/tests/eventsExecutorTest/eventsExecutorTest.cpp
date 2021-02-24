@@ -18,7 +18,8 @@ using namespace smart_house;
 
 BEGIN_TEST(test_events_executor_one_event_N_observers_M_threads)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     vector<EventTypeLoc> typeLoc;
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
     
@@ -45,7 +46,8 @@ END_TEST
 
 BEGIN_TEST(test_events_executor_M_event_M_types_N_observers_K_threads)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     vector<EventTypeLoc> typeLoc;
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
     typeLoc.push_back(EventTypeLoc("NOISE_DETECTED", Location("1", "room_1_a")));
@@ -78,7 +80,8 @@ END_TEST
 
 BEGIN_TEST(test_events_executor_M_events_with_all_N_observers_K_threads)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     vector<EventTypeLoc> typeLoc;
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("2", "room_1_a")));
     typeLoc.push_back(EventTypeLoc("NOISE_DETECTED", Location("1", "room")));
@@ -116,7 +119,8 @@ END_TEST
 
 BEGIN_TEST(test_events_executor_M_event_enque_thread_N_observers_K_threads)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     vector<EventTypeLoc> typeLoc;
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
     typeLoc.push_back(EventTypeLoc("NOISE_DETECTED", Location("1", "room_1_a")));
