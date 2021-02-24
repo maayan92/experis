@@ -19,7 +19,7 @@ SRC_DIR_SO = ../../agents
 
 MODULES = iObserver iPayload iSubscription iConfiguration iParser iSubscribersFinder eventTypeLocation location subscriptionHandler \
 			subscriptions subscribersFinder eventsExecutor parser sensorAgentBucket \
-			event sharedLibrarySo configuration fileLog agentsCreator clientTcp
+			event sharedLibrarySo configuration fileLog agentsCreator absController absSensor
 
 MODULES_ADVCPP = threadPool tasks mutex waitersConditionVar additionalFunctionality atomicFlag conditionVariable readersWriters
 
