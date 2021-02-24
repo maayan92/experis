@@ -61,10 +61,11 @@ hell: $(TARGET)
 	./$(TARGET)
 
 clean: 
-	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) *.d
+	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) $(DEPENDS_CONTROLLER) *.d *_log.txt
 
 DEPENDS = $(PATH_MODULE:%=%.d)
 DEPENDS_ADVCPP = $(PATH_MODULE_ADVCPP:%=%.d)
+DEPENDS_CONTROLLER = $(PATH_MODULE_CONTROLLER:%=%.d)
 -include $(DEPENDS) $(DEPENDS_ADVCPP)
 
 .PHONY: all clean check recheck

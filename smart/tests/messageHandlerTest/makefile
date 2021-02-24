@@ -55,7 +55,7 @@ hell: $(TARGET)
 	./$(TARGET)
 
 clean: 
-	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP)
+	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) *_log.txt *.d
 
 DEPENDS = $(PATH_MODULE:%=%.d)
 DEPENDS_ADVCPP = $(PATH_MODULE_ADVCPP:%=%.d)
