@@ -1,7 +1,7 @@
 CC := $(CXX)
 CXX := g++
 
-CPPFLAGS := -I. -I../../../inc/advcpp -I../../../inc/ -I../../../tests/inc/ -I../../inc/
+CPPFLAGS := -I. -I../../../inc/advcpp -I../../../inc/ -I../../../tests/inc/ -I../../inc/ -I../../observers
 CPPFLAGS += -MMD -MP
 CFLAGS += -Werror -Wall -Wextra
 CFLAGS += -g
@@ -14,17 +14,22 @@ TARGET := subscriptionsTest
 
 SRC_DIR = ../../src
 SRC_DIR_ADVCPP = ../../../src
+SRC_DIR_OBSERVERS = ../../observers
 
-MODULES = iObserver iPayload iSubscription controllerTest eventTypeLocation location subscriptionHandler subscriptions \
-			iSubscribersFinder subscribersFinder sensorAgentBucket temperatureSensor
+MODULES = iObserver iPayload iSubscription eventTypeLocation location subscriptionHandler subscriptions \
+			iSubscribersFinder subscribersFinder sensorAgentBucket absSensor
 
 MODULES_ADVCPP = mutex threadPool atomicFlag conditionVariable tasks waitersConditionVar
 
+MODULES_OBSERVERS = temperatureSensor controllerTest
+
 PATH_MODULE = $(MODULES:%=$(SRC_DIR)/%)
 PATH_MODULE_ADVCPP = $(MODULES_ADVCPP:%=$(SRC_DIR_ADVCPP)/%)
+PATH_MODULE_OBSERVERS = $(MODULES_OBSERVERS:%=$(SRC_DIR_OBSERVERS)/%)
 
 OBJS = $(PATH_MODULE:%=%.o)
 OBJS += $(PATH_MODULE_ADVCPP:%=%.o)
+OBJS += $(PATH_MODULE_OBSERVERS:%=%.o)
 
 $(TARGET): $(OBJS)
 
@@ -55,10 +60,11 @@ hell: $(TARGET)
 	./$(TARGET)
 
 clean: 
-	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) *.d
+	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) $(PATH_MODULE_OBSERVERS) *.d
 
 DEPENDS = $(PATH_MODULE:%=%.d)
 DEPENDS_ADVCPP = $(PATH_MODULE_ADVCPP:%=%.d)
+DEPENDS_ADVCPP = $(PATH_MODULE_OBSERVERS:%=%.d)
 -include $(DEPENDS) $(DEPENDS_ADVCPP)
 
 .PHONY: all clean check recheck
