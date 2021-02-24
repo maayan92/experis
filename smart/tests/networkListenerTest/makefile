@@ -13,12 +13,17 @@ LDLIBS := -lpthread
 TARGET := networkListenerTest 
 
 SRC_DIR = ../../src
+SRC_DIR_ADVCPP = ../../../src
 
 MODULES = networkListener iMessageHandler serverTcp fileLog
 
+MODULES_ADVCPP = mutex
+
 PATH_MODULE = $(MODULES:%=$(SRC_DIR)/%)
+PATH_MODULE_ADVCPP = $(MODULES_ADVCPP:%=$(SRC_DIR_ADVCPP)/%)
 
 OBJS = $(PATH_MODULE:%=%.o)
+OBJS += $(PATH_MODULE_ADVCPP:%=%.o)
 
 $(TARGET): $(OBJS)
 
@@ -49,9 +54,10 @@ hell: $(TARGET)
 	./$(TARGET)
 
 clean: 
-	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) *.d *_log.txt
+	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) *.d *_log.txt
 
 DEPENDS = $(PATH_MODULE:%=%.d)
+DEPENDS_ADVCPP = $(PATH_MODULE_ADVCPP:%=%.d)
 -include $(DEPENDS)
 
 .PHONY: all clean check recheck
