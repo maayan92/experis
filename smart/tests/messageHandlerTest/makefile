@@ -16,7 +16,7 @@ SRC_DIR = ../../src
 SRC_DIR_ADVCPP = ../../../src
 
 MODULES = iObserver iPayload eventTypeLocation location temperatureSensor sensorAgentBucket iEventCreator \
-			eventCreatorMT event messageHandler messageSeparator iMessageHandler protocol
+			eventCreatorMT event messageHandler messageSeparator iMessageHandler protocol fileLog
 
 MODULES_ADVCPP = mutex waitersConditionVar conditionVariable atomicFlag threadPool tasks
 
