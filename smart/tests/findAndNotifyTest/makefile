@@ -1,7 +1,7 @@
 CC := $(CXX)
 CXX := g++
 
-CPPFLAGS := -I. -I../../../inc/advcpp -I../../../inc/ -I../../../tests/inc/ -I../../inc/ -I../inc/
+CPPFLAGS := -I. -I../../../inc/advcpp -I../../../inc/ -I../../../tests/inc/ -I../../inc/ -I../inc/ -I../../observers/
 CPPFLAGS += -MMD -MP
 CFLAGS += -Werror -Wall -Wextra
 CFLAGS += -g
@@ -14,18 +14,23 @@ TARGET := findAndNotifyTest
 
 SRC_DIR = ../../src
 SRC_DIR_ADVCPP = ../../../src
+SRC_DIR_CONTROLLER = ../../observers
 
-MODULES = iObserver iPayload iSubscription controllerTest eventTypeLocation \
+MODULES = iObserver iPayload iSubscription eventTypeLocation \
 			location subscriptionHandler subscriptions iSubscribersFinder iObserversNotifier \
-			subscribersFinder observersNotifier
+			subscribersFinder observersNotifier sensorAgentBucket
 
 MODULES_ADVCPP = mutex
 
+MODULES_CONTROLLER = controllerTest
+
 PATH_MODULE = $(MODULES:%=$(SRC_DIR)/%)
 PATH_MODULE_ADVCPP = $(MODULES_ADVCPP:%=$(SRC_DIR_ADVCPP)/%)
+PATH_MODULE_CONTROLLER = $(MODULES_CONTROLLER:%=$(SRC_DIR_CONTROLLER)/%)
 
 OBJS = $(PATH_MODULE:%=%.o)
 OBJS += $(PATH_MODULE_ADVCPP:%=%.o)
+OBJS += $(PATH_MODULE_CONTROLLER:%=%.o)
 
 $(TARGET): $(OBJS)
 

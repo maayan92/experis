@@ -31,7 +31,8 @@ static bool CheckAllControllers(vector<ControllerTest*>& a_allControllers, Event
 
 BEGIN_TEST(test_notify_all_subscribers_one_observer_one_event)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     vector<EventTypeLoc> typeLocSmoke;
     typeLocSmoke.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
     ControllerTest controllers[] = { ControllerTest(&subHandler, typeLocSmoke) };
@@ -47,7 +48,8 @@ END_TEST
 
 BEGIN_TEST(test_find_and_notify_one_event_N_controllers)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
 
     const size_t NUM_OF_CONTROLLERS = 5;
     vector<EventTypeLoc> typeLocSmoke;
@@ -68,7 +70,8 @@ END_TEST
 
 BEGIN_TEST(test_find_and_notify_one_event_no_subscriptions_N_Notify)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
 
     vector<EventTypeLoc> typeLocSmoke;
     typeLocSmoke.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
@@ -89,7 +92,8 @@ END_TEST
 
 BEGIN_TEST(test_find_and_notify_N_event_M_controllers)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     
     vector<EventTypeLoc> typeLoc;
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
