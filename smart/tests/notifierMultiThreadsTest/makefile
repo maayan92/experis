@@ -1,7 +1,7 @@
 CC := $(CXX)
 CXX := g++
 
-CPPFLAGS := -I. -I../../../inc/advcpp -I../../../inc/ -I../../../tests/inc/ -I../../inc/  -I../inc/
+CPPFLAGS := -I. -I../../../inc/advcpp -I../../../inc/ -I../../../tests/inc/ -I../../inc/  -I../inc/  -I../../observers/
 CPPFLAGS += -MMD -MP
 CFLAGS += -Werror -Wall -Wextra
 CFLAGS += -g
@@ -14,18 +14,23 @@ TARGET := notifierMultiThreadsTest
 
 SRC_DIR = ../../src
 SRC_DIR_ADVCPP = ../../../src
+SRC_DIR_CONTROLLER = ../../observers
 
-MODULES = iObserver iPayload iSubscription controllerTest eventTypeLocation \
+MODULES = iObserver iPayload iSubscription eventTypeLocation \
 			location subscriptionHandler subscriptions iSubscribersFinder iObserversNotifier \
-			subscribersFinder observersNotifierMT
+			subscribersFinder observersNotifierMT fileLog sensorAgentBucket notifyingTask event
 
 MODULES_ADVCPP = threadPool tasks mutex waitersConditionVar additionalFunctionality atomicFlag conditionVariable readersWriters
 
+MODULES_CONTROLLER = controllerTest
+
 PATH_MODULE = $(MODULES:%=$(SRC_DIR)/%)
 PATH_MODULE_ADVCPP = $(MODULES_ADVCPP:%=$(SRC_DIR_ADVCPP)/%)
+PATH_MODULE_CONTROLLER = $(MODULES_CONTROLLER:%=$(SRC_DIR_CONTROLLER)/%)
 
 OBJS = $(PATH_MODULE:%=%.o)
 OBJS += $(PATH_MODULE_ADVCPP:%=%.o)
+OBJS += $(PATH_MODULE_CONTROLLER:%=%.o)
 
 $(TARGET): $(OBJS)
 
@@ -56,10 +61,11 @@ hell: $(TARGET)
 	./$(TARGET)
 
 clean: 
-	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) *.d
+	@$(RM) -f $(TARGET) $(OBJS) $(DEPENDS) $(DEPENDS_ADVCPP) $(DEPENDS_CONTROLLER) *.d
 
 DEPENDS = $(PATH_MODULE:%=%.d)
 DEPENDS_ADVCPP = $(PATH_MODULE_ADVCPP:%=%.d)
+DEPENDS_CONTROLLER = $(PATH_MODULE_CONTROLLER:%=%.d)
 -include $(DEPENDS) $(DEPENDS_ADVCPP)
 
 .PHONY: all clean check recheck

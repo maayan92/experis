@@ -17,7 +17,8 @@ static void Delete(ControllerTest* a_ctrl)
 
 BEGIN_TEST(test_notifier_one_thread_one_notify)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     vector<EventTypeLoc> typeLoc;
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
     ControllerTest controllers[] = { ControllerTest(&subHandler, typeLoc) };
@@ -33,7 +34,8 @@ END_TEST
 
 BEGIN_TEST(test_notifier_one_thread_one_event_M_observers)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     vector<EventTypeLoc> typeLoc;
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
     ControllerTest controllers[] = { ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc)
@@ -52,7 +54,8 @@ END_TEST
 
 BEGIN_TEST(test_notifier_N_thread_one_event_M_observers)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     vector<EventTypeLoc> typeLoc;
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
     ControllerTest controllers[] = { ControllerTest(&subHandler, typeLoc), ControllerTest(&subHandler, typeLoc)
@@ -71,7 +74,8 @@ END_TEST
 
 BEGIN_TEST(test_notifier_K_thread_N_event_M_observers)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     vector<EventTypeLoc> typeLoc;
     
     const size_t SIZE = 8;
@@ -118,7 +122,8 @@ END_TEST
 
 BEGIN_TEST(test_notifier_N_thread_M_event_lots_of_observers)
     Subscriptions subs;
-    SubscriptionHandler subHandler(subs);
+    SensorAgentBucket sensors;
+    SubscriptionHandler subHandler(subs, sensors);
     vector<EventTypeLoc> typeLoc;
     typeLoc.push_back(EventTypeLoc("SMOKE_DETECTED", Location("1", "room_1_a")));
     
