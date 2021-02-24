@@ -19,11 +19,11 @@ SRC_DIR_SO = ../../observers
 
 MODULES = iObserver iPayload iSubscription eventTypeLocation sensorAgentBucket fileLog \
 			location subscriptionHandler subscriptions iSubscribersFinder iObserversNotifier \
-			subscribersFinder observersNotifierMT eventsExecutor sharedLibrarySo event notifyingTask
+			subscribersFinder observersNotifierMT eventsExecutor sharedLibrarySo event notifyingTask absController
 
 MODULES_ADVCPP = threadPool tasks mutex waitersConditionVar additionalFunctionality atomicFlag conditionVariable readersWriters
 
-MODULES_SO = controllerHVAC controllerSprinkler controller
+MODULES_SO = controllerHVAC controllerSprinkler 
 
 PATH_MODULE = $(MODULES:%=$(SRC_DIR)/%)
 PATH_MODULE_ADVCPP = $(MODULES_ADVCPP:%=$(SRC_DIR_ADVCPP)/%)
@@ -31,7 +31,6 @@ PATH_MODULE_SO = $(MODULES_SO:%=$(SRC_DIR_SO)/%)
 
 OBJS = $(PATH_MODULE:%=%.o)
 OBJS += $(PATH_MODULE_ADVCPP:%=%.o)
-OBJS += $(SRC_DIR_SO)/controller.o
 
 $(TARGET): $(OBJS) -ldl
 
