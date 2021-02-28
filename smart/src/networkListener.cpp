@@ -179,6 +179,7 @@ void NetworkListener::receiveMsg(int a_socket)
         }
     }
 
+    buffer[read_bytes] = '\0';
     m_msgHandler.HandleMsg(buffer);
 }
 
