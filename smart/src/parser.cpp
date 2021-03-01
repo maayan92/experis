@@ -40,6 +40,7 @@ void Parser::Parse(string& a_values, Device& a_device)
     GetNextValue(a_values, "room", a_device.m_typeLocation.m_location.m_room);
     GetNextValue(a_values, "floor", a_device.m_typeLocation.m_location.m_floor);
     GetNextValue(a_values, "log", a_device.m_log);
+    a_device.m_log += "_log.txt";
     GetNextValue(a_values, "config", a_device.m_config);
 }
 
