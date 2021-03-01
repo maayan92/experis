@@ -58,8 +58,8 @@ private:
 EventCreatorMT::EventCreatorMT(advcpp::WaitableQueue<Event>& a_events, size_t a_numOfThreads)
 : m_events(a_events)
 , m_log(Singleton<FileLog>::Instance())
-, m_eventsLog("events_log.txt")
-, m_createEventFailLog("createEventFail_log.txt")
+, m_eventsLog("events_log.txt", ios::app)
+, m_createEventFailLog("createEventFail_log.txt", ios::app)
 , m_threads((a_numOfThreads > MAX_NUM_OF_THREADS) ? MAX_NUM_OF_THREADS : a_numOfThreads)
 {
 }

@@ -22,7 +22,7 @@ Notifier::Notifier(const Event& a_event, Atomic<size_t>& a_count, WaitersConditi
 , m_count(a_count)
 , m_cv(a_cv)
 , m_log(Singleton<FileLog>::Instance())
-, m_logFile("notifyFail_log.txt")
+, m_logFile("notifyFail_log.txt", ios::app)
 {}
 
 void Notifier::Notify(IObserver* a_observer) {

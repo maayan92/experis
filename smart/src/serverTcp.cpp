@@ -12,7 +12,7 @@ namespace experis {
 
 ServerTcp::ServerTcp(const string& a_ipAddr, size_t a_port)
 : m_log(Singleton<FileLog>::Instance())
-, m_logFile("server_log.txt")
+, m_logFile("server_log.txt", ios::app)
 , m_socketNum(openSocket())
 {
     setSocket();

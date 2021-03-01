@@ -23,7 +23,7 @@ NetworkListener::NetworkListener(const std::string& a_ipAddr, size_t a_port, IMe
 : m_msgHandler(a_msgHandler)
 , m_server(a_ipAddr, a_port)
 , m_log(advcpp::Singleton<FileLog>::Instance())
-, m_logFile("network_log.txt")
+, m_logFile("network_log.txt", ios::app)
 , m_epollEv()
 , m_epollFd()
 {
