@@ -6,11 +6,13 @@
 #include <unistd.h>
 #include <cerrno>
 using namespace std;
+using namespace advcpp;
 
 namespace experis {
 
 ServerTcp::ServerTcp(const string& a_ipAddr, size_t a_port)
-: m_logFile("server_log.txt")
+: m_log(Singleton<FileLog>::Instance())
+, m_logFile("server_log.txt")
 , m_socketNum(openSocket())
 {
     setSocket();
@@ -22,7 +24,7 @@ ServerTcp::~ServerTcp()
 {
     int status = ::close(m_socketNum);
     assert(0 == status);
-    LOGINFO(m_logFile, "server closed");
+    LOGINFO(m_log, m_logFile, "server closed");
 }
 
 int ServerTcp::SetConnection()
@@ -41,26 +43,26 @@ int ServerTcp::SetConnection()
 
         switch(errno) {
             case ECONNABORTED:
-                LOGINFO(m_logFile, "A connection has been aborted.");
+                LOGINFO(m_log, m_logFile, "A connection has been aborted.");
                 break;
             case EINTR:
-                LOGINFO(m_logFile, "There was a signal interrupt before a valid connection arrived");
+                LOGINFO(m_log, m_logFile, "There was a signal interrupt before a valid connection arrived");
                 break;
             case EMFILE:
-                LOGINFO(m_logFile, "Reached the limit of open file descriptors");
+                LOGINFO(m_log, m_logFile, "Reached the limit of open file descriptors");
                 break;
             case (ENOBUFS || ENOMEM):
-                LOGINFO(m_logFile, "Not enough free memory");
+                LOGINFO(m_log, m_logFile, "Not enough free memory");
                 break;
 
             default:
-                LOGINFO(m_logFile, "undocumented error for accept!");
+                LOGINFO(m_log, m_logFile, "undocumented error for accept!");
                 assert(!"undocumented error for accept!");
                 break;
         }
     }
     else {
-        LOGINFO(m_logFile, "A connection occurred");
+        LOGINFO(m_log, m_logFile, "A connection occurred");
     }
 
     return clientSocket;
@@ -82,26 +84,26 @@ int ServerTcp::openSocket()
         assert(EPROTONOSUPPORT != errno);
         switch(errno) {
             case EACCES:
-                LOGINFO(m_logFile, "Connection reset!");
+                LOGINFO(m_log, m_logFile, "Connection reset!");
                 break;
 
             case EMFILE:
-                LOGINFO(m_logFile, "No memory available!");
+                LOGINFO(m_log, m_logFile, "No memory available!");
                 break;
 
             case ENOBUFS: 
-                LOGINFO(m_logFile, "The local end has been shut down on a connection oriented socket!");
+                LOGINFO(m_log, m_logFile, "The local end has been shut down on a connection oriented socket!");
                 break;
 
             default:
-                LOGINFO(m_logFile, "undocumented error for socket!");
+                LOGINFO(m_log, m_logFile, "undocumented error for socket!");
                 assert(!"undocumented error for socket!");
                 break;
         }
         throw runtime_error("failed to open socket");
     }
 
-    LOGINFO(m_logFile, "socket opened for the server");
+    LOGINFO(m_log, m_logFile, "socket opened for the server");
     return socketNum;
 }
 
@@ -110,11 +112,11 @@ void ServerTcp::setSocket()
     int optval = 1;
     int status = ::setsockopt(m_socketNum, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
     if (0 > status) {
-        LOGINFO(m_logFile, "Set options on the server socket failed!");
+        LOGINFO(m_log, m_logFile, "Set options on the server socket failed!");
         throw runtime_error("Set options on the server socket failed!");
     }
 
-    LOGINFO(m_logFile, "set socket options for the server");
+    LOGINFO(m_log, m_logFile, "set socket options for the server");
 }
 
 void ServerTcp::bind(const string& a_ipAddr, size_t a_port)
@@ -133,16 +135,16 @@ void ServerTcp::bind(const string& a_ipAddr, size_t a_port)
         assert(ENOTSOCK == errno);
 
         if(EADDRINUSE == errno) {
-            LOGINFO(m_logFile, "The given address is already in use!");
+            LOGINFO(m_log, m_logFile, "The given address is already in use!");
         }
         else {
-            LOGINFO(m_logFile, "undocumented error for bind!");
+            LOGINFO(m_log, m_logFile, "undocumented error for bind!");
             assert(!"undocumented error for bind!");
         }
         throw runtime_error("failed to bind server");
     }
 
-    LOGINFO(m_logFile, "bind server socket");
+    LOGINFO(m_log, m_logFile, "bind server socket");
 }
 
 void ServerTcp::listen()
@@ -153,16 +155,16 @@ void ServerTcp::listen()
         assert(ENOTSOCK == errno);
         assert(EOPNOTSUPP == errno);
         if(EADDRINUSE == errno) {
-            LOGINFO(m_logFile, "Another socket is already listening on the same port!");
+            LOGINFO(m_log, m_logFile, "Another socket is already listening on the same port!");
         }
         else {
-            LOGINFO(m_logFile, "undocumented error for listen!");
+            LOGINFO(m_log, m_logFile, "undocumented error for listen!");
             assert(!"undocumented error for listen!");
         }
         throw runtime_error("server failed to listen");
     }
 
-    LOGINFO(m_logFile, "set server to listen for connections");
+    LOGINFO(m_log, m_logFile, "set server to listen for connections");
 }
 
 } // experis

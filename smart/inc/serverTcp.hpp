@@ -23,7 +23,8 @@ private:
 private:
     static const size_t NUM_OF_CLIENTS = 64;
 
-    FileLog m_logFile;
+    FileLog& m_log;
+    std::ofstream m_logFile;
     int m_socketNum;
 };
 

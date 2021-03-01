@@ -21,8 +21,9 @@ private:
     static const size_t MAX_NUM_OF_THREADS = 8;
 
     advcpp::WaitableQueue<Event>& m_events;
-    experis::FileLog m_eventsLog;
-    experis::FileLog m_createEventFailLog;
+    experis::FileLog& m_log;
+    std::ofstream m_eventsLog;
+    std::ofstream m_createEventFailLog;
     advcpp::ThreadPool m_threads;
 };
 

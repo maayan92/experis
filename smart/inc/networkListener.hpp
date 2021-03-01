@@ -30,7 +30,8 @@ private:
 
     IMessageHandler& m_msgHandler;
     ServerTcp m_server;
-    FileLog m_logFile;
+    FileLog& m_log;
+    std::ofstream m_logFile;
     struct epoll_event m_epollEv;
     int m_epollFd;
 };

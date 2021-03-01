@@ -17,7 +17,7 @@ SRC_DIR_ADVCPP = ../../../src
 
 MODULES = networkListener iMessageHandler serverTcp fileLog
 
-MODULES_ADVCPP = mutex
+MODULES_ADVCPP = mutex atomicFlag
 
 PATH_MODULE = $(MODULES:%=$(SRC_DIR)/%)
 PATH_MODULE_ADVCPP = $(MODULES_ADVCPP:%=$(SRC_DIR_ADVCPP)/%)

@@ -21,6 +21,7 @@ Notifier::Notifier(const Event& a_event, Atomic<size_t>& a_count, WaitersConditi
 : m_event(a_event)
 , m_count(a_count)
 , m_cv(a_cv)
+, m_log(Singleton<FileLog>::Instance())
 , m_logFile("notifyFail_log.txt")
 {}
 
@@ -32,7 +33,7 @@ void Notifier::Notify(IObserver* a_observer) {
         stringstream msg;
         msg << "exeption thrown: " << exc.what() << '\n';
         msg << m_event;
-        LOGINFO(m_logFile, msg.str());
+        LOGINFO(m_log, m_logFile, msg.str());
     }
     
     if(--m_count == 0) {

@@ -21,7 +21,8 @@ private:
     Event m_event;
     experis::Atomic<size_t>& m_count;
     experis::WaitersConditionVar& m_cv;
-    experis::FileLog m_logFile;
+    experis::FileLog& m_log;
+    std::ofstream m_logFile;
 };
 
 struct NotifyObserver : public experis::IRunnable {
